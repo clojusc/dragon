@@ -1,0 +1,53 @@
+# file: dragon-bash-autocompletion
+# dragon (sub)command-completion
+
+TOP_LEVEL='new show gen run help version -h -v --help --version'
+TOP_DASHED='-h -v --help --version'
+TOP_HELP='new show'
+NEW_LEVEL='post help'
+POST_LEVEL='md clj edn html rfc5322 help'
+SHOW_LEVEL='config post metadata help'
+
+_dragon () {
+    local cur prev
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+    case ${COMP_CWORD} in
+        1)
+            case ${cur} in
+                -*)
+                    COMPREPLY=($(compgen -W "${TOP_DASHED}" -- $cur ))
+                    ;;
+                 *)
+                    COMPREPLY=($(compgen -W "${TOP_LEVEL}" ${cur}))
+                    ;;
+            esac
+            ;;
+        2)
+            case ${prev} in
+                new)
+                    COMPREPLY=($(compgen -W "${NEW_LEVEL}" ${cur}))
+                    ;;
+                show)
+                    COMPREPLY=($(compgen -W "${SHOW_LEVEL}" ${cur}))
+                    ;;
+            esac
+            ;;
+        3)
+          case ${prev} in
+                post)
+                    COMPREPLY=($(compgen -W "${POST_LEVEL}" ${cur}))
+                    ;;
+            esac
+            ;;
+
+        *)
+            COMPREPLY=()
+            ;;
+    esac
+    return 0
+}
+
+complete -F _dragon dragon
+complete -F _dragon ./bin/dragon
+#

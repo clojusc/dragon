@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [ $1 = "run" ]; then
+    lein trampoline $@
+else
+    lein blog $@
+fi

@@ -1,0 +1,88 @@
+# dragon
+
+[![Build Status][travis-badge]][travis]
+[![Dependencies Status][deps-badge]][deps]
+[![Clojars Project][clojars-badge]][clojars]
+[![Tag][tag-badge]][tag]
+[![Clojure version][clojure-v]](project.clj)
+
+[![][logo]][logo-large]
+
+*Customised, Stasis-based Static Site Generator*
+
+
+#### Table of Contents
+
+* [About](#about-)
+* [Prerequisites](#prerequisites-)
+* [Configuration](#configuration-)
+* [CLI](#cli-)
+* [License](#license-)
+
+
+## About [&#x219F;](#contents)
+
+This is really just a set of functions used for generating a couple of static
+sites on different projects. The goals of this set of functions are loosely
+aligned with a nascent [LFE project](http://dragon.lfe.io/) with a cool logo,
+so I borrowed the name and images for a "Clojure version" :-)
+
+
+## Prerequisites [&#x219F;](#contents)
+
+* Clone the repo :-)
+* `cd dragon`
+* `export PATH=$PATH:$(pwd)/bin`
+* `source dev-resources/shell/dragon-bash-autocompletion`
+
+
+## Configuration [&#x219F;](#contents)
+
+Every project that uses Dragon to generate static content needs to add some
+configuration to its `project.clj` file, e.g.:
+
+```clj
+  :dragon {
+    :dev-port 5098
+    :output-dir "docs"
+    :gen-fn #'my.project.site/generate
+    :cli {
+      :log-level :info}}
+```
+
+
+## CLI [&#x219F;](#contents)
+
+The project comes with a CLI. The supported commands (and any subcommands) are
+documented [here](), but to give you a sense of things, here's the output of
+`dragon help`:
+
+```bash
+$ dragon help
+```
+```
+TBD
+```
+
+
+## License [&#x219F;](#contents)
+
+Copyright © 2017, Clojure-Aided Enrichment Center
+
+Apache License, Version 2.0.
+
+
+<!-- Named page links below: /-->
+
+[travis]: https://travis-ci.org/clojusc/dragon
+[travis-badge]: https://travis-ci.org/clojusc/dragon.png?branch=master
+[deps]: http://jarkeeper.com/clojusc/dragon
+[deps-badge]: http://jarkeeper.com/clojusc/dragon/status.svg
+[logo]: resources/images/dragon-logo-2-x250.png
+[logo-large]: resources/images/dragon-logo-2-x2400-square.png
+[tag-badge]: https://img.shields.io/github/tag/clojusc/dragon.svg
+[tag]: https://github.com/clojusc/dragon/tags
+[clojure-v]: https://img.shields.io/badge/clojure-1.8.0-blue.svg
+[jdk-v]: https://img.shields.io/badge/jdk-1.7+-blue.svg
+[clojars]: https://clojars.org/clojusc/dragon
+[clojars-badge]: https://img.shields.io/clojars/v/clojusc/dragon.svg
