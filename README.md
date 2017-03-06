@@ -11,11 +11,12 @@
 *Customised, Stasis-based Static Site Generator*
 
 
-#### Table of Contents
+#### Contents
 
 * [About](#about-)
 * [Prerequisites](#prerequisites-)
 * [Configuration](#configuration-)
+* [Documentation](#documentation-)
 * [CLI](#cli-)
 * [License](#license-)
 
@@ -49,6 +50,13 @@ configuration to its `project.clj` file, e.g.:
     :cli {
       :log-level :info}}
 ```
+
+
+## Documentation [&#x219F;](#contents)
+
+The latest docs are available here:
+
+ * http://clojusc.github.io/dragon
 
 
 ## CLI [&#x219F;](#contents)
