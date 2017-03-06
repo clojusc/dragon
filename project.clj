@@ -18,7 +18,7 @@
     [stasis "2.3.0"]
     [tentacles "0.5.1"]]
   :dragon {
-    :dev-port 5098
+    :dev-port 5097
     :output-dir "docs"
     :cli {
       :log-level :info}}
@@ -39,9 +39,26 @@
         [leiningen-core "2.7.1"]
         [org.clojure/tools.namespace "0.2.11"]]}
     :test {
-      :plugins [
-        [lein-ancient "0.6.10"]
-        [jonase/eastwood "0.2.3" :exclusions [org.clojure/clojure]]
-        [lein-bikeshed "0.4.1" :exclusions [org.clojure/tools.namespace]]
-        [lein-kibit "0.1.3" :exclusions [org.clojure/clojure]]
-        [venantius/yagni "0.1.4"]]}})
+      :exclusions [org.clojure/clojure]
+      :plugins
+        [[lein-ancient "0.6.10"]
+         [jonase/eastwood "0.2.3"]
+         [lein-bikeshed "0.4.1"]
+         [lein-kibit "0.1.2"]
+         [venantius/yagni "0.1.4"]]}
+    :docs {
+      :dependencies [[codox-theme-rdash "0.1.1"]]
+      :plugins [[lein-codox "0.10.1"]
+                [lein-simpleton "1.3.0"]]
+      :codox {
+        :project {
+          :name "Dragon"
+          :description "Customised, Stasis-based Static Site Generator"}
+        :namespaces [#"^dragon\.(?!dev)"]
+        :themes [:rdash]
+        :output-path "docs/current"
+        :doc-paths ["resources/docs"]
+        :metadata {
+          :doc/format :markdown
+          :doc "Documentation forthcoming"}}}})
+

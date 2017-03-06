@@ -42,3 +42,5 @@ check: lint
 
 ancient:
 	@lein with-profile +test ancient check.check-profiles
+
+check-deps: ancient
