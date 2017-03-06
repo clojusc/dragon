@@ -61,7 +61,29 @@ documented [here](), but to give you a sense of things, here's the output of
 $ dragon help
 ```
 ```
-TBD
+  Usage:
+
+    dragon COMMAND [help | arg...]
+    dragon [-h | --help | -v | --version]
+
+
+  Commands:
+
+    new      Create files of a given type; see 'dragon new help'
+    show     Display various blog data in the terminal
+    gen      Generate updated static content for a site
+    run      Run the dragon site locally as a Ring app
+    help     Display this usage message
+    version  Display the current dragon version
+
+
+  More information:
+
+    Each command takes an optional 'help' subcommand that will provide
+    usage information about the particular command in question, e.g.:
+
+
+    $ dragon new help
 ```
 
 
