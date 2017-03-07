@@ -26,3 +26,7 @@
 (defn log-level
   []
   (:log-level (cli)))
+
+(defn log-ns
+  []
+  (:log-ns (cli)))
