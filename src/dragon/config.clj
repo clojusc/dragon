@@ -11,11 +11,11 @@
   []
   (:dragon (all)))
 
-(defn get-port
+(defn port
   []
   (:dev-port (dragon)))
 
-(defn get-output-dir
+(defn output-dir
   []
   (:output-dir (dragon)))
 

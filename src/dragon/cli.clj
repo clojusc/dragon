@@ -3,7 +3,7 @@
             [clojusc.twig :as logger]
             [dragon.cli.new :as new]
             [dragon.cli.show :as show]
-            [dragon.generator :as generator]
+            [dragon.generator :as gen]
             [dragon.util :as util]
             [dragon.web :as web]
             [taoensso.timbre :as log]
@@ -52,7 +52,7 @@
   (case cmd
     :new (new/run args)
     :show (show/run args)
-    :gen (generator/run args)
+    :gen (gen/run args)
     :run (web/run)
     :help (help-cmd args)
     :version (version-cmd)

@@ -5,10 +5,7 @@
             [taoensso.timbre :as log]))
 
 (defn run
-  [routes & args]
-  (let [out-dir (config/get-output-dir)]
-    (log/infof "Generating static content to %s ..." out-dir)
-    (stasis/export-pages
-      routes
-      out-dir)
-    (log/info "Static generation complete.")))
+  [routes out-dir]
+  (log/infof "Generating static content to %s ..." out-dir)
+  (stasis/export-pages routes out-dir)
+  (log/info "Static generation complete."))
