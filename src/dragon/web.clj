@@ -15,9 +15,10 @@
   (stasis/serve-pages routes))
 
 (defn run
-  [& args]
-  (let [port (config/get-port)]
-    (log/infof (str "Starting development HTTP server on port %s "
-                    "using dynamic content ...")
-               port)
-    (server/run-server app {:port port})))
+  [routes port]
+  (log/infof (str "Starting development HTTP server on port %s "
+                  "using dynamic content ...")
+             port)
+  (server/run-server
+    (app routes)
+    {:port port}))
