@@ -33,7 +33,7 @@
   (log/debug "Got args:" args)
   (case cmd
     :all (pprint (config/dragon))
-    :port (pprint (config/get-port))
+    :port (pprint (config/port))
     :metadata (if-let [post (first args)]
                 (pprint (meta/get post))
                 (pprint (meta/get-all)))
