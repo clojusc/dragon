@@ -1,7 +1,12 @@
 (ns dragon.util
-  (:require [clojure.string :as string]
+  (:require [clojure.java.io :as io]
+            [clojure.string :as string]
             [clojure.java.shell :as shell]
-            [taoensso.timbre :as log]))
+            [taoensso.timbre :as log]
+            [trifl.fs :as fs]))
+
+(def post-regex #"posts/(\d{4})-(\d{2})/(\d{2})-(\d{2})(\d{2})(\d{2})/.*")
+(def date-format ":year-:month-:day :hour::minute::second")
 
 (defn get-build
   []
@@ -16,3 +21,26 @@
         dt-format (new java.text.SimpleDateFormat "dd-HHmmss")]
     {:ym (.format ym-format now)
      :dt (.format dt-format now)}))
+
+(defn get-files
+  [dir]
+  (->> dir
+       (io/file)
+       (file-seq)
+       (filter fs/file?)))
+
+(defn path->date
+  [dir]
+  (dissoc
+    (->> dir
+        (re-matches post-regex)
+        (zipmap [:all :year :month :day :hour :minute :second]))
+    :all))
+
+(defn format-date
+  [date-map]
+  (reduce
+    (fn [acc [k v]]
+      (string/replace acc (str k) v))
+    date-format
+    date-map))
