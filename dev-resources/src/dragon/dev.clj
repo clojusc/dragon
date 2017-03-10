@@ -6,6 +6,7 @@
   (:require [dragon.cli :as cli]
             [dragon.generator :as generator]
             [dragon.main :as main]
+            [dragon.post.rfc5322 :as rfc5322]
             [dragon.util :as util]
             [dragon.web :as web]
             [dragon.web.content :as content]
