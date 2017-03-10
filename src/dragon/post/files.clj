@@ -3,13 +3,37 @@
             [clojure.string :as string]
             [dragon.util :as util]))
 
+(defn write-post
+  [data]
+  data)
+
+(defn update-archives
+  [data]
+  data)
+
+(defn update-category
+  [data]
+  data)
+
+(defn update-tags
+  [data]
+  data)
+
+(defn update-authors
+  [data]
+  data)
+
+(defn update-front-page
+  [data]
+  data)
+
 (defn process
   ""
   [data]
-  ;; XXX write post to archives
-  ;; XXX update archives year page with link
-  ;; XXX update category page with link
-  ;; XXX update tags page(s) with link
-  ;; XXX update authors page with link
-  ;; XXX update front page
-  data)
+  (-> data
+      (write-post)
+      (update-archives)
+      (update-category)
+      (update-tags)
+      (update-authors)
+      (update-front-page)))
