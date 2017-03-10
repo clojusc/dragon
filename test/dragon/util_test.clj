@@ -12,3 +12,11 @@
   (is (= (util/format-date {:year "2017" :month "01" :day "07"
                             :hour "05" :minute "09" :second "09"})
          "2017-01-07 05:09:09")))
+
+(deftest month->name
+  (is (= (util/month->name "12") "December"))
+  (is (= (util/month->name "01") "January")))
+
+(deftest month->short-name
+  (is (= (util/month->short-name "12") "Dec"))
+  (is (= (util/month->short-name "01") "Jan")))
