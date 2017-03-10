@@ -30,6 +30,14 @@
   [data]
   (assoc data :uri (string/replace-first (:file-dst data) "docs/" "")))
 
+(defn add-dates
+  [data]
+  (let [date (util/path->date (:file-src data))]
+    (-> data
+        (assoc :date date
+               :month (util/month->name (:month date))
+               :month-short (util/month->short-name (:month date))))))
+
 (defn add-post-data
   [data]
   (->> data
@@ -44,6 +52,7 @@
   (-> file-obj
       (add-post-data)
       (add-file-data)
+      (add-dates)
       (add-uri)
       (convert-body)
       (update-tags)))
