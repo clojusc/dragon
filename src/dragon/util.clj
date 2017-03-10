@@ -44,3 +44,9 @@
       (string/replace acc (str k) v))
     date-format
     date-map))
+
+(defn sanitize-str
+  [str]
+  (-> str
+      (string/replace #"\W+" "-")
+      (string/lower-case)))
