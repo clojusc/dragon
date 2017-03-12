@@ -1,4 +1,4 @@
-(ns dragon.post.rfc5322
+(ns dragon.content.rfc5322
   (:require [clojure.set :refer [rename-keys]]
             [clojure.string :as string]
             [instaparse.core :as instaparse]
