@@ -21,6 +21,7 @@
             [markdown.core :as md]
             [selmer.parser :as selmer]
             [taoensso.timbre :as log]
+            [trifl.core :refer [->int]]
             [trifl.java :as java]))
 
 (logger/set-level! ['dragon] :debug)
