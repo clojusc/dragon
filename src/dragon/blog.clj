@@ -1,9 +1,14 @@
 (ns dragon.blog
   (:require [clojure.set :refer [union]]
-            [dragon.blog.files :as files]
             [dragon.blog.post :as post]
             [dragon.util :as util]
+            [taoensso.timbre :as log]
             [trifl.core :refer [->int]]))
+
+(defn compare-timestamp-desc
+  [a b]
+  (< (:timestamp-long b)
+     (:timestamp-long a)))
 
 (defn compare-timestamp
   [a b]
@@ -30,7 +35,7 @@
   [data]
   (map
     (fn [[month posts]]
-      {:month month :posts posts})
+      {:month (util/month->name month) :posts posts})
     (group-by
       #(->int (get-in % [:date :month]))
       data)))
@@ -73,7 +78,7 @@
   [uri-base]
   (->> (get-posts)
        (map (partial post/process uri-base))
-       (sort compare-timestamp)))
+       (sort compare-timestamp-desc)))
 
 (defn tags
   [data]
@@ -106,11 +111,19 @@
        (map update-author-groups)
        (sort compare-author)))
 
+(defn data-minus-body
+  [data]
+  (map #(dissoc % :body) data))
+
+(defn get-archive-route
+  [uri-base gen-func post-data]
+  (let [route (format "%s/%s" uri-base (:uri-path post-data))]
+    (log/infof "Generating route for %s ..." route)
+    [route (gen-func post-data)]))
+
 (defn get-archive-routes
   [data & {:keys [uri-base gen-func]}]
-  (let [route (format "%s/%s" uri-base (:uri-path data))
-        data (gen-func data)]
-    (->> data
-         (data-for-archives)
-         [route data]
-         (into {}))))
+  (log/trace "Got data:" (data-minus-body data))
+  (->> data
+       (map (partial get-archive-route uri-base gen-func))
+       (into {})))

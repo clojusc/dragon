@@ -1,12 +1,11 @@
 (ns dragon.web.content
-  (:require [selmer.parser :as selmer]))
+  (:require [clojusc.twig :refer [pprint]]
+            [selmer.parser :as selmer]
+            [taoensso.timbre :as log]))
 
 (defn render
-  ([template]
-    (render template identity))
-  ([template func]
-    (render template func {}))
-  ([template func request]
-    (selmer/render-file
-      template
-      (func request))))
+  [template data]
+  (log/tracef "Rendering template %s with data %s" template (pprint data))
+  (selmer/render-file
+    template
+    data))

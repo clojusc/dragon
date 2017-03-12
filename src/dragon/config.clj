@@ -19,6 +19,10 @@
   []
   (:output-dir (dragon)))
 
+(defn posts-path
+  []
+  (:posts-path (dragon)))
+
 (defn cli
   []
   (:cli (dragon)))

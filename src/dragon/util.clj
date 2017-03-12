@@ -54,6 +54,18 @@
 (defn month->name
   [month]
   (case month
+    1 "January"
+    2 "February"
+    3 "March"
+    4 "April"
+    5 "May"
+    6 "June"
+    7 "July"
+    8 "August"
+    9 "September"
+    10 "October"
+    11 "November"
+    12 "December"
     "01" "January"
     "02" "February"
     "03" "March"
