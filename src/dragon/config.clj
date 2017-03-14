@@ -1,7 +1,8 @@
 (ns dragon.config
   (:require [leiningen.core.project :as project]
             [dragon.util :as util]
-            [taoensso.timbre :as log]))
+            [taoensso.timbre :as log])
+  (:refer-clojure :exclude [name]))
 
 (defn all
   []
@@ -10,6 +11,22 @@
 (defn dragon
   []
   (:dragon (all)))
+
+(defn domain
+  []
+  (:domain (dragon)))
+
+(defn domain-urn
+  []
+  (format "urn:%s" (util/dots->dashes (domain))))
+
+(defn name
+  []
+  (:name (dragon)))
+
+(defn description
+  []
+  (:description (dragon)))
 
 (defn port
   []
@@ -22,6 +39,10 @@
 (defn posts-path
   []
   (:posts-path (dragon)))
+
+(defn feed-count
+  []
+  (:feed-count (dragon)))
 
 (defn cli
   []
