@@ -28,21 +28,25 @@
 
 (defn add-link
   [uri-base data]
-  (let [link-template "<a href=\"%s/%s\">%s</a>"
-        link (format link-template uri-base (:uri-path data) (:title data))]
-    (assoc data :link link)))
+  (let [link-template "<a href=\"%s\">%s</a>"
+        url (str uri-base "/" (:uri-path data))
+        link (format link-template url (:title data))]
+    (assoc data :url url
+                :link link)))
 
 (defn add-dates
   [data]
   (let [date (util/path->date (:file-src data))
-        timestamp (util/format-date date)
-        timestamp-clean (string/replace timestamp #"[^\d]" "")]
+        timestamp (util/format-timestamp date)
+        timestamp-clean (string/replace timestamp #"[^\d]" "")
+        datestamp (util/format-datestamp date)]
     (-> data
         (assoc :date date
                :month (util/month->name (:month date))
                :month-short (util/month->short-name (:month date))
                :timestamp timestamp
-               :timestamp-long (Long/parseLong timestamp-clean)))))
+               :timestamp-long (Long/parseLong timestamp-clean)
+               :datestamp datestamp))))
 
 (defn add-post-data
   ""
