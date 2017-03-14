@@ -6,7 +6,8 @@
             [trifl.fs :as fs]))
 
 (def post-regex #"posts/(\d{4})-(\d{2})/(\d{2})-(\d{2})(\d{2})(\d{2})/.*")
-(def date-format ":year-:month-:day :hour::minute::second")
+(def timestamp-format ":year-:month-:day :hour::minute::second")
+(def datestamp-format ":year-:month-:day")
 
 (defn get-build
   []
@@ -38,12 +39,20 @@
     :all))
 
 (defn format-date
-  [date-map]
+  [date-map formater]
   (reduce
     (fn [acc [k v]]
       (string/replace acc (str k) v))
-    date-format
+    formater
     date-map))
+
+(defn format-timestamp
+  [date-map]
+  (format-date date-map timestamp-format))
+
+(defn format-datestamp
+  [date-map]
+  (format-date date-map datestamp-format))
 
 (defn sanitize-str
   [str]
@@ -84,3 +93,7 @@
   (-> month
       (month->name)
       (subs 0 3)))
+
+(defn dots->dashes
+  [str]
+  (string/replace str #"\." "-"))
