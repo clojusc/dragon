@@ -115,9 +115,13 @@
   [data]
   (map #(dissoc % :body) data))
 
+(defn post-url
+  [uri-base post]
+  (format "%s/%s" uri-base (:uri-path post)))
+
 (defn get-archive-route
   [uri-base gen-func post-data]
-  (let [route (format "%s/%s" uri-base (:uri-path post-data))]
+  (let [route (post-url uri-base post-data)]
     (log/infof "Generating route for %s ..." route)
     [route (gen-func post-data)]))
 
@@ -126,4 +130,28 @@
   (log/trace "Got data:" (data-minus-body data))
   (->> data
        (map (partial get-archive-route uri-base gen-func))
+       (into {})))
+
+(defn get-indexed-archive-route
+  [uri-base gen-func posts [post-idx post-data]]
+  (let [route (post-url uri-base post-data)
+        len (count posts)
+        prev-idx (when-not (= post-idx (dec len)) (inc post-idx))
+        next-idx (when-not (= post-idx 0) (dec post-idx))]
+    (log/infof "Generating route for %s ..." route)
+    (log/debugf "This index: %s (prev: %s; next: %s)" post-idx prev-idx next-idx)
+    [route
+     (gen-func
+       (assoc
+         post-data
+         :prev-post (when prev-idx
+                      (post-url uri-base (second (nth posts prev-idx))))
+         :next-post (when next-idx
+                      (post-url uri-base (second (nth posts next-idx))))))]))
+
+(defn get-indexed-archive-routes
+  [data & {:keys [uri-base gen-func]}]
+  (log/trace "Got data:" (data-minus-body data))
+  (->> data
+       (map (partial get-indexed-archive-route uri-base gen-func data))
        (into {})))
