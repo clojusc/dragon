@@ -5,6 +5,7 @@
             [taoensso.timbre :as log]
             [trifl.fs :as fs]))
 
+(def char-regex #"^a*")
 (def post-regex #"posts/(\d{4})-(\d{2})/(\d{2})-(\d{2})(\d{2})(\d{2})/.*")
 (def timestamp-format ":year-:month-:day :hour::minute::second")
 (def datestamp-format ":year-:month-:day")
@@ -97,3 +98,11 @@
 (defn dots->dashes
   [str]
   (string/replace str #"\." "-"))
+
+(defn count-chars
+  [str]
+  (count (re-seq #"." str)))
+
+(defn count-words
+  [str]
+  (count (re-seq #"[^\s]+" str)))

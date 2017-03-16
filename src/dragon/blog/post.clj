@@ -40,13 +40,21 @@
         timestamp (util/format-timestamp date)
         timestamp-clean (string/replace timestamp #"[^\d]" "")
         datestamp (util/format-datestamp date)]
-    (-> data
-        (assoc :date date
-               :month (util/month->name (:month date))
-               :month-short (util/month->short-name (:month date))
-               :timestamp timestamp
-               :timestamp-long (Long/parseLong timestamp-clean)
-               :datestamp datestamp))))
+    (assoc
+      data
+        :date date
+        :month (util/month->name (:month date))
+        :month-short (util/month->short-name (:month date))
+        :timestamp timestamp
+        :timestamp-long (Long/parseLong timestamp-clean)
+        :datestamp datestamp)))
+
+(defn add-counts
+  [data]
+  (assoc
+    data
+      :char-count (util/count-chars (:body data))
+      :word-count (util/count-words (:body data))))
 
 (defn add-post-data
   ""
@@ -62,6 +70,7 @@
   [uri-base file-obj]
   (->> file-obj
        (add-post-data)
+       (add-counts)
        (add-file-data)
        (add-link uri-base)
        (add-dates)
