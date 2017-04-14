@@ -13,9 +13,9 @@
     [clojusc/trifl "0.1.0-SNAPSHOT"]
     [clojusc/twig "0.3.1"]
     [ring/ring-core "1.6.0-RC1"]
-    [markdown-clj "0.9.98"]
+    [markdown-clj "0.9.99"]
     [org.clojure/clojure "1.8.0"]
-    [selmer "1.10.6"]
+    [selmer "1.10.7"]
     [stasis "2.3.0"]
     [tentacles "0.5.1"]]
   :dragon {
