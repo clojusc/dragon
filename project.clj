@@ -33,7 +33,13 @@
                                    "type `lein dragon help` for commands\n")}
                        ["run" "-m" "dragon.main" "cli"]}
       :repl-options {
-        :init-ns dragon.dev}
+        :init-ns dragon.dev
+        :prompt (fn [ns] (str "\u001B[35m[\u001B[34m"
+                              ns
+                              "\u001B[35m]\u001B[33m λ\u001B[m=> "))
+        :welcome ~(do
+                    (println (slurp "resources/text/banner.txt"))
+                    (println (slurp "resources/text/loading.txt")))}
       :plugins [
         [lein-simpleton "1.3.0"]]
       :dependencies [
