@@ -12,9 +12,9 @@
             [clojure.walk :refer [macroexpand-all]]
             [clojusc.twig :as logger]
             [dragon.cli :as cli]
+            [dragon.content.rfc5322 :as rfc5322]
             [dragon.generator :as generator]
             [dragon.main :as main]
-            [dragon.post.rfc5322 :as rfc5322]
             [dragon.util :as util]
             [dragon.web :as web]
             [dragon.web.content :as content]
@@ -22,11 +22,9 @@
             [selmer.parser :as selmer]
             [taoensso.timbre :as log]
             [trifl.core :refer [->int]]
-            [trifl.java :as java]))
+            [trifl.java :refer [show-methods]]))
 
 (logger/set-level! '[dragon clojang] :debug)
-
-(def show-methods #'java/show-methods)
 
 ;;; Aliases
 
