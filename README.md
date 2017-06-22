@@ -114,5 +114,5 @@ Apache License, Version 2.0.
 [tag]: https://github.com/clojusc/dragon/tags
 [clojure-v]: https://img.shields.io/badge/clojure-1.8.0-blue.svg
 [jdk-v]: https://img.shields.io/badge/jdk-1.7+-blue.svg
-[clojars]: https://clojars.org/clojusc/dragon
-[clojars-badge]: https://img.shields.io/clojars/v/clojusc/dragon.svg
+[clojars]: https://clojars.org/dragon
+[clojars-badge]: https://img.shields.io/clojars/v/dragon.svg
