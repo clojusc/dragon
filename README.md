@@ -57,6 +57,7 @@ configuration to its `project.clj` file, e.g.:
 The latest docs are available here:
 
  * http://clojusc.github.io/dragon
+ * http://clojusc.github.io/dragon/marginalia.html
 
 
 ## CLI [&#x219F;](#contents)

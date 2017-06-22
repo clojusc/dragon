@@ -12,6 +12,7 @@
     [clojusc/rfc5322 "0.3.0"]
     [clojusc/trifl "0.1.0"]
     [clojusc/twig "0.3.1"]
+    [http-kit "2.2.0"]
     [leiningen-core "2.7.1"]
     [markdown-clj "0.9.99"]
     [org.clojure/clojure "1.8.0"]
@@ -43,7 +44,6 @@
       :plugins [
         [lein-simpleton "1.3.0"]]
       :dependencies [
-        [http-kit "2.2.0"]
         [org.clojure/tools.namespace "0.2.11"]]}
     :test {
       :exclusions [org.clojure/clojure]
@@ -56,6 +56,7 @@
     :docs {
       :dependencies [[codox-theme-rdash "0.1.2"]]
       :plugins [[lein-codox "0.10.3"]
+                [lein-marginalia "0.9.0"]
                 [lein-simpleton "1.3.0"]]
       :codox {
         :project {
