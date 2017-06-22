@@ -12,7 +12,7 @@
 (defn convert-body
   [data]
   (case (keyword (:content-type data))
-    :md (assoc data :body (markdown/md-to-html-string (:body data)))))
+    :md (update-in data [:body] markdown/md-to-html-string)))
 
 (defn add-file-data
   [data]

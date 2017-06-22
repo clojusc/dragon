@@ -137,7 +137,7 @@
   (let [route (post-url uri-base post-data)
         len (count posts)
         prev-idx (when-not (= post-idx (dec len)) (inc post-idx))
-        next-idx (when-not (= post-idx 0) (dec post-idx))]
+        next-idx (when-not (zero? post-idx) (dec post-idx))]
     (log/infof "Generating route for %s ..." route)
     (log/debugf "This index: %s (prev: %s; next: %s)" post-idx prev-idx next-idx)
     [route
