@@ -12,9 +12,10 @@
     [clojusc/rfc5322 "0.3.0"]
     [clojusc/trifl "0.1.0-SNAPSHOT"]
     [clojusc/twig "0.3.1"]
-    [ring/ring-core "1.6.0-RC1"]
+    [leiningen-core "2.7.1"]
     [markdown-clj "0.9.99"]
     [org.clojure/clojure "1.8.0"]
+    [ring/ring-core "1.6.0-RC1"]
     [selmer "1.10.7"]
     [stasis "2.3.0"]
     [tentacles "0.5.1"]]
@@ -37,7 +38,6 @@
         [lein-simpleton "1.3.0"]]
       :dependencies [
         [http-kit "2.2.0"]
-        [leiningen-core "2.7.1"]
         [org.clojure/tools.namespace "0.2.11"]]}
     :test {
       :exclusions [org.clojure/clojure]
