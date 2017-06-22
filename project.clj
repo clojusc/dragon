@@ -10,12 +10,12 @@
   :dependencies [
     [clojusc/env-ini "0.3.0"]
     [clojusc/rfc5322 "0.3.0"]
-    [clojusc/trifl "0.1.0-SNAPSHOT"]
+    [clojusc/trifl "0.1.0"]
     [clojusc/twig "0.3.1"]
     [leiningen-core "2.7.1"]
     [markdown-clj "0.9.99"]
     [org.clojure/clojure "1.8.0"]
-    [ring/ring-core "1.6.0-RC1"]
+    [ring/ring-core "1.6.1"]
     [selmer "1.10.7"]
     [stasis "2.3.0"]
     [tentacles "0.5.1"]]
@@ -54,7 +54,7 @@
          [lein-kibit "0.1.3"]
          [venantius/yagni "0.1.4"]]}
     :docs {
-      :dependencies [[codox-theme-rdash "0.1.1"]]
+      :dependencies [[codox-theme-rdash "0.1.2"]]
       :plugins [[lein-codox "0.10.3"]
                 [lein-simpleton "1.3.0"]]
       :codox {
@@ -67,5 +67,20 @@
         :doc-paths ["resources/docs"]
         :metadata {
           :doc/format :markdown
-          :doc "Documentation forthcoming"}}}})
+          :doc "Documentation forthcoming"}}}}
+  :aliases {
+    "check-deps" ["with-profile" "+test" "ancient" "check" "all"]
+    "lint" ["with-profile" "+test" "kibit"]
+    "docs" ["with-profile" "+docs" "do"
+      ["codox"]
+      ["marg" "--dir" "docs/current"
+              "--file" "marginalia.html"
+              "--name" "sockets"]]
+    "build" ["with-profile" "+test" "do"
+      ["check-deps"]
+      ["lint"]
+      ["test"]
+      ["compile"]
+      ["docs"]
+      ["uberjar"]]})
 
