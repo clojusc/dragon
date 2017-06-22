@@ -1,4 +1,4 @@
-(defproject dragon "0.2.0-SNAPSHOT"
+(defproject dragon "0.3.0-SNAPSHOT"
   :description "Customised, Stasis-based Static Site Generator"
   :url "https://github.com/clojusc/dragon"
   :scm {
