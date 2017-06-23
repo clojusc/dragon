@@ -1,6 +1,22 @@
 
 Clojure-Aided Enrichment Center's DRAGON!
 
+.d88b 8         w                          db    w    8          8
+8P    8 .d8b.   w 8   8 8d8b .d88b        dPYb   w .d88 .d88b .d88
+8b    8 8' .8   8 8b d8 8P   8.dP' wwww  dPwwYb  8 8  8 8.dP' 8  8
+`Y88P 8 `Y8P'   8 `Y8P8 8    `Y88P      dP    Yb 8 `Y88 `Y88P `Y88
+              wdP
+8888            w      8                            w
+8www 8d8b. 8d8b w .d8b 8d8b. 8d8b.d8b. .d88b 8d8b. w8ww
+8    8P Y8 8P   8 8    8P Y8 8P Y8P Y8 8.dP' 8P Y8  8
+8888 8   8 8    8 `Y8P 8   8 8   8   8 `Y88P 8   8  Y8P
+
+.d88b              w               w
+8P    .d88b 8d8b. w8ww .d88b 8d8b ." d88b
+8b    8.dP' 8P Y8  8   8.dP' 8P      `Yb.
+`Y88P `Y88P 8   8  Y8P `Y88P 8       Y88P
+
+
  .o`
  .oo/                 `              .+::-
  .o++-`              `so+/`           .+sy+`.o:`                 --`
@@ -36,3 +52,9 @@ Clojure-Aided Enrichment Center's DRAGON!
               `-/:/+:/+`         -oso::o:/o:
                   `..`            `--:+/-:-
 
+     '||
+   .. ||  ... ..   ....     ... .   ...   .. ...
+ .'  '||   ||' '' '' .||   || ||  .|  '|.  ||  ||
+ |.   ||   ||     .|' ||    |''   ||   ||  ||  ||
+ '|..'||. .||.    '|..'|'  '||||.  '|..|' .||. ||.
+                          .|....'
