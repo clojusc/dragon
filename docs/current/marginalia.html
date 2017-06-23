@@ -2865,7 +2865,7 @@ net.brehaut.ClojureTools = (function (SH) {
     build_tree: build_tree
   };
 })(SyntaxHighlighter);
-</script><title>sockets -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name"><a href="https://github.com/clojusc/dragon">sockets</a></h1><h2 class="project-version">0.1.0-SNAPSHOT</h2><br /><p>Customised, Stasis-based Static Site Generator</p>
+</script><title>sockets -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name"><a href="https://github.com/clojusc/dragon">sockets</a></h1><h2 class="project-version">0.3.0-SNAPSHOT</h2><br /><p>Customised, Stasis-based Static Site Generator</p>
 </div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">clojusc/env-ini</td><td class="dotted"><hr /></td><td class="dep-version">0.3.0</td></tr><tr><td class="dep-name">clojusc/rfc5322</td><td class="dotted"><hr /></td><td class="dep-version">0.3.0</td></tr><tr><td class="dep-name">clojusc/trifl</td><td class="dotted"><hr /></td><td class="dep-version">0.1.0</td></tr><tr><td class="dep-name">clojusc/twig</td><td class="dotted"><hr /></td><td class="dep-version">0.3.1</td></tr><tr><td class="dep-name">http-kit</td><td class="dotted"><hr /></td><td class="dep-version">2.2.0</td></tr><tr><td class="dep-name">leiningen-core</td><td class="dotted"><hr /></td><td class="dep-version">2.7.1</td></tr><tr><td class="dep-name">markdown-clj</td><td class="dotted"><hr /></td><td class="dep-version">0.9.99</td></tr><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.8.0</td></tr><tr><td class="dep-name">ring/ring-core</td><td class="dotted"><hr /></td><td class="dep-version">1.6.1</td></tr><tr><td class="dep-name">selmer</td><td class="dotted"><hr /></td><td class="dep-version">1.10.7</td></tr><tr><td class="dep-name">stasis</td><td class="dotted"><hr /></td><td class="dep-version">2.3.0</td></tr><tr><td class="dep-name">tentacles</td><td class="dotted"><hr /></td><td class="dep-version">0.5.1</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#dragon.blog.post">dragon.blog.post</a></li><li><a href="#dragon.blog">dragon.blog</a></li><li><a href="#dragon.cli.new.post">dragon.cli.new.post</a></li><li><a href="#dragon.cli.new">dragon.cli.new</a></li><li><a href="#dragon.cli.show">dragon.cli.show</a></li><li><a href="#dragon.cli">dragon.cli</a></li><li><a href="#dragon.config">dragon.config</a></li><li><a href="#dragon.content.rfc5322">dragon.content.rfc5322</a></li><li><a href="#dragon.generator">dragon.generator</a></li><li><a href="#dragon.main">dragon.main</a></li><li><a href="#dragon.meta">dragon.meta</a></li><li><a href="#dragon.stub">dragon.stub</a></li><li><a href="#dragon.util">dragon.util</a></li><li><a href="#dragon.web.content">dragon.web.content</a></li><li><a href="#dragon.web">dragon.web</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.post" name="dragon.blog.post"><h1 class="project-name">dragon.blog.post</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.post
   (:require [clojure.java.io :as io]
@@ -3030,7 +3030,10 @@ net.brehaut.ClojureTools = (function (SH) {
        (sort compare-author)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn data-minus-body
   [data]
-  (map #(dissoc % :body) data))</pre></td></tr><tr><td class="docs">
+  (log/trace &quot;Dumping body from: &quot; (vec data))
+  (cond
+    (map? data) (assoc data :body &quot;...&quot;)
+    (coll? data) (map #(assoc % :body &quot;...&quot;) data)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn post-url
   [uri-base post]
   (format &quot;%s/%s&quot; uri-base (:uri-path post)))</pre></td></tr><tr><td class="docs">
@@ -3063,7 +3066,7 @@ net.brehaut.ClojureTools = (function (SH) {
                       (post-url uri-base (second (nth posts next-idx))))))]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-indexed-archive-routes
   [data &amp; {:keys [uri-base gen-func]}]
-  (log/trace &quot;Got data:&quot; (data-minus-body data))
+  (log/trace &quot;Got data:&quot;data)
   (-&gt;&gt; data
        (map (partial get-indexed-archive-route uri-base gen-func data))
        (into {})))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.cli.new.post" name="dragon.cli.new.post"><h1 class="project-name">dragon.cli.new.post</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
@@ -3572,14 +3575,16 @@ Content-Type: md
             [stasis.core :as stasis]
             [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn run
-  [stasis-routes port]
-  (log/infof
-    (str &quot;Starting development HTTP server on port %s using dynamic &quot;
-         &quot;content ...&quot;)
-    port)
-  (server/run-server
-    (ring-file/wrap-file {} &quot;docs&quot;)
-    {:port port}))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/gdeer81/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a><div id="floating-toc"><ul><li class="floating-toc-li" id="floating-toc_dragon.blog.post">dragon.blog.post</li><li class="floating-toc-li" id="floating-toc_dragon.blog">dragon.blog</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.post">dragon.cli.new.post</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new">dragon.cli.new</li><li class="floating-toc-li" id="floating-toc_dragon.cli.show">dragon.cli.show</li><li class="floating-toc-li" id="floating-toc_dragon.cli">dragon.cli</li><li class="floating-toc-li" id="floating-toc_dragon.config">dragon.config</li><li class="floating-toc-li" id="floating-toc_dragon.content.rfc5322">dragon.content.rfc5322</li><li class="floating-toc-li" id="floating-toc_dragon.generator">dragon.generator</li><li class="floating-toc-li" id="floating-toc_dragon.main">dragon.main</li><li class="floating-toc-li" id="floating-toc_dragon.meta">dragon.meta</li><li class="floating-toc-li" id="floating-toc_dragon.stub">dragon.stub</li><li class="floating-toc-li" id="floating-toc_dragon.util">dragon.util</li><li class="floating-toc-li" id="floating-toc_dragon.web.content">dragon.web.content</li><li class="floating-toc-li" id="floating-toc_dragon.web">dragon.web</li></ul></div></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
+  ([stasis-routes port]
+    (run stasis-routes port &quot;docs&quot;))
+  ([stasis-routes port docroot]
+    (log/infof
+      (str &quot;Starting development HTTP server on port %s using dynamic &quot;
+           &quot;content ...&quot;)
+      port)
+    (server/run-server
+      (ring-file/wrap-file {} docroot)
+      {:port port})))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/gdeer81/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a><div id="floating-toc"><ul><li class="floating-toc-li" id="floating-toc_dragon.blog.post">dragon.blog.post</li><li class="floating-toc-li" id="floating-toc_dragon.blog">dragon.blog</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.post">dragon.cli.new.post</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new">dragon.cli.new</li><li class="floating-toc-li" id="floating-toc_dragon.cli.show">dragon.cli.show</li><li class="floating-toc-li" id="floating-toc_dragon.cli">dragon.cli</li><li class="floating-toc-li" id="floating-toc_dragon.config">dragon.config</li><li class="floating-toc-li" id="floating-toc_dragon.content.rfc5322">dragon.content.rfc5322</li><li class="floating-toc-li" id="floating-toc_dragon.generator">dragon.generator</li><li class="floating-toc-li" id="floating-toc_dragon.main">dragon.main</li><li class="floating-toc-li" id="floating-toc_dragon.meta">dragon.meta</li><li class="floating-toc-li" id="floating-toc_dragon.stub">dragon.stub</li><li class="floating-toc-li" id="floating-toc_dragon.util">dragon.util</li><li class="floating-toc-li" id="floating-toc_dragon.web.content">dragon.web.content</li><li class="floating-toc-li" id="floating-toc_dragon.web">dragon.web</li></ul></div></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
 SyntaxHighlighter.all();
 
 // hackity hack
