@@ -6,6 +6,6 @@
 
 (defn run
   [routes out-dir]
-  (log/infof "Generating static content to %s ..." out-dir)
+  (log/infof "Generating static content to '%s' ..." out-dir)
   (stasis/export-pages routes out-dir)
   (log/info "Static generation complete."))
