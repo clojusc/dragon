@@ -114,7 +114,7 @@
 
 (defn data-minus-body
   [data]
-  (log/trace "Dumping body from: " (into [] data))
+  (log/trace "Dumping body from: " (vec data))
   (cond
     (map? data) (assoc data :body "...")
     (coll? data) (map #(assoc % :body "...") data)))
