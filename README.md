@@ -40,15 +40,21 @@ so I borrowed the name and images for a "Clojure version" :-)
 ## Configuration [&#x219F;](#contents)
 
 Every project that uses Dragon to generate static content needs to add some
-configuration to its `project.clj` file, e.g.:
+configuration to its `project.clj` file. Here's an example taken from
+the [Clojang Blog](http://clojang.lfe.io/) e.g.:
 
 ```clj
   :dragon {
-    :dev-port 5098
+    :domain "clojang.lfe.io"
+    :name "The Clojang Blog"
+    :description "News, Information, & Tutorials for the Clojang Library Collection"
+    :dev-port 5097
     :output-dir "docs"
-    :gen-fn #'my.project.site/generate
+    :posts-path "/archives"
+    :feed-count 20
     :cli {
-      :log-level :info}}
+      :log-level :info
+      :log-ns [clojang.blog dragon]}}
 ```
 
 
