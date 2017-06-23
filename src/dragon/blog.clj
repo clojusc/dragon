@@ -114,7 +114,10 @@
 
 (defn data-minus-body
   [data]
-  (map #(dissoc % :body) data))
+  (log/trace "Dumping body from: " (into [] data))
+  (cond
+    (map? data) (assoc data :body "...")
+    (coll? data) (map #(assoc % :body "...") data)))
 
 (defn post-url
   [uri-base post]
@@ -152,7 +155,7 @@
 
 (defn get-indexed-archive-routes
   [data & {:keys [uri-base gen-func]}]
-  (log/trace "Got data:" (data-minus-body data))
+  (log/trace "Got data:"data)
   (->> data
        (map (partial get-indexed-archive-route uri-base gen-func data))
        (into {})))
