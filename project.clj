@@ -1,3 +1,15 @@
+(defn get-banner
+  []
+  (str
+    (slurp "resources/text/banner.txt")
+    (slurp "resources/text/loading.txt")))
+
+(defn get-prompt
+  [ns]
+  (str "\u001B[35m[\u001B[34m"
+       ns
+       "\u001B[35m]\u001B[33m λ\u001B[m=> "))
+
 (defproject dragon "0.3.0-SNAPSHOT"
   :description "Customised, Stasis-based Static Site Generator"
   :url "https://github.com/clojusc/dragon"
@@ -27,20 +39,14 @@
       :log-level :info}}
   :profiles {
     :uberjar {:aot :all}
+    :custom-repl {
+      :repl-options {
+        :init-ns dragon.dev
+        :prompt ~get-prompt
+        :init ~(println (get-banner))}}
     :dev {
       :source-paths ["dev-resources/src"]
       :main dragon.main
-      :aliases {"blog" ^{:doc (str "The Dragon CLI; "
-                                   "type `lein dragon help` for commands\n")}
-                       ["run" "-m" "dragon.main" "cli"]}
-      :repl-options {
-        :init-ns dragon.dev
-        :prompt (fn [ns] (str "\u001B[35m[\u001B[34m"
-                              ns
-                              "\u001B[35m]\u001B[33m λ\u001B[m=> "))
-        :welcome ~(do
-                    (println (slurp "resources/text/banner.txt"))
-                    (println (slurp "resources/text/loading.txt")))}
       :plugins [
         [lein-simpleton "1.3.0"]]
       :dependencies [
@@ -70,6 +76,10 @@
           :doc/format :markdown
           :doc "Documentation forthcoming"}}}}
   :aliases {
+    "blog"
+      ^{:doc (str "The Dragon CLI; type `lein dragon help` for commands\n")}
+      ["run" "-m" "dragon.main" "cli"]
+    "repl" ["with-profile" "+custom-repl" "repl"]
     "check-deps" ["with-profile" "+test" "ancient" "check" "all"]
     "lint" ["with-profile" "+test" "kibit"]
     "docs" ["with-profile" "+docs" "do"
