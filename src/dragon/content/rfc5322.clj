@@ -6,14 +6,14 @@
             [rfc5322.dev :as rfc-dev]))
 
 (defn rfc5322-names->metadata-names
-  "Given a form name, convert to a keyword column name."
-  [^clojure.lang.Keyword form-name]
-  (case form-name
+  "Given a field name, convert to a keyword column name."
+  [^clojure.lang.Keyword field-name]
+  (case field-name
     :subject :title
     :from :author
     :keywords :tags
     :comments :comment-link
-    form-name))
+    field-name))
 
 (defn remap-keys
   "Update the keys in a map, converting them with the provided function."
