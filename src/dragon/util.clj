@@ -14,7 +14,7 @@
   []
   (:out (shell/sh "git" "rev-parse" "--short" "HEAD")))
 
-(defn now
+(defn post-now
   "Return the current time in two parts, ready to be used for creating
   blog post directories."
   []
@@ -24,20 +24,33 @@
     {:ym (.format ym-format now)
      :dt (.format dt-format now)}))
 
+(defn path->date
+  [dir]
+  (dissoc
+    (->> dir
+         (re-matches post-regex)
+         (zipmap [:all :year :month :day :hour :minute :second]))
+    :all))
+
+(defn datetime-now
+  []
+  (let [{:keys [ym dt]} (post-now)]
+    (path->date (format "posts/%s/%s/" ym dt))))
+
+(defn now
+  ([]
+    (now :post-map))
+  ([date-format]
+    (case date-format
+      :datetime-map (datetime-now)
+      :post-map (post-now))))
+
 (defn get-files
   [dir]
   (->> dir
        (io/file)
        (file-seq)
        (filter fs/file?)))
-
-(defn path->date
-  [dir]
-  (dissoc
-    (->> dir
-        (re-matches post-regex)
-        (zipmap [:all :year :month :day :hour :minute :second]))
-    :all))
 
 (defn format-date
   [date-map formater]
