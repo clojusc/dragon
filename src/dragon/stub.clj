@@ -10,6 +10,7 @@
 (def stub-metadata
 "{:title \"REQUIRED\"
  :subtitle \"\"
+ :header-image \"\"
  :excerpt \"\"
  :author \"REQUIRED\"
  :twitter \"\"
@@ -22,6 +23,7 @@
   []
   {:title \"REQUIRED\"
    :subtitle \"\"
+   :header-image \"\"
    :excerpt \"\"
    :author \"REQUIRED\"
    :twitter \"\"
@@ -35,6 +37,7 @@
 (def edn-content
 "{:title \"REQUIRED\"
  :subtitle \"\"
+ :header-image \"\"
  :excerpt \"\"
  :author \"REQUIRED\"
  :twitter \"\"
@@ -62,6 +65,7 @@
 (def rfc5322-content
 "Subject: REQUIRED (title)
 Subtitle:
+Header-Image:
 Excerpt:
 From: REQUIRED (author)
 Twitter:
