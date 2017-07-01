@@ -12,6 +12,7 @@
  :subtitle \"\"
  :excerpt \"\"
  :author \"REQUIRED\"
+ :twitter \"\"
  :category \"REQUIRED\"
  :tags []
  :comment-link \"\"}\n")
@@ -23,6 +24,7 @@
    :subtitle \"\"
    :excerpt \"\"
    :author \"REQUIRED\"
+   :twitter \"\"
    :category \"REQUIRED\"
    :tags []
    :comment-link \"\"})\n
@@ -35,6 +37,7 @@
  :subtitle \"\"
  :excerpt \"\"
  :author \"REQUIRED\"
+ :twitter \"\"
  :category \"REQUIRED\"
  :tags []
  :comment-link \"\"
@@ -61,6 +64,7 @@
 Subtitle:
 Excerpt:
 From: REQUIRED (author)
+Twitter:
 Category:
 Keywords:
 Comments:
