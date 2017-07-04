@@ -119,3 +119,10 @@
 (defn count-words
   [str]
   (count (re-seq #"[^\s]+" str)))
+
+(defn count-lines
+  [str]
+  (as-> str data
+        (string/split data #"\n")
+        (remove empty? data)
+        (count data)))

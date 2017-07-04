@@ -51,10 +51,12 @@
 
 (defn add-counts
   [data]
-  (assoc
-    data
-      :char-count (util/count-chars (:body data))
-      :word-count (util/count-words (:body data))))
+  (let [body (:body data)]
+    (assoc
+      data
+        :char-count (util/count-chars body)
+        :word-count (util/count-words body)
+        :line-count (util/count-lines body))))
 
 (defn add-post-data
   ""
