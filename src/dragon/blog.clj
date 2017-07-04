@@ -70,10 +70,12 @@
    :posts auth-data})
 
 (defn get-posts
-  []
-  (map (fn [x]
-         {:file x})
-       (util/get-files (config/posts-path-))))
+  ([]
+    (get-posts "posts"))
+  ([posts-path]
+    (map (fn [x]
+           {:file x})
+         (util/get-files posts-path))))
 
 (defn process
   [uri-base]
