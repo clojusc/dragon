@@ -39,6 +39,8 @@
   :dragon {
     :dev-port 5097
     :output-dir "docs"
+    :base-path "/blog"
+    :posts-path "/blog/archives"
     :cli {
       :log-level :info}}
   :profiles {

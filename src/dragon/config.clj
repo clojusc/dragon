@@ -36,6 +36,10 @@
   []
   (:output-dir (dragon)))
 
+(defn base-path
+  []
+  (:base-path (dragon)))
+
 (defn posts-path
   []
   (:posts-path (dragon)))
