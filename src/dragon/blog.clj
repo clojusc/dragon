@@ -83,7 +83,39 @@
        (map (partial post/process uri-base))
        (sort compare-timestamp-desc)))
 
-(defn tags
+(defn get-tag-freqs
+  [data]
+  (->> data
+       (map (comp vec :tags))
+       (flatten)
+       (frequencies)))
+
+(defn add-tag-percents
+  [total highest tag-data]
+  (let [percent (float (/ (:count tag-data) highest))]
+    (assoc tag-data
+           :total total
+           :highest highest
+           :percent percent
+           :five-star (Math/round (* 5 percent))
+           :hundred (Math/round (* 100 percent)))))
+
+(defn add-tags-percents
+  [total highest tags-data]
+  (map #(add-tag-percents total highest %) tags-data))
+
+(defn tag-stats
+  [data]
+  (let [freqs (get-tag-freqs data)
+        total (reduce + (vals freqs))
+        highest (apply max (vals freqs))]
+    (->> freqs
+         (vec)
+         (map #(zipmap [:name :count] %))
+         (add-tags-percents total highest)
+         (sort-by :name))))
+
+(defn tags-unique
   [data]
   (->> data
        (map :tags)
@@ -104,8 +136,8 @@
 
 (defn data-for-tags
   [data]
-  (let [all-tags (tags data)]
-    (map (partial group-by-tag data) all-tags)))
+  (let [unique-tags (tags-unique data)]
+    (map (partial group-by-tag data) unique-tags)))
 
 (defn data-for-authors
   [data]
