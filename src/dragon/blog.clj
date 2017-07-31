@@ -73,12 +73,14 @@
   ([]
     (get-posts "posts"))
   ([posts-path]
+    (log/debugf "Finding posts under '%s' dir ..." posts-path)
     (map (fn [x]
            {:file x})
          (util/get-files posts-path))))
 
 (defn process
   [uri-base]
+  (log/debug "Processing posts ...")
   (->> (get-posts)
        (map (partial post/process uri-base))
        (sort compare-timestamp-desc)))

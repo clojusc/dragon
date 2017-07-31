@@ -114,14 +114,17 @@
 
 (defn count-chars
   [str]
-  (count (re-seq #"." str)))
+  (log/trace "Counting chars ...")
+  (count (re-seq #".*" str)))
 
 (defn count-words
   [str]
+  (log/trace "Counting words ...")
   (count (re-seq #"[^\s]+" str)))
 
 (defn count-lines
   [str]
+  (log/trace "Counting lines ...")
   (as-> str data
         (string/split data #"\n")
         (remove empty? data)

@@ -3,7 +3,8 @@
             [clojure.string :as string]
             [dragon.content.rfc5322 :as rfc5322]
             [dragon.util :as util]
-            [markdown.core :as markdown]))
+            [markdown.core :as markdown]
+            [taoensso.timbre :as log]))
 
 (defn md->html
   [md]
@@ -18,10 +19,11 @@
 
 (defn convert-body
   [data]
+  (log/debug "Converting post body ...")
   (let [paragraphs (string/split (:body data) #"\n\n")
         words (-> paragraphs
-                      (first)
-                      (string/split #"\s"))
+                  (first)
+                  (string/split #"\s"))
         words-100 (take 100 words)
         excerpt-100 (join-excerpt words-100 100)
         excerpt-50 (join-excerpt words-100 50)
@@ -35,10 +37,12 @@
 
 (defn update-tags
   [data]
+  (log/debug "Updating tags ...")
   (assoc data :tags (apply sorted-set (string/split (:tags data) #",\s?"))))
 
 (defn add-file-data
   [data]
+  (log/debug "Adding file data ...")
   (let [file-obj (:file data)
         file-src (.getPath file-obj)
         filename-old (.getName file-obj)
@@ -51,6 +55,7 @@
 
 (defn add-link
   [uri-base data]
+  (log/debug "Adding links ...")
   (let [link-template "<a href=\"%s\">%s</a>"
         url (str uri-base "/" (:uri-path data))
         link (format link-template url (:title data))]
@@ -59,6 +64,7 @@
 
 (defn add-dates
   [data]
+  (log/debug "Adding post dates ...")
   (let [date (util/path->date (:file-src data))
         timestamp (util/format-timestamp date)
         timestamp-clean (string/replace timestamp #"[^\d]" "")
@@ -74,7 +80,9 @@
 
 (defn add-counts
   [data]
+  (log/debug "Adding counts ...")
   (let [body (:body data)]
+    (log/trace "Body data:" data)
     (assoc
       data
         :char-count (util/count-chars body)
@@ -84,6 +92,7 @@
 (defn add-post-data
   ""
   [data]
+  (log/debugf "Adding post data for '%s' ..." (:file data))
   (->> data
        :file
        (slurp)

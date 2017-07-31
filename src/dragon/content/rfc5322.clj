@@ -3,7 +3,8 @@
             [clojure.string :as string]
             [instaparse.core :as instaparse]
             [rfc5322.core :as rfc]
-            [rfc5322.dev :as rfc-dev]))
+            [rfc5322.dev :as rfc-dev]
+            [taoensso.timbre :as log]))
 
 (defn rfc5322-names->metadata-names
   "Given a field name, convert to a keyword column name."
@@ -28,6 +29,7 @@
 (defn parse
   "Parse the given message, converting the parsed tree into a Clojure map."
   [msg]
+  (log/debug "Parsing message content ...")
   (->> msg
        (instaparse/parse (rfc/make-lite-parser))
        (rfc-dev/->map)
