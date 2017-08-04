@@ -92,12 +92,12 @@
 (defn add-post-data
   ""
   [data]
-  (log/debugf "Adding post data for '%s' ..." (:file data))
-  (->> data
-       :file
-       (slurp)
-       (rfc5322/parse)
-       (merge data)))
+  (let [file (:file data)]
+    (log/debugf "Adding post data for '%s' ..." file)
+    (->> file
+         (slurp)
+         (rfc5322/parse)
+         (merge data))))
 
 (defn process
   ""

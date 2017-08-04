@@ -1,10 +1,32 @@
 (ns dragon.blog
-  (:require [clojure.set :refer [union]]
+  (:require [clojure.java.io :as io]
+            [clojure.set :refer [union]]
+            [clojure.string :as string]
             [dragon.blog.post :as post]
             [dragon.config :as config]
             [dragon.util :as util]
             [taoensso.timbre :as log]
-            [trifl.core :refer [->int]]))
+            [trifl.core :refer [->int]]
+            [trifl.fs :as fs])
+  (:import (java.io.File)))
+
+(def legal-post-file-extensions
+  #{".rfc5322"})
+
+(defn legal-content-file?
+  [^java.io.File post]
+  (->> legal-post-file-extensions
+       (map #(string/ends-with? (.getCanonicalPath post) %))
+       (remove false?)
+       (not-empty)))
+
+(defn get-files
+  [dir]
+  (->> dir
+       (io/file)
+       (file-seq)
+       (filter fs/file?)
+       (filter legal-content-file?)))
 
 (defn compare-timestamp-desc
   [a b]
@@ -76,7 +98,7 @@
     (log/debugf "Finding posts under '%s' dir ..." posts-path)
     (map (fn [x]
            {:file x})
-         (util/get-files posts-path))))
+         (get-files posts-path))))
 
 (defn process
   [uri-base]

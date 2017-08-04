@@ -1,9 +1,7 @@
 (ns dragon.util
-  (:require [clojure.java.io :as io]
-            [clojure.string :as string]
+  (:require [clojure.string :as string]
             [clojure.java.shell :as shell]
-            [taoensso.timbre :as log]
-            [trifl.fs :as fs]))
+            [taoensso.timbre :as log]))
 
 (def char-regex #"^a*")
 (def post-regex #"posts/(\d{4})-(\d{2})/(\d{2})-(\d{2})(\d{2})(\d{2})/.*")
@@ -44,13 +42,6 @@
     (case date-format
       :datetime-map (datetime-now)
       :post-map (post-now))))
-
-(defn get-files
-  [dir]
-  (->> dir
-       (io/file)
-       (file-seq)
-       (filter fs/file?)))
 
 (defn format-date
   [date-map formater]
