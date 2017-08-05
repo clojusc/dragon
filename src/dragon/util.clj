@@ -106,7 +106,7 @@
 (defn count-chars
   [str]
   (log/trace "Counting chars ...")
-  (count (re-seq #".*" str)))
+  (count (re-seq #"." str)))
 
 (defn count-words
   [str]
