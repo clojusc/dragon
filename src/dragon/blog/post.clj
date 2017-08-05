@@ -47,11 +47,13 @@
         file-src (.getPath file-obj)
         filename-old (.getName file-obj)
         filename (format "%s.html" (util/sanitize-str (:title data)))]
-    (assoc data :filename filename
-                :file-src file-src
-                :uri-path (-> file-src
-                              (string/replace filename-old filename)
-                              (string/replace-first "posts/" "")))))
+    (assoc data
+           :filename filename
+           :src-file file-src
+           :src-dir (.getParent file-obj)
+           :uri-path (-> file-src
+                         (string/replace filename-old filename)
+                         (string/replace-first "posts/" "")))))
 
 (defn add-link
   [uri-base data]
@@ -65,18 +67,18 @@
 (defn add-dates
   [data]
   (log/debug "Adding post dates ...")
-  (let [date (util/path->date (:file-src data))
+  (let [date (util/path->date (:src-file data))
         timestamp (util/format-timestamp date)
         timestamp-clean (string/replace timestamp #"[^\d]" "")
         datestamp (util/format-datestamp date)]
     (assoc
       data
-        :date date
-        :month (util/month->name (:month date))
-        :month-short (util/month->short-name (:month date))
-        :timestamp timestamp
-        :timestamp-long (Long/parseLong timestamp-clean)
-        :datestamp datestamp)))
+      :date date
+      :month (util/month->name (:month date))
+      :month-short (util/month->short-name (:month date))
+      :timestamp timestamp
+      :timestamp-long (Long/parseLong timestamp-clean)
+      :datestamp datestamp)))
 
 (defn add-counts
   [data]
@@ -85,9 +87,9 @@
     (log/trace "Body data:" data)
     (assoc
       data
-        :char-count (util/count-chars body)
-        :word-count (util/count-words body)
-        :line-count (util/count-lines body))))
+      :char-count (util/count-chars body)
+      :word-count (util/count-words body)
+      :line-count (util/count-lines body))))
 
 (defn add-post-data
   ""
