@@ -1,7 +1,7 @@
 (ns dragon.blog.post
   (:require [clojure.java.io :as io]
             [clojure.string :as string]
-            [dragon.content.rfc5322 :as rfc5322]
+            [dragon.content.core :as content]
             [dragon.util :as util]
             [markdown.core :as markdown]
             [taoensso.timbre :as log]))
@@ -97,8 +97,7 @@
   (let [file (:file data)]
     (log/debugf "Adding post data for '%s' ..." file)
     (->> file
-         (slurp)
-         (rfc5322/parse)
+         (content/parse)
          (merge data))))
 
 (defn process
