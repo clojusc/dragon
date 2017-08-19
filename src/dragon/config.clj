@@ -40,6 +40,10 @@
   []
   (:posts-path (dragon)))
 
+(defn posts-path-src
+  []
+  (:posts-path-src (dragon)))
+
 (defn feed-count
   []
   (:feed-count (dragon)))

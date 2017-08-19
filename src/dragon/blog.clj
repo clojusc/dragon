@@ -1,6 +1,7 @@
 (ns dragon.blog
   (:require [clojure.set :refer [union]]
             [dragon.blog.post :as post]
+            [dragon.config :as config]
             [dragon.util :as util]
             [taoensso.timbre :as log]
             [trifl.core :refer [->int]]))
@@ -72,7 +73,7 @@
   []
   (map (fn [x]
          {:file x})
-       (util/get-files "posts")))
+       (util/get-files (config/posts-path-))))
 
 (defn process
   [uri-base]
