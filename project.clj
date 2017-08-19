@@ -16,8 +16,8 @@
     [leiningen-core "2.7.1"]
     [markdown-clj "0.9.99"]
     [org.clojure/clojure "1.8.0"]
-    [ring/ring-core "1.6.1"]
-    [selmer "1.10.7"]
+    [ring/ring-core "1.6.2"]
+    [selmer "1.11.0"]
     [stasis "2.3.0"]
     [tentacles "0.5.1"]]
   :dragon {
