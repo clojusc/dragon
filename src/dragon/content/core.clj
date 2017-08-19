@@ -1,0 +1,14 @@
+(ns dragon.content.core
+  (:require [dragon.content.rfc5322 :as rfc5322]
+            [trifl.fs :as fs]))
+
+(defn parse
+  [file-obj]
+  (let [file-type (fs/extension file-obj)
+        content (slurp file-obj)]
+    (assoc
+      (case file-type
+        "rfc5322" (rfc5322/parse content)
+        :default {:raw-data content
+                  :error :parser-not-found})
+      :file-type file-type)))
