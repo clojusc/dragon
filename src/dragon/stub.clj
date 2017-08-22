@@ -16,7 +16,8 @@
  :twitter \"\"
  :category \"REQUIRED\"
  :tags []
- :comment-link \"\"}\n")
+ :comment-link \"\"
+ :header-image \"\"}\n")
 
 (def clj-content
 "(defn metadata
@@ -29,7 +30,8 @@
    :twitter \"\"
    :category \"REQUIRED\"
    :tags []
-   :comment-link \"\"})\n
+   :comment-link \"\"
+   :header-image \"\"})\n
 (defn content
   []
   \"REQUIRED\")\n")
@@ -44,6 +46,7 @@
  :category \"REQUIRED\"
  :tags []
  :comment-link \"\"
+ :header-image \"\"
  :content \"REQUIRED\"}\n")
 
 ;; Note that rfc5322-content uses the standard field names, when something
@@ -73,6 +76,7 @@ Category:
 Keywords:
 Comments:
 Content-Type: md
+Header-Image: img/
 
 [content goes here]\n")
 
