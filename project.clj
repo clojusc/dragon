@@ -10,8 +10,8 @@
   :dependencies [
     [clojusc/env-ini "0.3.0"]
     [clojusc/rfc5322 "0.3.0"]
-    [clojusc/trifl "0.1.0"]
-    [clojusc/twig "0.3.1"]
+    [clojusc/trifl "0.2.0-SNAPSHOT"]
+    [clojusc/twig "0.3.2-SNAPSHOT"]
     [http-kit "2.2.0"]
     [leiningen-core "2.7.1"]
     [markdown-clj "1.0.1"]
