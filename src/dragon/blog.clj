@@ -73,7 +73,7 @@
   []
   (map (fn [x]
          {:file x})
-       (util/get-files (config/posts-path-))))
+       (util/get-files (config/posts-path-src))))
 
 (defn process
   [uri-base]
