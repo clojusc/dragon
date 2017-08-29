@@ -93,7 +93,7 @@
 
 (defn get-posts
   ([]
-    (get-posts "posts"))
+    (get-posts (config/posts-path-src)))
   ([posts-path]
     (log/debugf "Finding posts under '%s' dir ..." posts-path)
     (map (fn [x]
