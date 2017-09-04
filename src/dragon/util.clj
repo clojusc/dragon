@@ -4,7 +4,7 @@
             [taoensso.timbre :as log]))
 
 (def char-regex #"^a*")
-(def post-regex #"posts/(\d{4})-(\d{2})/(\d{2})-(\d{2})(\d{2})(\d{2})/.*")
+(def post-regex #"(\./)?posts/(\d{4})-(\d{2})/(\d{2})-(\d{2})(\d{2})(\d{2})/.*")
 (def timestamp-format ":year-:month-:day :hour::minute::second")
 (def datestamp-format ":year-:month-:day")
 
@@ -27,7 +27,7 @@
   (dissoc
     (->> dir
          (re-matches post-regex)
-         (zipmap [:all :year :month :day :hour :minute :second]))
+         (zipmap [:all :dir-prefix :year :month :day :hour :minute :second]))
     :all))
 
 (defn datetime-now
