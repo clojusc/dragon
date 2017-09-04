@@ -78,7 +78,9 @@
       :month-short (util/month->short-name (:month date))
       :timestamp timestamp
       :timestamp-long (Long/parseLong timestamp-clean)
-      :datestamp datestamp)))
+      :datestamp datestamp
+      :now-timestamp (util/format-timestamp (util/datetime-now))
+      :now-datestamp (util/format-datestamp (util/datetime-now)))))
 
 (defn add-counts
   [data]
