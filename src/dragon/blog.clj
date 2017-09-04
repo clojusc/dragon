@@ -213,7 +213,7 @@
 
 (defn get-indexed-archive-routes
   [data & {:keys [uri-base gen-func]}]
-  (log/trace "Got data:"data)
+  (log/trace "Got data:" data)
   (->> data
        (map (partial get-indexed-archive-route uri-base gen-func data))
        (into {})))

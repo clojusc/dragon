@@ -53,6 +53,7 @@
            :src-dir (.getParent file-obj)
            :uri-path (-> file-src
                          (string/replace filename-old filename)
+                         (util/sanitize-post-path)
                          (string/replace-first "posts/" "")))))
 
 (defn add-link

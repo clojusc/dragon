@@ -28,7 +28,7 @@
     (->> dir
          (re-matches post-regex)
          (zipmap [:all :dir-prefix :year :month :day :hour :minute :second]))
-    :all))
+    :all :dir-prefix))
 
 (defn datetime-now
   []
@@ -60,10 +60,14 @@
   (format-date date-map datestamp-format))
 
 (defn sanitize-str
-  [str]
-  (-> str
+  [data-str]
+  (-> data-str
       (string/replace #"\W+" "-")
       (string/lower-case)))
+
+(defn sanitize-post-path
+  [path-str]
+  (string/replace path-str #"^\./" ""))
 
 (defn month->name
   [month]
