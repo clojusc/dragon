@@ -14,7 +14,7 @@
        ns
        "\u001B[35m]\u001B[33m λ\u001B[m=> "))
 
-(defproject dragon "0.3.0"
+(defproject dragon "0.4.0-SNAPSHOT"
   :description "Customised, Stasis-based Static Site Generator"
   :url "https://github.com/clojusc/dragon"
   :scm {
