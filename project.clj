@@ -33,7 +33,7 @@
     [markdown-clj "1.0.1"]
     [org.clojure/clojure "1.8.0"]
     [ring/ring-core "1.6.2"]
-    [selmer "1.11.0"]
+    [selmer "1.11.1"]
     [stasis "2.3.0"]
     [tentacles "0.5.1"]]
   :dragon {
@@ -60,7 +60,7 @@
     :test {
       :exclusions [org.clojure/clojure]
       :plugins [
-        [lein-ancient "0.6.10"]
+        [lein-ancient "0.6.12"]
         [jonase/eastwood "0.2.4"]
         [lein-bikeshed "0.4.1"]
         [lein-kibit "0.1.5"]
@@ -88,7 +88,7 @@
       ^{:doc (str "The Dragon CLI; type `lein dragon help` for commands\n")}
       ["run" "-m" "dragon.main" "cli"]
     "repl" ["with-profile" "+custom-repl" "repl"]
-    "check-deps" ["with-profile" "+test" "ancient" "check" "all"]
+    "check-deps" ["with-profile" "+test" "ancient" "check" ":all"]
     "lint" ["with-profile" "+test" "kibit"]
     "docs" ["with-profile" "+docs" "do"
       ["codox"]
