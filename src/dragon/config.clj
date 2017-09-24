@@ -15,8 +15,14 @@
    :posts-path "/blog/archives"
    :posts-path-src "./posts"
    :feed-count 20
-   :cli {
+   :repl {
      :log-level :info
+     :log-nss '[dragon]}
+   :app {
+     :log-level :warn
+     :log-nss '[dragon]}
+   :cli {
+     :log-level :error
      :log-nss '[dragon]}})
 
 (defn build
