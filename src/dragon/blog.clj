@@ -1,4 +1,4 @@
-(ns dragon.blog
+(ns dragon.blog ;; XXX move to dragon.blog.core
   (:require [clojure.java.io :as io]
             [clojure.set :refer [union]]
             [clojure.string :as string]

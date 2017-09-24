@@ -1,7 +1,9 @@
 (ns dragon.components.event
   (:require [com.stuartsierra.component :as component]
+            [dragon.components.core :as component-api]
             [dragon.event.subscription :as subscription]
             [dragon.event.system.core :as event]
+            [dragon.event.tag :as tag]
             [dragon.event.topic :as topic]
             [taoensso.timbre :as log]))
 
@@ -11,21 +13,22 @@
   (start [component]
     (log/info "Starting event component ...")
     (log/debug "Started event component.")
-    (let [component (assoc component :pubsub pubsub)]
+    (let [dataflow (event/create-dataflow-pubsub)
+          component (assoc-in component component-api/dataflow-keys dataflow)]
       (log/info "Adding subscribers ...")
       (subscription/subscribe-all component)
+      (event/publish component tag/subscribers-added)
       component))
 
   (stop [component]
     (log/info "Stopping event component ...")
-    (log/debug "Stopped event component.")
-    (event/delete (:pubsub component))
-    (assoc component :pubsub nil)))
+    (event/delete (get-in component component-api/dataflow-keys))
+    (let [component (assoc-in component component-api/dataflow-keys nil)]
+      (log/debug "Stopped event component.")
+      component)))
 
 (defn create-event-component
   ""
   ([]
-   (create-event-component topic/dataflow-events))
-  ([topic]
-   (->Event
-    (event/create-pubsub topic))))
+   (map->Event
+    {:pubsub {}})))

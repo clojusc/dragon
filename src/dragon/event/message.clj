@@ -3,7 +3,7 @@
 
 (defn new-dataflow-event
   [tag data]
-  {:topic/dataflow-events tag
+  {topic/dataflow-events tag
    :data data})
 
 (defn get-payload

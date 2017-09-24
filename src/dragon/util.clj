@@ -147,3 +147,10 @@
 (defmethod merge-val :default
   [a b]
   b)
+
+(defn component->system
+  ""
+  [system-or-component]
+  (if (contains? system-or-component :event)
+    system-or-component
+    {:event system-or-component}))

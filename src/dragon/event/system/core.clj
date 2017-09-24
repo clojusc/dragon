@@ -4,12 +4,14 @@
             [dragon.event.message :as message]
             [dragon.event.system.impl :as impl]
             [dragon.event.topic :as topic]
+            [dragon.util :as util]
             [potemkin :refer [import-vars]]
             [taoensso.timbre :as log])
   (:import [dragon.event.system.impl PubSub]))
 
 (import-vars
- [impl create-pubsub])
+ [impl create-pubsub
+       create-dataflow-pubsub])
 
 (defprotocol PubSubAPI
   "The API for Dragon pubsub messenging."
@@ -19,9 +21,8 @@
     "Get the core.async channel associated with the publisher.")
   (get-pub [this]
     "Get the core.async pub associated with the publisher.")
-  (get-sub [this] [this topic]
-    "Create and return a subscriber channel for a given topic. If no topic is
-    given, use the default.")
+  (get-sub [this tag]
+    "Create and return a subscriber channel for a given tag (event-type).")
   (delete [this]
     "Delete the publisher."))
 
@@ -31,30 +32,32 @@
 
 (defn publish
   ""
-  [system event-type data]
-  (let [pubsub (components/get-pubsub system)
-        topic (get-topic pubsub)
-        msg (message/new-dataflow-event event-type data)]
-    (log/info "Publishing message ...")
-    (log/info "Routing info:" (message/get-route msg))
-    (log/info "Sending message data:" (message/get-payload msg))
-    (async/>!! (get-chan pubsub) msg))
-  data)
+  ([system-or-component event-type]
+   (publish system-or-component event-type {}))
+  ([system-or-component event-type data]
+   (let [system (util/component->system system-or-component)
+         dataflow (components/get-dataflow-pubsub system)
+         topic (get-topic dataflow)
+         msg (message/new-dataflow-event event-type data)]
+     (log/debug "Publishing message to" (message/get-route msg))
+     (log/trace "Sending message data:" (message/get-payload msg))
+     (async/>!! (get-chan dataflow) msg))
+   data))
 
 (defn subscribe
   ""
   ([system event-type]
    (subscribe system event-type (fn [s m]
-                                  (log/infof
-                                   "Got system: %s\nGot msg: %s" s m))))
+                                  (log/warn
+                                   "Using default subscriber callback for route"
+                                   (message/get-route m)))))
   ([system event-type func]
-   (let [pubsub (components/get-pubsub system)]
+   (let [dataflow (components/get-dataflow-pubsub system)]
      (async/go-loop []
-       (when-let [msg (async/<! (get-sub pubsub event-type))]
-         (log/info "Received subscribed message.")
-         (log/info "Routing info:" (message/get-route msg))
-         (log/info "Message data:" (message/get-payload msg))
-         (log/info "Callback function:" func)
+       (when-let [msg (async/<! (get-sub dataflow event-type))]
+         (log/debug "Received subscribed message for" (message/get-route msg))
+         (log/trace "Message data:" (message/get-payload msg))
+         (log/trace "Callback function:" func)
          (func system msg)
          (recur))))))
 

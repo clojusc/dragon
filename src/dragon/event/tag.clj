@@ -4,6 +4,10 @@
 (def read-config ::read-config)
 (def read-config-post ::read-config-post)
 
+(def subscribers-added-pre ::subscribers-added-pre)
+(def subscribers-added ::subscribers-added)
+(def subscribers-added-post ::subscribers-added-post)
+
 (def run-cli-pre ::run-cli-pre)
 (def run-cli ::run-cli)
 (def run-cli-post ::run-cli-post)
@@ -27,3 +31,7 @@
 (def generate-routes-pre ::generate-routes-pre)
 (def generate-routes ::generate-routes)
 (def generate-routes-post ::generate-routes-post)
+
+(def shutdown-cli-pre ::shutdown-cli-pre)
+(def shutdown-cli ::shutdown-cli)
+(def shutdown-cli-post ::shutdown-cli-post)

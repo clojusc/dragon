@@ -59,4 +59,5 @@
     :--help (docs/print-docstring #'run)
     :--version (version-cmd)
     :-h (docs/print-docstring #'run)
-    :-v (version-cmd)))
+    :-v (version-cmd))
+  (event/publish system tag/shutdown-cli))

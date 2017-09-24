@@ -20,10 +20,10 @@
   (:pub this))
 
 (defn get-sub
-  [this event-type]
+  [this tag]
   (let [sub-chan (async/chan 1)]
-    (async/sub (get-pub this) event-type sub-chan)
-    sub-chan))
+    (async/sub (get-pub this) tag sub-chan)
+    #_sub-chan))
 
 (defn delete
   [this]
@@ -45,13 +45,15 @@
 
   Since topics are keywords, the data sent on the publish channel needs to have
   the topic as one of the keys, or a subscriber will not receive the message."
-  ([]
-   (create-pubsub topic/dataflow-events))
-  ([topic]
-   (log/debug "Creating pubsub manager ...")
-   (let [channel (async/chan 1)]
-     (->PubSub
-      topic
-      channel
-      (async/pub channel topic)))))
+  [topic]
+  (log/debug "Creating pubsub manager ...")
+  (log/trace "Using topic" topic)
+  (let [channel (async/chan 1)]
+    (map->PubSub
+     {:topic topic
+      :chan channel
+      :pub (async/pub channel topic)})))
 
+(defn create-dataflow-pubsub
+  []
+  (create-pubsub topic/dataflow-events))

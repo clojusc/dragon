@@ -1,6 +1,8 @@
 (ns dragon.components.core
   "System component access functions.")
 
+(def dataflow-keys [:pubsub :dataflow])
+
 (defn get-config
   ""
   [system & args]
@@ -13,3 +15,8 @@
   ""
   [system]
   (get-in system [:event :pubsub]))
+
+(defn get-dataflow-pubsub
+  ""
+  [system]
+  (get-in system (concat [:event] dataflow-keys)))
