@@ -1,6 +1,6 @@
 (ns dragon.main
   (:require [dragon.cli.core :as cli]
-            [dragon.components.core :as components]
+            [dragon.components.system :as components]
             [dragon.config :as config]
             [dragon.web.core :as web]
             [taoensso.timbre :as log]

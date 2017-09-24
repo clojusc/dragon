@@ -1,5 +1,6 @@
 (ns dragon.event.system.core
   (:require [clojure.core.async :as async]
+            [dragon.components.core :as components]
             [dragon.event.system.impl :as impl]
             [dragon.event.topic :as topic]
             [potemkin :refer [import-vars]]
@@ -30,7 +31,7 @@
 (defn publish
   ""
   [system event-type data]
-  (let [pubsub (get-in system [:event :pubsub])
+  (let [pubsub (components/get-pubsub system)
         topic (get-topic pubsub)
         msg {topic event-type
              :data data}]
@@ -50,7 +51,7 @@
                                   (log/infof
                                    "Got system: %s\nGot msg: %s" s m))))
   ([system event-type func]
-   (let [pubsub (get-in system [:event :pubsub])]
+   (let [pubsub (components/get-pubsub system)]
      (async/go-loop []
        (when-let [msg (async/<! (get-sub pubsub event-type))]
          (log/info "Received subscribed message.")

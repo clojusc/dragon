@@ -1,5 +1,6 @@
 (ns dragon.config
-  (:require [dragon.util :as util]
+  (:require [dragon.components.core :as components]
+            [dragon.util :as util]
             [leiningen.core.project :as project]
             [taoensso.timbre :as log])
   (:refer-clojure :exclude [name read]))
@@ -27,7 +28,7 @@
 
 (defn domain
   [system]
-  (get-in system [:config :dragon :domain]))
+  (components/get-config system :domain))
 
 (defn domain-urn
   [system]
@@ -38,44 +39,44 @@
 
 (defn name
   [system]
-  (get-in system [:config :dragon :name]))
+  (components/get-config system :name))
 
 (defn description
   [system]
-  (get-in system [:config :dragon :description]))
+  (components/get-config system :description))
 
 (defn port
   [system]
-  (get-in system [:config :dragon :port]))
+  (components/get-config system :port))
 
 (defn output-dir
   [system]
-  (get-in system [:config :dragon :output-dir]))
+  (components/get-config system :output-dir))
 
 (defn base-path
   [system]
-  (get-in system [:config :dragon :base-path]))
+  (components/get-config system :base-path))
 
 (defn posts-path
   [system]
-  (get-in system [:config :dragon :posts-path]))
+  (components/get-config system :posts-path))
 
 (defn posts-path-src
   [system]
-  (get-in system [:config :dragon :posts-path-src]))
+  (components/get-config system :posts-path-src))
 
 (defn feed-count
   [system]
-  (get-in system [:config :dragon :feed-count]))
+  (components/get-config system :feed-count))
 
 (defn cli
   [system]
-  (get-in system [:config :dragon :cli]))
+  (components/get-config system :cli))
 
 (defn log-level
   [system]
-  (get-in system [:config :dragon :cli :log-level]))
+  (components/get-config system :cli :log-level))
 
 (defn log-nss
   [system]
-  (get-in system [:config :dragon :cli :log-nss]))
+  (components/get-config system :cli :log-nss))
