@@ -4,8 +4,8 @@
             [clojure.string :as string]
             [dragon.blog.post :as post]
             [dragon.config :as config]
-            [dragon.event.names :as names]
             [dragon.event.system.core :as event]
+            [dragon.event.tag :as tag]
             [dragon.util :as util]
             [taoensso.timbre :as log]
             [trifl.core :refer [->int]]
@@ -105,11 +105,11 @@
 (defn process
   [system uri-base]
   (log/debug "Processing posts ...")
-  (event/publish system names/process-all-pre {})
+  (event/publish system tag/process-all-pre {})
   (->> (get-posts)
        (map (partial post/process uri-base))
        (sort compare-timestamp-desc)
-       (event/publish system names/process-all-post)))
+       (event/publish system tag/process-all-post)))
 
 (defn get-tag-freqs
   [data]

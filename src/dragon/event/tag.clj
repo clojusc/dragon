@@ -1,6 +1,4 @@
-(ns dragon.event.names)
-
-(def dataflow-events ::dataflow-events)
+(ns dragon.event.tag)
 
 (def read-config-pre ::read-config-pre)
 (def read-config ::read-config)

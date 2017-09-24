@@ -1,8 +1,8 @@
 (ns dragon.components.event
   (:require [com.stuartsierra.component :as component]
-            [dragon.event.names :as names]
             [dragon.event.subscription :as subscription]
             [dragon.event.system.core :as event]
+            [dragon.event.topic :as topic]
             [taoensso.timbre :as log]))
 
 (defrecord Event [pubsub]
@@ -13,7 +13,7 @@
     (log/debug "Started event component.")
     (let [component (assoc component :pubsub pubsub)]
       (log/info "Adding subscribers ...")
-      (subscription/subscribe-all {:event component})
+      (subscription/subscribe-all component)
       component))
 
   (stop [component]
@@ -25,7 +25,7 @@
 (defn create-event-component
   ""
   ([]
-   (create-event-component names/dataflow-events))
+   (create-event-component topic/dataflow-events))
   ([topic]
    (->Event
     (event/create-pubsub topic))))

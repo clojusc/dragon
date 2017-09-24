@@ -1,7 +1,7 @@
 (ns dragon.event.system.impl
   (:require [clojure.core.async :as async]
-            [dragon.event.names :as names]
             [dragon.event.system.impl :as impl]
+            [dragon.event.topic :as topic]
             [taoensso.timbre :as log]))
 
 (defrecord PubSub
@@ -46,7 +46,7 @@
   Since topics are keywords, the data sent on the publish channel needs to have
   the topic as one of the keys, or a subscriber will not receive the message."
   ([]
-   (create-pubsub names/dataflow-events))
+   (create-pubsub topic/dataflow-events))
   ([topic]
    (log/debug "Creating pubsub manager ...")
    (let [channel (async/chan 1)]

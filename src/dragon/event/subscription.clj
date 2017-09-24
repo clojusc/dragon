@@ -1,28 +1,36 @@
 (ns dragon.event.subscription
-  (:require [dragon.event.names :as names]
-            [dragon.event.system.core :as event]
+  (:require [dragon.event.system.core :as event]
+            [dragon.event.tag :as tag]
             [taoensso.timbre :as log]))
 
 (def subscribers
-  {names/process-all-pre []
-   names/process-all-post []
-   names/run-cli [:a]
-   names/read-source-pre []
-   names/read-source-post []
-   names/parse-content-pre []
-   names/parse-content-post []
-   names/write-output-pre []
-   names/write-output-post []
-   names/generate-routes-pre []
-   names/generate-routes-post []})
+  {tag/process-all-pre []
+   tag/process-all-post []
+   tag/run-cli [(constantly true)]
+   tag/read-source-pre []
+   tag/read-source-post []
+   tag/parse-content-pre []
+   tag/parse-content-post []
+   tag/write-output-pre []
+   tag/write-output-post []
+   tag/generate-routes-pre []
+   tag/generate-routes-post []})
+
+(defn component->system
+  ""
+  [system-or-component]
+  (if (contains? system-or-component :event)
+    system-or-component
+    {:event system-or-component}))
 
 (defn subscribe-all-event
   ""
-  [system [event-type subscribers]]
-  (doseq [func subscribers]
-    (log/infof "Subscribing to %s ..." event-type)
-    ;;(event/subscribe system event-type func)
-    (event/subscribe system event-type)))
+  [system-or-component [event-type subscribers]]
+  (let [system (component->system system-or-component)]
+    (doseq [func subscribers]
+      (log/infof "Subscribing to %s ..." event-type)
+      ;;(event/subscribe system event-type func)
+      (event/subscribe system event-type))))
 
 (defn subscribe-all
   ""
