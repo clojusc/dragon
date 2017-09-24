@@ -1,11 +1,11 @@
 (ns dragon.cli.core
   (:require [clojure.pprint :refer [pprint]]
             [clojusc.twig :as logger]
+            [dragon.blog.generator :as gen]
             [dragon.cli.new.core :as new]
             [dragon.cli.show :as show]
             [dragon.event.system.core :as event]
             [dragon.event.tag :as tag]
-            [dragon.generator :as gen]
             [dragon.util :as util]
             [dragon.web.core :as web]
             [taoensso.timbre :as log]

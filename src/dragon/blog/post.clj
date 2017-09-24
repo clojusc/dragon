@@ -1,7 +1,7 @@
 (ns dragon.blog.post
   (:require [clojure.java.io :as io]
             [clojure.string :as string]
-            [dragon.content.core :as content]
+            [dragon.blog.content.core :as content]
             [dragon.util :as util]
             [markdown.core :as markdown]
             [taoensso.timbre :as log]))

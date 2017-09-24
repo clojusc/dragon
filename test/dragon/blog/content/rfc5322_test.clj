@@ -1,7 +1,7 @@
-(ns dragon.content.rfc5322-test
+(ns dragon.blog.content.rfc5322-test
   (:require [clojure.java.io :as io]
             [clojure.test :refer :all]
-            [dragon.content.rfc5322 :as rfc5322]))
+            [dragon.blog.content.rfc5322 :as rfc5322]))
 
 (deftest test-parse
   (let [data (rfc5322/parse (slurp (io/resource "sample-post.rfc5322")))]

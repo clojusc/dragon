@@ -1,5 +1,5 @@
-(ns dragon.content.core
-  (:require [dragon.content.rfc5322 :as rfc5322]
+(ns dragon.blog.content.core
+  (:require [dragon.blog.content.rfc5322 :as rfc5322]
             [trifl.fs :as fs]))
 
 (defn parse

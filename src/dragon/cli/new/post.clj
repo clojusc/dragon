@@ -1,6 +1,6 @@
 (ns dragon.cli.new.post
   (:require [clojure.pprint :refer [pprint]]
-            [dragon.stub :as stub]
+            [dragon.cli.new.stub :as stub]
             [dragon.util :as util]
             [taoensso.timbre :as log]
             [trifl.docs :as docs]))
