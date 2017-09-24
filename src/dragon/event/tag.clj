@@ -20,6 +20,10 @@
 (def read-source ::read-source)
 (def read-source-post ::read-source-post)
 
+(def parse-file-pre ::parse-file-pre)
+(def parse-file ::parse-file)
+(def parse-file-post ::parse-file-post)
+
 (def parse-content-pre ::parse-content-pre)
 (def parse-content ::parse-content)
 (def parse-content-post ::parse-content-post)

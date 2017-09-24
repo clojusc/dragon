@@ -11,10 +11,22 @@
    :name "Dragon Blog Generator"
    :description "A fire-breathing blog generator"
    :output-dir "docs"
+   :output-file-tmpl "%s.html"
    :base-path "/blog"
    :posts-path "/blog/archives"
    :posts-path-src "./posts"
    :feed-count 20
+   :link-tmpl "<a href=\"%s\">%s</a>"
+   :templating {
+     :skip-marker "%%%"}
+   :parsing {
+     :word-separator #"\s"
+     :word-joiner " "
+     :paragraph-separator #"\n\n"
+     :tag-separator #",\s?"
+     :sentence-end "."
+     :ellipsis " ..."
+     :period-ellipsis ".."}
    :repl {
      :log-level :info
      :log-nss '[dragon]}
@@ -59,6 +71,10 @@
   [system]
   (components/get-config system :output-dir))
 
+(defn output-file-tmpl
+  [system]
+  (components/get-config system :output-file-tmpl))
+
 (defn base-path
   [system]
   (components/get-config system :base-path))
@@ -75,6 +91,10 @@
   [system]
   (components/get-config system :feed-count))
 
+(defn link-tmpl
+  [system]
+  (components/get-config system :link-tmpl))
+
 (defn cli
   [system]
   (components/get-config system :cli))
@@ -86,3 +106,43 @@
 (defn log-nss
   [system]
   (components/get-config system :cli :log-nss))
+
+(defn templating
+  [system]
+  (components/get-config system :templating))
+
+(defn template-skip-marker
+  [system]
+  (components/get-config system :templating :skip-marker))
+
+(defn parsing
+  [system]
+  (components/get-config system :parsing))
+
+(defn word-separator
+  [system]
+  (components/get-config system :parsing :word-separator))
+
+(defn word-joiner
+  [system]
+  (components/get-config system :parsing :word-joiner))
+
+(defn paragraph-separator
+  [system]
+  (components/get-config system :parsing :paragraph-separator))
+
+(defn tag-separator
+  [system]
+  (components/get-config system :parsing :tag-separator))
+
+(defn sentence-end
+  [system]
+  (components/get-config system :parsing :sentence-end))
+
+(defn ellipsis
+  [system]
+  (components/get-config system :parsing :ellipsis))
+
+(defn period-ellipsis
+  [system]
+  (components/get-config system :parsing :period-ellipsis))

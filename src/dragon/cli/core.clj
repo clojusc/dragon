@@ -51,7 +51,7 @@
   (case cmd
     :new (new/run system args)
     :show (show/run system args)
-    :gen (gen/run system args)
+    :gen (gen/run system)
     :run (web/run system)
     :help (docs/print-docstring #'run)
     :version (version-cmd)

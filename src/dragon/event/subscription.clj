@@ -29,6 +29,8 @@
    tag/run-cli [:default]
    tag/read-source-pre [:default]
    tag/read-source-post [:default]
+   tag/parse-file-pre [:default]
+   tag/parse-file-post [:default]
    tag/parse-content-pre [:default]
    tag/parse-content-post [:default]
    tag/write-output-pre [:default]

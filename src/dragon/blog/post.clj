@@ -1,56 +1,65 @@
 (ns dragon.blog.post
   (:require [clojure.java.io :as io]
             [clojure.string :as string]
+            [dragon.config :as config]
             [dragon.blog.content.core :as content]
             [dragon.util :as util]
             [markdown.core :as markdown]
             [taoensso.timbre :as log]))
 
 (defn md->html
-  [md]
-  ;; XXX move inhibit string into configuration
-  (markdown/md-to-html-string md :inhibit-separator "%%%"))
+  [system md]
+  (markdown/md-to-html-string
+   md
+   :inhibit-separator (config/template-skip-marker system)))
 
 (defn join-excerpt
-  [words number]
-  (let [excerpt (string/join " " (take number words))]
-    ;; XXX if word ends in punctuation beside ".", add " ..."
-    (if (string/ends-with? excerpt ".")
-      (str excerpt "..")
-      (str excerpt "..."))))
+  [system words number]
+  (let [excerpt (string/join (config/word-joiner system)
+                             (take number words))]
+    (if (string/ends-with? excerpt (config/sentence-end system))
+      (str excerpt (config/period-ellipsis system))
+      (str excerpt (config/ellipsis system)))))
 
 (defn convert-body
-  [data]
+  [system data]
   (log/debug "Converting post body ...")
-  ;; XXX put paragraph separator into config
-  (let [paragraphs (string/split (:body data) #"\n\n")
+  (let [body (:body data)
+        paragraphs (string/split body
+                                 (config/paragraph-separator system))
         words (-> paragraphs
                   (first)
-                  ;; XXX put word separator into config
-                  (string/split #"\s"))
+                  (string/split (config/word-separator system)))
         words-100 (take 100 words)
         excerpt-100 (join-excerpt words-100 100)
         excerpt-50 (join-excerpt words-100 50)
         excerpt-25 (join-excerpt words-100 25)]
-    (case (keyword (:content-type data))
-      :md (-> data
-              (update-in [:body] md->html)
-              (assoc :excerpt-100 (md->html excerpt-100)
-                     :excerpt-50 (md->html excerpt-50)
-                     :excerpt-25 (md->html excerpt-25))))))
+    (event/publish system tag/parse-content-pre {:body body})
+    (-> data
+        :content-type
+        keyword
+        (case
+          :md (update-in data [:body] md->html))
+        (#(event/publish system tag/parse-content-post {:body (:body data)} %))
+        (assoc :excerpt-100 (md->html excerpt-100)
+               :excerpt-50 (md->html excerpt-50)
+               :excerpt-25 (md->html excerpt-25)))))
 
 (defn update-tags
-  [data]
+  [system data]
   (log/debug "Updating tags ...")
-  (assoc data :tags (apply sorted-set (string/split (:tags data) #",\s?"))))
+  (assoc data :tags (apply sorted-set (string/split
+                                       (:tags data)
+                                       (config/tag-separator system)))))
 
 (defn add-file-data
-  [data]
+  [system data]
   (log/debug "Adding file data ...")
   (let [file-obj (:file data)
         file-src (.getPath file-obj)
         filename-old (.getName file-obj)
-        filename (format "%s.html" (util/sanitize-str (:title data)))]
+        filename (format (config/output-file-tmpl system)
+                         (util/sanitize-str (:title data)))]
     (assoc data
            :filename filename
            :src-file file-src
@@ -61,16 +70,15 @@
                          (string/replace-first "posts/" "")))))
 
 (defn add-link
-  [uri-base data]
+  [system uri-base data]
   (log/debug "Adding links ...")
-  (let [link-template "<a href=\"%s\">%s</a>"
-        url (str uri-base "/" (:uri-path data))
-        link (format link-template url (:title data))]
+  (let [url (str uri-base "/" (:uri-path data))
+        link (format (config/link-tmpl system) url (:title data))]
     (assoc data :url url
                 :link link)))
 
 (defn add-dates
-  [data]
+  [system data]
   (log/debug "Adding post dates ...")
   (let [date (util/path->date (:src-file data))
         timestamp (util/format-timestamp date)
@@ -88,7 +96,7 @@
       :now-datestamp (util/format-datestamp (util/datetime-now)))))
 
 (defn add-counts
-  [data]
+  [system data]
   (log/debug "Adding counts ...")
   (let [body (:body data)]
     (log/trace "Body data:" data)
@@ -100,7 +108,7 @@
 
 (defn add-post-data
   ""
-  [data]
+  [system data]
   (let [file (:file data)]
     (log/debugf "Adding post data for '%s' ..." file)
     (->> file
@@ -109,12 +117,12 @@
 
 (defn process
   ""
-  [uri-base file-obj]
+  [system uri-base file-obj]
   (->> file-obj
-       (add-post-data)
-       (add-counts)
-       (add-file-data)
-       (add-link uri-base)
-       (add-dates)
-       (update-tags)
-       (convert-body)))
+       (add-post-data system)
+       (add-counts system)
+       (add-file-data system)
+       (add-link system uri-base)
+       (add-dates system)
+       (update-tag systems)
+       (convert-body system)))

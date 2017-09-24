@@ -45,7 +45,7 @@
     :base-path "/blog"
     :posts-path "/blog/archives"
     :cli {
-      :log-level :info}}
+      :log-level :debug}}
   :profiles {
     :uberjar {:aot :all}
     :custom-repl {
