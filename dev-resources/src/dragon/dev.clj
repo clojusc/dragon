@@ -1,8 +1,8 @@
 (ns dragon.dev
-  "Clojang blog development namespace
+  "Dragon development namespace
 
-  This namespace is particularly useful when doing active development on the
-  Clojang blog application."
+  This namespace is particularly useful when doing active development on depedent
+  blog applications."
   (:require [clojure.edn :as edn]
             [clojure.java.io :as io]
             [clojure.pprint :refer [pprint print-table]]
