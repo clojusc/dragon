@@ -24,6 +24,4 @@
        :web (web/run system)
        :cli (cli/run system (map keyword args)))
      ;; Do a full shut-down upon ^c
-     (trifl/add-shutdown-handler #(components/stop system))
-     ;; Deamonize
-     (.join (Thread/currentThread)))))
+     (trifl/add-shutdown-handler #(components/stop system)))))
