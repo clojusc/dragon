@@ -3,6 +3,8 @@
             [clojusc.twig :as logger]
             [dragon.cli.new.core :as new]
             [dragon.cli.show :as show]
+            [dragon.event.names :as names]
+            [dragon.event.system.core :as event]
             [dragon.generator :as gen]
             [dragon.util :as util]
             [dragon.web.core :as web]
@@ -45,6 +47,7 @@
   [system [cmd & args]]
   (log/debug "Got cmd:" cmd)
   (log/debug "Got args:" args)
+  (event/publish system names/run-cli {:cmd cmd :args args})
   (case cmd
     :new (new/run system args)
     :show (show/run system args)

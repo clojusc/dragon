@@ -33,6 +33,8 @@
     [leiningen-core "2.7.1"]
     [markdown-clj "1.0.1"]
     [org.clojure/clojure "1.8.0"]
+    [org.clojure/core.async "0.3.443"]
+    [potemkin "0.4.4"]
     [ring/ring-core "1.6.2"]
     [selmer "1.11.1"]
     [stasis "2.3.0"]
