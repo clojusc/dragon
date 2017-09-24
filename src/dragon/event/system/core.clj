@@ -1,6 +1,7 @@
 (ns dragon.event.system.core
   (:require [clojure.core.async :as async]
             [dragon.components.core :as components]
+            [dragon.event.message :as message]
             [dragon.event.system.impl :as impl]
             [dragon.event.topic :as topic]
             [potemkin :refer [import-vars]]
@@ -33,14 +34,10 @@
   [system event-type data]
   (let [pubsub (components/get-pubsub system)
         topic (get-topic pubsub)
-        msg {topic event-type
-             :data data}]
+        msg (message/new-dataflow-event event-type data)]
     (log/info "Publishing message ...")
-    (log/infof "Routing with topic %s and tag %s ..."
-               topic event-type)
-    ;; XXX Add messaging API function (get-payload msg)
-    ;; XXX Add messaging API function (get-route msg) that dissoc's data
-    (log/info "Sending message data:" (:data msg))
+    (log/info "Routing info:" (message/get-route msg))
+    (log/info "Sending message data:" (message/get-payload msg))
     (async/>!! (get-chan pubsub) msg))
   data)
 
@@ -55,9 +52,8 @@
      (async/go-loop []
        (when-let [msg (async/<! (get-sub pubsub event-type))]
          (log/info "Received subscribed message.")
-         ;; XXX use the message API functions in the next two lines
-         (log/info "Routing info:" (dissoc msg :data))
-         (log/info "Message data:" (:data msg))
+         (log/info "Routing info:" (message/get-route msg))
+         (log/info "Message data:" (message/get-payload msg))
          (log/info "Callback function:" func)
          (func system msg)
          (recur))))))
