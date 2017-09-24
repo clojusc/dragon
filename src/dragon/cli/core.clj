@@ -1,18 +1,14 @@
-(ns dragon.cli
+(ns dragon.cli.core
   (:require [clojure.pprint :refer [pprint]]
             [clojusc.twig :as logger]
-            [dragon.cli.new :as new]
+            [dragon.cli.new.core :as new]
             [dragon.cli.show :as show]
             [dragon.generator :as gen]
             [dragon.util :as util]
-            [dragon.web :as web]
+            [dragon.web.core :as web]
             [taoensso.timbre :as log]
             [trifl.core :refer [sys-prop]]
             [trifl.docs :as docs]))
-
-(defn help-cmd
-  [& args]
-  (docs/print-docstring 'dragon.cli 'run))
 
 (defn version-cmd
   []
@@ -46,19 +42,18 @@
   ```
     $ dragon new help
   ```"
-  [[cmd & args]]
+  [system [cmd & args]]
   (log/debug "Got cmd:" cmd)
   (log/debug "Got args:" args)
   (case cmd
-    :new (new/run args)
-    :show (show/run args)
-    :gen (gen/run args)
-    :run (web/run)
-    :help (help-cmd args)
+    :new (new/run system args)
+    :show (show/run system args)
+    :gen (gen/run system args)
+    :run (web/run system)
+    :help (docs/print-docstring #'run)
     :version (version-cmd)
     ;; Aliases
-    :--help (help-cmd args)
+    :--help (docs/print-docstring #'run)
     :--version (version-cmd)
-    :-h (help-cmd args)
-    :-v (version-cmd))
-  (shutdown-agents))
+    :-h (docs/print-docstring #'run)
+    :-v (version-cmd)))

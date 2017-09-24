@@ -27,3 +27,16 @@
 (deftest month->short-name
   (is (= (util/month->short-name "12") "Dec"))
   (is (= (util/month->short-name "01") "Jan")))
+
+(deftest deep-merge
+  (is (= {:a 2}
+         (util/deep-merge {:a 1} {:a 2})))
+  (is (= {:a 1 :b 2}
+         (util/deep-merge {:a 1} {:b 2})))
+  (is (= {:a {:b 2}}
+         (util/deep-merge {:a {:b 1}} {:a {:b 2}})))
+  (is (= {:a {:b 1 :c 2}}
+         (util/deep-merge {:a {:b 1}} {:a {:c 2}})))
+  (is (= {:a {:b {:c {:d {:e {:f 1 :g 2}}}}}}
+         (util/deep-merge {:a {:b {:c {:d {:e {:f 1}}}}}}
+                          {:a {:b {:c {:d {:e {:g 2}}}}}}))))

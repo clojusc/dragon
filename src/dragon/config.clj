@@ -1,65 +1,81 @@
 (ns dragon.config
-  (:require [leiningen.core.project :as project]
-            [dragon.util :as util]
+  (:require [dragon.util :as util]
+            [leiningen.core.project :as project]
             [taoensso.timbre :as log])
-  (:refer-clojure :exclude [name]))
+  (:refer-clojure :exclude [name read]))
 
-(defn all
-  []
-  (project/read))
+(def defaults
+  {:dev-port 5097
+   :domain "dragon.github.io"
+   :name "Dragon Blog Generator"
+   :description "A fire-breathing blog generator"
+   :output-dir "docs"
+   :base-path "/blog"
+   :posts-path "/blog/archives"
+   :posts-path-src "./posts"
+   :feed-count 20
+   :cli {
+     :log-level :info
+     :log-nss '[dragon]}})
 
-(defn dragon
+(defn build
+  ""
   []
-  (:dragon (all)))
+  (util/deep-merge
+   defaults
+   (:dragon (project/read))))
 
 (defn domain
-  []
-  (:domain (dragon)))
+  [system]
+  (get-in system [:config :dragon :domain]))
 
 (defn domain-urn
-  []
-  (format "urn:%s" (util/dots->dashes (domain))))
+  [system]
+  (->> system
+       (domain)
+       (util/dots->dashes)
+       (format "urn:%s")))
 
 (defn name
-  []
-  (:name (dragon)))
+  [system]
+  (get-in system [:config :dragon :name]))
 
 (defn description
-  []
-  (:description (dragon)))
+  [system]
+  (get-in system [:config :dragon :description]))
 
 (defn port
-  []
-  (:dev-port (dragon)))
+  [system]
+  (get-in system [:config :dragon :port]))
 
 (defn output-dir
-  []
-  (:output-dir (dragon)))
+  [system]
+  (get-in system [:config :dragon :output-dir]))
 
 (defn base-path
-  []
-  (:base-path (dragon)))
+  [system]
+  (get-in system [:config :dragon :base-path]))
 
 (defn posts-path
-  []
-  (:posts-path (dragon)))
+  [system]
+  (get-in system [:config :dragon :posts-path]))
 
 (defn posts-path-src
-  []
-  (:posts-path-src (dragon)))
+  [system]
+  (get-in system [:config :dragon :posts-path-src]))
 
 (defn feed-count
-  []
-  (:feed-count (dragon)))
+  [system]
+  (get-in system [:config :dragon :feed-count]))
 
 (defn cli
-  []
-  (:cli (dragon)))
+  [system]
+  (get-in system [:config :dragon :cli]))
 
 (defn log-level
-  []
-  (:log-level (cli)))
+  [system]
+  (get-in system [:config :dragon :cli :log-level]))
 
-(defn log-ns
-  []
-  (:log-ns (cli)))
+(defn log-nss
+  [system]
+  (get-in system [:config :dragon :cli :log-nss]))

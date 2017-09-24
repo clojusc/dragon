@@ -3,6 +3,8 @@
             [clojure.java.shell :as shell]
             [taoensso.timbre :as log]))
 
+(declare merge-val)
+
 (def char-regex #"^a*")
 (def post-regex #"(\./)?posts/(\d{4})-(\d{2})/(\d{2})-(\d{2})(\d{2})(\d{2})/.*")
 (def timestamp-format ":year-:month-:day :hour::minute::second")
@@ -124,3 +126,24 @@
         (string/split data #"\n")
         (remove empty? data)
         (count data)))
+
+(defn deep-merge
+  ""
+  [data1 data2]
+  (merge-with merge-val data1 data2))
+
+(defmulti merge-val
+  (fn [a b]
+    (type a)))
+
+(defmethod merge-val clojure.lang.PersistentVector
+  [a b]
+  (concat a b))
+
+(defmethod merge-val clojure.lang.PersistentArrayMap
+  [a b]
+  (deep-merge a b))
+
+(defmethod merge-val :default
+  [a b]
+  b)

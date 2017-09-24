@@ -14,7 +14,7 @@
        ns
        "\u001B[35m]\u001B[33m λ\u001B[m=> "))
 
-(defproject dragon "0.4.0-SNAPSHOT"
+(defproject dragon "0.3.0-SNAPSHOT"
   :description "Customised, Stasis-based Static Site Generator"
   :url "https://github.com/clojusc/dragon"
   :scm {
@@ -28,6 +28,7 @@
     [clojusc/rfc5322 "0.3.0"]
     [clojusc/trifl "0.2.0-SNAPSHOT"]
     [clojusc/twig "0.3.2-SNAPSHOT"]
+    [com.stuartsierra/component "0.3.2"]
     [http-kit "2.2.0"]
     [leiningen-core "2.7.1"]
     [markdown-clj "1.0.1"]
