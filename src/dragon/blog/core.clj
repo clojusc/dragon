@@ -103,13 +103,14 @@
          (get-files posts-path))))
 
 (defn process
-  [system uri-base]
+  [system]
   (log/debug "Processing posts ...")
-  (event/publish system tag/process-all-pre {})
-  (->> (get-posts)
-       (map (partial post/process uri-base))
-       (sort compare-timestamp-desc)
-       (event/publish system tag/process-all-post)))
+  (let [uri-base (config/posts-path system)]
+    (event/publish system tag/process-all-pre {})
+    (->> (get-posts)
+         (map (partial post/process uri-base))
+         (sort compare-timestamp-desc)
+         (event/publish system tag/process-all-post)))
 
 (defn get-tag-freqs
   [data]

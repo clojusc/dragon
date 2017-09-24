@@ -4,10 +4,12 @@
             [taoensso.timbre :as log]))
 
 (defn run
-  [system]
-  (let [routes []
-        out-dir (config/output-dir system)]
-    (log/infof "Generating static content to '%s' ..." out-dir)
-    (log/warn "Routes are manually set to be empty! Please fix.")
-    (stasis/export-pages routes out-dir)
-    (log/info "Static generation complete.")))
+  ([system]
+   (run system []))
+  ([system routes]
+   (let [out-dir (config/output-dir system)]
+     (when-not (seq routes)
+       (log/warn "Routes are manually set to be empty! Please fix."))
+     (log/infof "Generating static content to '%s' ..." out-dir)
+     (stasis/export-pages routes out-dir)
+     (log/info "Static generation complete."))))
