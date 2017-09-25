@@ -110,7 +110,7 @@
     (->> (get-posts)
          (map (partial post/process uri-base))
          (sort compare-timestamp-desc)
-         (event/publish system tag/process-all-post)))
+         (event/publish system tag/process-all-post))))
 
 (defn get-tag-freqs
   [data]

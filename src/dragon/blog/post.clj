@@ -3,6 +3,8 @@
             [clojure.string :as string]
             [dragon.config :as config]
             [dragon.blog.content.core :as content]
+            [dragon.event.system.core :as event]
+            [dragon.event.tag :as tag]
             [dragon.util :as util]
             [markdown.core :as markdown]
             [taoensso.timbre :as log]))
@@ -124,5 +126,5 @@
        (add-file-data system)
        (add-link system uri-base)
        (add-dates system)
-       (update-tag systems)
+       (update-tags system)
        (convert-body system)))

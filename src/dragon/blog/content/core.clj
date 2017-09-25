@@ -1,11 +1,11 @@
 (ns dragon.blog.content.core
   (:require [dragon.blog.content.rfc5322 :as rfc5322]
-            [dragon.even.system.core as event]
+            [dragon.event.system.core :as event]
             [dragon.event.tag :as tag]
             [trifl.fs :as fs]))
 
 (defn parse
-  [file-obj]
+  [system file-obj]
   (event/publish system tag/read-source-pre {:file file-obj})
   (let [file-type (fs/extension file-obj)
         content (slurp file-obj)]
