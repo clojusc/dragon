@@ -44,6 +44,22 @@
      (async/>!! (get-chan dataflow) msg))
    data))
 
+(defn publish->
+  ""
+  ([other-data system-or-component event-type]
+   (publish-> other-data system-or-component event-type {}))
+  ([other-data system-or-component event-type data]
+   (publish system-or-component event-type data)
+   other-data))
+
+(defn publish->>
+  ""
+  ([system-or-component event-type other-data]
+   (publish->> system-or-component event-type {} other-data))
+  ([system-or-component event-type data other-data]
+   (publish system-or-component event-type data)
+   other-data))
+
 (defn subscribe
   ""
   ([system event-type]

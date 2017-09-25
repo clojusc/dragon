@@ -33,19 +33,19 @@
                   (first)
                   (string/split (config/word-separator system)))
         words-100 (take 100 words)
-        excerpt-100 (join-excerpt words-100 100)
-        excerpt-50 (join-excerpt words-100 50)
-        excerpt-25 (join-excerpt words-100 25)]
+        excerpt-100 (join-excerpt system words-100 100)
+        excerpt-50 (join-excerpt system words-100 50)
+        excerpt-25 (join-excerpt system words-100 25)]
     (event/publish system tag/parse-content-pre {:body body})
     (-> data
         :content-type
         keyword
         (case
-          :md (update-in data [:body] md->html))
-        (#(event/publish system tag/parse-content-post {:body (:body data)} %))
-        (assoc :excerpt-100 (md->html excerpt-100)
-               :excerpt-50 (md->html excerpt-50)
-               :excerpt-25 (md->html excerpt-25)))))
+          :md (update-in data [:body] (partial md->html system)))
+        (event/publish-> system tag/parse-content-post {:body (:body data)})
+        (assoc :excerpt-100 (md->html system excerpt-100)
+               :excerpt-50 (md->html system excerpt-50)
+               :excerpt-25 (md->html system excerpt-25)))))
 
 (defn update-tags
   [system data]
@@ -72,9 +72,9 @@
                          (string/replace-first "posts/" "")))))
 
 (defn add-link
-  [system uri-base data]
+  [system data]
   (log/debug "Adding links ...")
-  (let [url (str uri-base "/" (:uri-path data))
+  (let [url (str (config/posts-path system) "/" (:uri-path data))
         link (format (config/link-tmpl system) url (:title data))]
     (assoc data :url url
                 :link link)))
@@ -114,17 +114,17 @@
   (let [file (:file data)]
     (log/debugf "Adding post data for '%s' ..." file)
     (->> file
-         (content/parse)
+         (content/parse system)
          (merge data))))
 
 (defn process
   ""
-  [system uri-base file-obj]
+  [system file-obj]
   (->> file-obj
        (add-post-data system)
        (add-counts system)
        (add-file-data system)
-       (add-link system uri-base)
+       (add-link system)
        (add-dates system)
        (update-tags system)
        (convert-body system)))
