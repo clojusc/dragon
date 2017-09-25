@@ -24,19 +24,21 @@
     :name "Apache License, Version 2.0"
     :url "http://www.apache.org/licenses/LICENSE-2.0"}
   :dependencies [
-    [clojusc/env-ini "0.3.0"]
+    [clojusc/env-ini "0.4.0-SNAPSHOT"]
     [clojusc/rfc5322 "0.3.0"]
     [clojusc/trifl "0.2.0-SNAPSHOT"]
     [clojusc/twig "0.3.2-SNAPSHOT"]
     [com.stuartsierra/component "0.3.2"]
     [http-kit "2.2.0"]
-    [leiningen-core "2.7.1"]
+    [leiningen-core "2.7.1" :exclusions [
+      org.apache.maven.wagon/wagon-provider-api
+      org.apache.maven.wagon/wagon-http]]
     [markdown-clj "1.0.1"]
     [org.clojure/clojure "1.8.0"]
     [org.clojure/core.async "0.3.443"]
     [potemkin "0.4.4"]
     [ring/ring-core "1.6.2"]
-    [selmer "1.11.1"]
+    [selmer "1.11.1" :exclusions [joda-time]]
     [stasis "2.3.0"]
     [tentacles "0.5.1"]]
   :dragon {
