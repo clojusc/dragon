@@ -4,7 +4,7 @@
             [dragon.components.event :as event]
             [dragon.components.logging :as logging]))
 
-(defn initialize []
+(defn initialize-default []
   (component/system-map
    :config (config/create-config-component)
    :logging (component/using
@@ -13,6 +13,17 @@
    :event (component/using
            (event/create-event-component)
            [:config :logging])))
+
+(defn initialize-config-only []
+  (component/system-map
+   :config (config/create-config-component)))
+
+(defn initialize-with-no-events []
+  (component/system-map
+   :config (config/create-config-component)
+   :logging (component/using
+             (logging/create-logging-component)
+             [:config])))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Managment Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -29,7 +40,7 @@
 
 (defn start
   ([]
-   (start (initialize)))
+   (start (initialize-default)))
   ([system]
    (component/start system))
   ([system component-key]
