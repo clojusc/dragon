@@ -9,8 +9,6 @@
 
   (start [component]
     (log/info "Starting logging component ...")
-    (println component)
-    (println (keys component))
     (logger/set-level!
      (config/log-nss component)
      (config/log-level component))

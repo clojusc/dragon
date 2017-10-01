@@ -1,8 +1,8 @@
 (ns dragon.dev
-  "Clojang blog development namespace
+  "Dragon development namespace
 
-  This namespace is particularly useful when doing active development on the
-  Clojang blog application."
+  This namespace is particularly useful when doing active development on depedent
+  blog applications."
   (:require [clojure.edn :as edn]
             [clojure.java.io :as io]
             [clojure.pprint :refer [pprint print-table]]
@@ -11,9 +11,9 @@
             [clojure.tools.namespace.repl :as repl]
             [clojure.walk :refer [macroexpand-all]]
             [clojusc.twig :as logger]
+            [dragon.blog.content.rfc5322 :as rfc5322]
+            [dragon.blog.generator :as generator]
             [dragon.cli.core :as cli]
-            [dragon.content.rfc5322 :as rfc5322]
-            [dragon.generator :as generator]
             [dragon.main :as main]
             [dragon.util :as util]
             [dragon.web.core :as web]

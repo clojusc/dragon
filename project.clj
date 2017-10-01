@@ -14,7 +14,7 @@
        ns
        "\u001B[35m]\u001B[33m λ\u001B[m=> "))
 
-(defproject dragon "0.3.0-SNAPSHOT"
+(defproject dragon "0.4.0-SNAPSHOT"
   :description "Customised, Stasis-based Static Site Generator"
   :url "https://github.com/clojusc/dragon"
   :scm {
@@ -24,8 +24,8 @@
     :name "Apache License, Version 2.0"
     :url "http://www.apache.org/licenses/LICENSE-2.0"}
   :dependencies [
-    [clojusc/env-ini "0.3.0"]
-    [clojusc/rfc5322 "0.3.0"]
+    [clojusc/env-ini "0.4.0-SNAPSHOT"]
+    [clojusc/rfc5322 "0.4.0-SNAPSHOT"]
     [clojusc/trifl "0.2.0-SNAPSHOT"]
     [clojusc/twig "0.3.2-SNAPSHOT"]
     [com.stuartsierra/component "0.3.2"]
@@ -33,17 +33,18 @@
     [leiningen-core "2.7.1"]
     [markdown-clj "1.0.1"]
     [org.clojure/clojure "1.8.0"]
+    [org.clojure/core.async "0.3.443"]
+    [potemkin "0.4.4"]
     [ring/ring-core "1.6.2"]
-    [selmer "1.11.1"]
-    [stasis "2.3.0"]
-    [tentacles "0.5.1"]]
+    [selmer "1.11.1" :exclusions [joda-time]]
+    [stasis "2.3.0"]]
   :dragon {
     :dev-port 5097
     :output-dir "docs"
     :base-path "/blog"
     :posts-path "/blog/archives"
     :cli {
-      :log-level :info}}
+      :log-level :debug}}
   :profiles {
     :uberjar {:aot :all}
     :custom-repl {

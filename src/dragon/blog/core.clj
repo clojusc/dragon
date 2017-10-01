@@ -1,9 +1,11 @@
-(ns dragon.blog
+(ns dragon.blog.core
   (:require [clojure.java.io :as io]
             [clojure.set :refer [union]]
             [clojure.string :as string]
             [dragon.blog.post :as post]
             [dragon.config :as config]
+            [dragon.event.system.core :as event]
+            [dragon.event.tag :as tag]
             [dragon.util :as util]
             [taoensso.timbre :as log]
             [trifl.core :refer [->int]]
@@ -92,20 +94,22 @@
    :posts auth-data})
 
 (defn get-posts
-  ([]
-    (get-posts (config/posts-path-src)))
-  ([posts-path]
+  ([system]
+    (get-posts system (config/posts-path-src system)))
+  ([system posts-path]
     (log/debugf "Finding posts under '%s' dir ..." posts-path)
     (map (fn [x]
            {:file x})
          (get-files posts-path))))
 
 (defn process
-  [uri-base]
+  [system]
   (log/debug "Processing posts ...")
-  (->> (get-posts)
-       (map (partial post/process uri-base))
-       (sort compare-timestamp-desc)))
+  (event/publish system tag/process-all-pre)
+  (->> (get-posts system)
+       (map (partial post/process system))
+       (sort compare-timestamp-desc)
+       (event/publish system tag/process-all-post)))
 
 (defn get-tag-freqs
   [data]

@@ -1,6 +1,6 @@
 (ns dragon.main
   (:require [dragon.cli.core :as cli]
-            [dragon.components.core :as components]
+            [dragon.components.system :as components]
             [dragon.config :as config]
             [dragon.web.core :as web]
             [taoensso.timbre :as log]
@@ -23,5 +23,5 @@
      (case (keyword mode)
        :web (web/run system)
        :cli (cli/run system (map keyword args)))
-     (trifl/add-shutdown-handler #(components/stop system)))
-   (shutdown-agents)))
+     ;; Do a full shut-down upon ^c
+     (trifl/add-shutdown-handler #(components/stop system)))))

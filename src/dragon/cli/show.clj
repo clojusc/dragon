@@ -2,7 +2,6 @@
   (:require [clojure.pprint :refer [pprint]]
             [clojusc.twig :as logger]
             [dragon.config :as config]
-            [dragon.meta :as meta]
             [dragon.util :as util]
             [taoensso.timbre :as log]
             [trifl.docs :as docs])
@@ -30,8 +29,7 @@
   (case cmd
     :all (pprint (:config system))
     :port (pprint (config/port system))
-    :metadata (if-let [post (first args)]
-                (pprint (meta/get post))
-                (pprint (meta/get-all)))
+    :metadata ;(if-let [post (first args)]
+              (println "\nCurrently this operation is not supported.\n")
     :help (docs/print-docstring #'run)
     (pprint (:config system))))

@@ -1,9 +1,11 @@
 (ns dragon.cli.core
   (:require [clojure.pprint :refer [pprint]]
             [clojusc.twig :as logger]
+            [dragon.blog.generator :as gen]
             [dragon.cli.new.core :as new]
             [dragon.cli.show :as show]
-            [dragon.generator :as gen]
+            [dragon.event.system.core :as event]
+            [dragon.event.tag :as tag]
             [dragon.util :as util]
             [dragon.web.core :as web]
             [taoensso.timbre :as log]
@@ -45,10 +47,11 @@
   [system [cmd & args]]
   (log/debug "Got cmd:" cmd)
   (log/debug "Got args:" args)
+  (event/publish system tag/run-cli {:cmd cmd :args args})
   (case cmd
     :new (new/run system args)
     :show (show/run system args)
-    :gen (gen/run system args)
+    :gen (gen/run system)
     :run (web/run system)
     :help (docs/print-docstring #'run)
     :version (version-cmd)
@@ -56,4 +59,5 @@
     :--help (docs/print-docstring #'run)
     :--version (version-cmd)
     :-h (docs/print-docstring #'run)
-    :-v (version-cmd)))
+    :-v (version-cmd))
+  (event/publish system tag/shutdown-cli))

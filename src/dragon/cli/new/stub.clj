@@ -1,9 +1,8 @@
-(ns dragon.stub
+(ns dragon.cli.new.stub
   (:require [clojure.pprint :refer [pprint]]
             [clojure.java.io :as io]
             [clojusc.twig :as logger]
             [dragon.config :as config]
-            [dragon.meta :as meta]
             [dragon.util :as util]
             [taoensso.timbre :as log]))
 

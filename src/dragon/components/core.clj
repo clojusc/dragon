@@ -1,45 +1,22 @@
 (ns dragon.components.core
-  (:require [com.stuartsierra.component :as component]
-            [dragon.components.config :as config]
-            [dragon.components.event :as event]
-            [dragon.components.logging :as logging]))
+  "System component access functions.")
 
-(defn init-system []
-  (component/system-map
-   :config (config/create-config-component)
-   :logging (component/using
-             (logging/create-logging-component)
-             [:config])
-   :event (component/using
-           (event/create-event-component)
-           [:config :logging])))
+(def dataflow-keys [:pubsub :dataflow])
 
-(defn stop
-  ([system]
-   (component/stop system))
-  ([system component-key]
-   (->> system
-        (component-key)
-        (component/stop)
-        (assoc system component-key))))
+(defn get-config
+  ""
+  [system & args]
+  (let [base-keys [:config :dragon]]
+    (if-not (seq args)
+      (get-in system base-keys)
+      (get-in system (concat base-keys args)))))
 
-(defn start
-  ([]
-   (start (init-system)))
-  ([system]
-   (component/start system))
-  ([system component-key]
-   (->> system
-        (component-key)
-        (component/start)
-        (assoc system component-key))))
+(defn get-pubsub
+  ""
+  [system]
+  (get-in system [:event :pubsub]))
 
-(defn restart
-  ([system]
-   (-> system
-       (stop)
-       (start)))
-  ([system component-key]
-   (-> system
-       (stop component-key)
-       (start component-key))))
+(defn get-dataflow-pubsub
+  ""
+  [system]
+  (get-in system (concat [:event] dataflow-keys)))
