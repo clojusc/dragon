@@ -9,11 +9,13 @@
 
   (start [component]
     (log/info "Starting logging component ...")
-    (logger/set-level!
-     (config/log-nss component)
-     (config/log-level component))
-    (log/debug "Started logging component.")
-    component)
+    (let [log-level (config/log-level component)
+          log-nss (vec (config/log-nss component))]
+      (log/debug "Setting up logging with level" log-level)
+      (log/debug "Logging namespaces:" log-nss)
+      (logger/set-level! log-nss log-level)
+      (log/debug "Started logging component.")
+      component))
 
   (stop [component]
     (log/info "Stopping logging component ...")

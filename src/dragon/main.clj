@@ -17,7 +17,7 @@
   ([]
    (-main :web))
   ([mode & args]
-   (let [system (components/start)]
+   (let [system (components/start config/build)]
      (log/infof "Running Dragon in %s mode ..." mode)
      (log/debug "Passing the following args to the application:" args)
      (case (keyword mode)

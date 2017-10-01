@@ -39,12 +39,12 @@
     [selmer "1.11.1" :exclusions [joda-time]]
     [stasis "2.3.0"]]
   :dragon {
-    :dev-port 5097
+    :port 5097
     :output-dir "docs"
     :base-path "/blog"
     :posts-path "/blog/archives"
     :cli {
-      :log-level :debug}}
+      :log-level :trace}}
   :profiles {
     :uberjar {:aot :all}
     :custom-repl {

@@ -29,6 +29,6 @@
 
 (defn create-event-component
   ""
-  ([]
-   (map->Event
-    {:pubsub {}})))
+  []
+  (map->Event
+   {:pubsub {}}))
