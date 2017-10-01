@@ -2,11 +2,12 @@
   (:require [com.stuartsierra.component :as component]
             [dragon.components.config :as config]
             [dragon.components.event :as event]
+            [dragon.components.httpd :as httpd]
             [dragon.components.logging :as logging]))
 
-(defn initialize-default []
+(defn initialize-default [config-builder]
   (component/system-map
-   :config (config/create-config-component)
+   :config (config/create-config-component config-builder)
    :logging (component/using
              (logging/create-logging-component)
              [:config])
@@ -14,48 +15,44 @@
            (event/create-event-component)
            [:config :logging])))
 
-(defn initialize-config-only []
+(defn initialize-bare-bones [config-builder]
   (component/system-map
-   :config (config/create-config-component)))
+   :config (config/create-config-component config-builder)
+   :event (component/using
+           (event/create-event-component)
+           [:config])))
 
-(defn initialize-with-no-events []
+(defn initialize-with-web [config-builder]
   (component/system-map
-   :config (config/create-config-component)
+   :config (config/create-config-component config-builder)
    :logging (component/using
              (logging/create-logging-component)
-             [:config])))
+             [:config])
+   :event (component/using
+           (event/create-event-component)
+           [:config :logging])
+   :httpd (component/using
+           (httpd/create-httpd-component)
+           [:config :logging :event])))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Managment Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn stop
-  ([system]
-   (component/stop system))
-  ([system component-key]
-   (->> system
-        (component-key)
-        (component/stop)
-        (assoc system component-key))))
+(def stop #'component/stop)
 
 (defn start
-  ([]
-   (start (initialize-default)))
-  ([system]
-   (component/start system))
-  ([system component-key]
-   (->> system
-        (component-key)
-        (component/start)
-        (assoc system component-key))))
+  ([config-builder]
+   (start (initialize-default config-builder)))
+  ([config-builder system-type]
+   (case system-type
+     :web (component/start (initialize-with-web config-builder))
+     :basic (component/start (initialize-bare-bones config-builder))
+     :cli (component/start (initialize-default config-builder)))))
 
 (defn restart
   ([system]
    (-> system
-       (stop)
-       (start)))
-  ([system component-key]
-   (-> system
-       (stop component-key)
-       (start component-key))))
+       (component/stop)
+       (component/start))))
 

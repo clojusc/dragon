@@ -1,6 +1,8 @@
 (ns dragon.util
   (:require [clojure.string :as string]
             [clojure.java.shell :as shell]
+            [clojusc.twig :refer [pprint]]
+            [selmer.parser :as selmer]
             [taoensso.timbre :as log]))
 
 (declare merge-val)
@@ -147,6 +149,13 @@
 (defmethod merge-val :default
   [a b]
   b)
+
+(defn render
+  [template data]
+  (log/tracef "Rendering template %s with data %s" template (pprint data))
+  (selmer/render-file
+    template
+    data))
 
 (defn component->system
   ""
