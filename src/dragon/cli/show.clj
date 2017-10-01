@@ -8,10 +8,6 @@
             [trifl.docs :as docs])
   (:refer-clojure :exclude [meta]))
 
-(defn help-cmd
-  [& args]
-  (docs/print-docstring 'dragon.cli.show 'run))
-
 (defn run
   "
   Usage:
@@ -28,14 +24,14 @@
     metadata        Display the metadata for all posts
     metadata POST   Display the metadata for a given post
   ```"
-  [[cmd & args]]
+  [system [cmd & args]]
   (log/debug "Got cmd:" cmd)
   (log/debug "Got args:" args)
   (case cmd
-    :all (pprint (config/dragon))
-    :port (pprint (config/port))
+    :all (pprint (:config system))
+    :port (pprint (config/port system))
     :metadata (if-let [post (first args)]
                 (pprint (meta/get post))
                 (pprint (meta/get-all)))
-    :help (help-cmd args)
-    (pprint (config/dragon))))
+    :help (docs/print-docstring #'run)
+    (pprint (:config system))))

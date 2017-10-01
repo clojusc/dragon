@@ -8,11 +8,13 @@
 
 (defn md->html
   [md]
+  ;; XXX move inhibit string into configuration
   (markdown/md-to-html-string md :inhibit-separator "%%%"))
 
 (defn join-excerpt
   [words number]
   (let [excerpt (string/join " " (take number words))]
+    ;; XXX if word ends in punctuation beside ".", add " ..."
     (if (string/ends-with? excerpt ".")
       (str excerpt "..")
       (str excerpt "..."))))
@@ -20,9 +22,11 @@
 (defn convert-body
   [data]
   (log/debug "Converting post body ...")
+  ;; XXX put paragraph separator into config
   (let [paragraphs (string/split (:body data) #"\n\n")
         words (-> paragraphs
                   (first)
+                  ;; XXX put word separator into config
                   (string/split #"\s"))
         words-100 (take 100 words)
         excerpt-100 (join-excerpt words-100 100)
@@ -112,5 +116,5 @@
        (add-file-data)
        (add-link uri-base)
        (add-dates)
-       (convert-body)
-       (update-tags)))
+       (update-tags)
+       (convert-body)))
