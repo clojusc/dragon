@@ -7,7 +7,6 @@
             [dragon.event.system.core :as event]
             [dragon.event.tag :as tag]
             [dragon.util :as util]
-            [dragon.web.core :as web]
             [taoensso.timbre :as log]
             [trifl.core :refer [sys-prop]]
             [trifl.docs :as docs]))
@@ -52,7 +51,6 @@
     :new (new/run system args)
     :show (show/run system args)
     :gen (gen/run system)
-    :run (web/run system)
     :help (docs/print-docstring #'run)
     :version (version-cmd)
     ;; Aliases
