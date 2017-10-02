@@ -20,7 +20,7 @@
           main-handler {}
           site (ring-file/wrap-file main-handler docroot)
           server (server/run-server site {:port port})]
-      (log/debug "Serving files from % and listening on port %s"
+      (log/debugf "Serving files from %s and listening on port %s"
                   docroot port)
       (log/debug "Started httpd component.")
       (assoc component :server server)))
