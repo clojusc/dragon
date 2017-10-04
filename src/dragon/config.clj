@@ -107,6 +107,30 @@
   [system]
   (components/get-config system :cli :log-nss))
 
+(defn repl
+  [system]
+  (components/get-config system :repl))
+
+(defn repl-log-level
+  [system]
+  (components/get-config system :repl :log-level))
+
+(defn repl-log-nss
+  [system]
+  (components/get-config system :repl :log-nss))
+
+(defn app
+  [system]
+  (components/get-config system :app))
+
+(defn app-log-level
+  [system]
+  (components/get-config system :app :log-level))
+
+(defn app-log-nss
+  [system]
+  (components/get-config system :app :log-nss))
+
 (defn templating
   [system]
   (components/get-config system :templating))
