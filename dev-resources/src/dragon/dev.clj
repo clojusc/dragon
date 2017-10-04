@@ -18,8 +18,6 @@
             [dragon.components.system :as components]
             [dragon.main :as main]
             [dragon.util :as util]
-            [dragon.web.core :as web]
-            [dragon.web.content :as content]
             [markdown.core :as md]
             [selmer.parser :as selmer]
             [taoensso.timbre :as log]
@@ -45,13 +43,13 @@
       (log/error "System has aready been initialized.")
       (do
         (alter-var-root #'system
-          (constantly ((components/init mode)))
+          (constantly ((components/init mode))))
         (alter-var-root #'state (fn [_] :initialized))))
     state))
 
 (defn deinit
   []
-  (if (contains? [] state)
+  (if (contains? invalid-deinit-transitions state)
     (log/error "System is not stopped; please stop before deinitializing.")
     (do
       (alter-var-root #'system (fn [_] nil))
@@ -60,7 +58,7 @@
 
 (defn start
   ([]
-    (start :repl))
+    (start :default))
   ([mode]
     (when (nil? system)
       (init mode))
