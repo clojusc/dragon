@@ -1,12 +1,13 @@
 (ns dragon.config
-  (:require [dragon.components.core :as components]
+  (:require [datomic.client :as datomic]
+            [dragon.components.core :as components]
             [dragon.util :as util]
             [leiningen.core.project :as project]
             [taoensso.timbre :as log])
   (:refer-clojure :exclude [name read]))
 
 (def defaults
-  {:dev-port 5097
+  {:port 5097
    :domain "dragon.github.io"
    :name "Dragon Blog Generator"
    :description "A fire-breathing blog generator"
@@ -35,7 +36,17 @@
      :log-nss '[dragon]}
    :cli {
      :log-level :error
-     :log-nss '[dragon]}})
+     :log-nss '[dragon]}
+   :db {
+     :type :datomic
+     :datomic {
+       :account-id datomic/PRO_ACCOUNT
+       :region datomic/PRO_ACCOUNT
+       :service "peer-server"
+       :endpoint "localhost:8998"
+       :db-name "dragon"
+       :secret "dragon"
+       :access-key "dragon"}}})
 
 (defn build
   ""
@@ -170,3 +181,16 @@
 (defn period-ellipsis
   [system]
   (components/get-config system :parsing :period-ellipsis))
+
+(defn db
+  [system]
+  (components/get-config system :db))
+
+(defn db-type
+  [system]
+  (components/get-config system :db :type))
+
+(defn db-config
+  [system]
+  (let [db-type (db-type system)]
+    (db-type (db system))))
