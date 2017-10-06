@@ -11,7 +11,7 @@
     (log/info "Starting config component ...")
     (log/debug "Started config component.")
     (let [cfg (builder)]
-      (log/debug "Built configuration:" cfg)
+      (log/trace "Built configuration:" cfg)
       (assoc component :dragon cfg)))
 
   (stop [component]

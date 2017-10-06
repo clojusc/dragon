@@ -112,7 +112,7 @@
   ""
   [system data]
   (let [file (:file data)]
-    (log/debugf "Adding post data for '%s' ..." file)
+    (log/infof "Adding post data for '%s' ..." file)
     (->> file
          (content/parse system)
          (merge data))))
@@ -120,6 +120,7 @@
 (defn process
   ""
   [system file-obj]
+  (event/publish system tag/process-one-pre {:file-obj file-obj})
   (->> file-obj
        (add-post-data system)
        (add-counts system)
@@ -127,4 +128,6 @@
        (add-link system)
        (add-dates system)
        (update-tags system)
-       (convert-body system)))
+       (convert-body system)
+       (into {})
+       (event/publish->> system tag/process-one-post {:file-obj file-obj})))

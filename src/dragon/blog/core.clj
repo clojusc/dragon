@@ -106,10 +106,14 @@
   [system]
   (log/debug "Processing posts ...")
   (event/publish system tag/process-all-pre)
-  (->> (get-posts system)
-       (map (partial post/process system))
-       (sort compare-timestamp-desc)
-       (event/publish system tag/process-all-post)))
+  (let [posts (get-posts system)]
+    (->> posts
+         (map (partial post/process system))
+         (sort compare-timestamp-desc)
+         vec
+         (event/publish->> system
+                           tag/process-all-post
+                           {:count (count posts)}))))
 
 (defn get-tag-freqs
   [data]

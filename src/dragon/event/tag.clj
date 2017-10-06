@@ -12,6 +12,10 @@
 (def run-cli ::run-cli)
 (def run-cli-post ::run-cli-post)
 
+(def process-one-pre ::process-one-pre)
+(def process-one ::process-one)
+(def process-one-post ::process-one-post)
+
 (def process-all-pre ::process-all-pre)
 (def process-all ::process-all)
 (def process-all-post ::process-all-post)
