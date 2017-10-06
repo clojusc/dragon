@@ -28,8 +28,8 @@
     [clojusc/rfc5322 "0.4.0-SNAPSHOT"]
     [clojusc/trifl "0.2.0-SNAPSHOT"]
     [clojusc/twig "0.3.2-SNAPSHOT"]
+    [com.datomic/clj-client "0.8.606"]
     [com.stuartsierra/component "0.3.2"]
-    [datascript "0.16.2"]
     [http-kit "2.2.0"]
     [leiningen-core "2.7.1"]
     [markdown-clj "1.0.1"]
@@ -40,10 +40,6 @@
     [selmer "1.11.1" :exclusions [joda-time]]
     [stasis "2.3.0"]]
   :dragon {
-    :port 5097
-    :output-dir "docs"
-    :base-path "/blog"
-    :posts-path "/blog/archives"
     :cli {
       :log-level :info}}
   :profiles {
