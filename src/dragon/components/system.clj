@@ -11,31 +11,39 @@
 ;;;   Common Configuration Components   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(def cfg config/create-config-component)
+(defn cfg
+  [builder]
+  {:config (config/create-config-component builder)})
 
-(defn log
-  []
-  (component/using
-   (logging/create-logging-component)
-   [:config]))
+(def log
+  {:logging (component/using
+             (logging/create-logging-component)
+             [:config])})
 
-(defn data
-  []
-  (component/using
-   (db/create-db-component)
-   [:config :logging]))
+(def data-no-log
+  {:db (component/using
+        (db/create-db-component)
+        [:config])})
 
-(defn evt
-  []
-  (component/using
-   (event/create-event-component)
-   [:config :logging :db]))
+(def evt-no-log
+  {:event (component/using
+           (event/create-event-component)
+           [:config :db])})
 
-(defn http
-  []
-  (component/using
-   (httpd/create-httpd-component)
-   [:config :logging :event]))
+(def data
+  {:db (component/using
+        (db/create-db-component)
+        [:config :logging])})
+
+(def evt
+  {:event (component/using
+           (event/create-event-component)
+           [:config :logging :db])})
+
+(def http
+  {:httpd (component/using
+           (httpd/create-httpd-component)
+           [:config :logging :db :event])})
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Component Intilizations   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -45,30 +53,32 @@
   ([]
     (initialize-default build-config))
   ([config-builder]
-    (component/system-map
-     :config (cfg config-builder)
-     :logging (log)
-     :db (data)
-     :event (evt))))
+    (component/map->SystemMap
+      (merge (cfg config-builder)
+             log
+             data
+             evt))))
 
 (defn initialize-bare-bones
   ([]
     (initialize-bare-bones build-config))
   ([config-builder]
-    (component/system-map
-     :config (cfg config-builder)
-     :event (evt))))
+    (component/map->SystemMap
+      (merge (cfg config-builder)
+             data-no-log
+             evt-no-log))))
+
 
 (defn initialize-with-web
   ([]
     (initialize-with-web build-config))
   ([config-builder]
-    (component/system-map
-     :config (cfg config-builder)
-     :logging (log)
-     :db (data)
-     :event (evt)
-     :httpd (http))))
+    (component/map->SystemMap
+      (merge (cfg config-builder)
+             log
+             data
+             evt
+             http))))
 
 (def init
   {:default initialize-default
@@ -95,4 +105,3 @@
    (-> system
        (component/stop)
        (component/start))))
-
