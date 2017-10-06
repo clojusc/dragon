@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-if [ $1 = "run" ]; then
-    lein trampoline $@
+if [ "$1" = "run" ]; then
+    lein trampoline dragon
+elif [ -z "$1" ]; then
+    lein dragon help
 else
-    lein blog $@
+    lein dragon $@
 fi
