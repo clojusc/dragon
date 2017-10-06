@@ -1,49 +1,74 @@
 (ns dragon.components.system
   (:require [com.stuartsierra.component :as component]
             [dragon.components.config :as config]
+            [dragon.components.db :as db]
             [dragon.components.event :as event]
             [dragon.components.httpd :as httpd]
             [dragon.components.logging :as logging]
             [dragon.config :refer [build] :rename {build build-config}]))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Common Configuration Components   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def cfg config/create-config-component)
+
+(defn log
+  []
+  (component/using
+   (logging/create-logging-component)
+   [:config]))
+
+(defn data
+  []
+  (component/using
+   (db/create-db-component)
+   [:config :logging]))
+
+(defn evt
+  []
+  (component/using
+   (event/create-event-component)
+   [:config :logging :db]))
+
+(defn http
+  []
+  (component/using
+   (httpd/create-httpd-component)
+   [:config :logging :event]))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Component Intilizations   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn initialize-default
   ([]
     (initialize-default build-config))
   ([config-builder]
     (component/system-map
-     :config (config/create-config-component config-builder)
-     :logging (component/using
-               (logging/create-logging-component)
-               [:config])
-     :event (component/using
-             (event/create-event-component)
-             [:config :logging]))))
+     :config (cfg config-builder)
+     :logging (log)
+     :db (data)
+     :event (evt))))
 
 (defn initialize-bare-bones
   ([]
     (initialize-bare-bones build-config))
   ([config-builder]
     (component/system-map
-     :config (config/create-config-component config-builder)
-     :event (component/using
-             (event/create-event-component)
-             [:config]))))
+     :config (cfg config-builder)
+     :event (evt))))
 
 (defn initialize-with-web
   ([]
     (initialize-with-web build-config))
   ([config-builder]
     (component/system-map
-     :config (config/create-config-component config-builder)
-     :logging (component/using
-               (logging/create-logging-component)
-               [:config])
-     :event (component/using
-             (event/create-event-component)
-             [:config :logging])
-     :httpd (component/using
-             (httpd/create-httpd-component)
-             [:config :logging :event]))))
+     :config (cfg config-builder)
+     :logging (log)
+     :db (data)
+     :event (evt)
+     :httpd (http))))
 
 (def init
   {:default initialize-default

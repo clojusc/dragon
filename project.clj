@@ -29,6 +29,7 @@
     [clojusc/trifl "0.2.0-SNAPSHOT"]
     [clojusc/twig "0.3.2-SNAPSHOT"]
     [com.stuartsierra/component "0.3.2"]
+    [datascript "0.16.2"]
     [http-kit "2.2.0"]
     [leiningen-core "2.7.1"]
     [markdown-clj "1.0.1"]

@@ -42,13 +42,13 @@
 (defn subscribe-all-event
   ""
   [system event-type subscriber-funcs]
-    (doseq [func subscriber-funcs]
-      (log/debugf "Subscribing to %s ..." event-type)
-      (event/subscribe system event-type debug-subscriber)
-      (event/subscribe system event-type trace-subscriber)
-      (if (= func :default)
-        (event/subscribe system event-type)
-        (event/subscribe system event-type func))))
+  (doseq [func subscriber-funcs]
+    (log/debugf "Subscribing to %s ..." event-type)
+    (event/subscribe system event-type debug-subscriber)
+    (event/subscribe system event-type trace-subscriber)
+    (if (= func :default)
+      (event/subscribe system event-type)
+      (event/subscribe system event-type func))))
 
 (defn subscribe-all
   ""
