@@ -20,25 +20,25 @@
              (logging/create-logging-component)
              [:config])})
 
-(def data-no-log
-  {:db (component/using
-        (db/create-db-component)
-        [:config])})
-
 (def evt-no-log
   {:event (component/using
            (event/create-event-component)
-           [:config :db])})
+           [:config])})
 
-(def data
+(def data-no-log
   {:db (component/using
         (db/create-db-component)
-        [:config :logging])})
+        [:config :event])})
 
 (def evt
   {:event (component/using
            (event/create-event-component)
-           [:config :logging :db])})
+           [:config :logging])})
+
+(def data
+  {:db (component/using
+        (db/create-db-component)
+        [:config :logging :event])})
 
 (def http
   {:httpd (component/using
