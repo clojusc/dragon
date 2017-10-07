@@ -16,8 +16,6 @@
     (let [dataflow (event/create-dataflow-pubsub)
           component (assoc-in component component-api/dataflow-keys dataflow)]
       (log/info "Adding subscribers ...")
-      (subscription/subscribe-all component)
-      (event/publish component tag/subscribers-added)
       component))
 
   (stop [component]
