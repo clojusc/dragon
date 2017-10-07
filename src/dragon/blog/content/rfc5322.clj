@@ -29,12 +29,14 @@
 
 (defn parse
   "Parse the given message, converting the parsed tree into a Clojure map."
-  [system msg]
-  (log/debug "Parsing message content ...")
-  (event/publish system tag/parse-file-pre)
-  (->> msg
-       (instaparse/parse (rfc/make-lite-parser))
-       (rfc-dev/->map)
-       (walk/postwalk-replace rfc5322-names->metadata-names)
-       (into {})
-       (event/publish->> system tag/parse-file-post)))
+  ([msg]
+    (parse nil msg))
+  ([system msg]
+    (log/debug "Parsing message content ...")
+    (event/publish system tag/parse-file-pre)
+    (->> msg
+         (instaparse/parse (rfc/make-lite-parser))
+         (rfc-dev/->map)
+         (walk/postwalk-replace rfc5322-names->metadata-names)
+         (into {})
+         (event/publish->> system tag/parse-file-post))))

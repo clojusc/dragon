@@ -1,7 +1,19 @@
 #!/usr/bin/env bash
 
-if [ $1 = "run" ]; then
-    lein trampoline $@
+DATOMIC_VERSION=0.9.5561.62
+
+if [ "$1" = "run" ]; then
+    lein trampoline dragon
+elif [ "$1" = "datomic" ]; then
+    cd /opt/datatomic/${DATOMIC_VERSION} && \
+    bin/run \
+      -m datomic.peer-server \
+      -h localhost \
+      -p 8998 \
+      -a dragon,dragon \
+      -d dragon,datomic:mem://dragon
+elif [ -z "$1" ]; then
+    lein dragon help
 else
-    lein blog $@
+    lein dragon $@
 fi

@@ -28,6 +28,7 @@
     [clojusc/rfc5322 "0.4.0-SNAPSHOT"]
     [clojusc/trifl "0.2.0-SNAPSHOT"]
     [clojusc/twig "0.3.2-SNAPSHOT"]
+    [com.datomic/clj-client "0.8.606"]
     [com.stuartsierra/component "0.3.2"]
     [http-kit "2.2.0"]
     [leiningen-core "2.7.1"]
@@ -39,12 +40,8 @@
     [selmer "1.11.1" :exclusions [joda-time]]
     [stasis "2.3.0"]]
   :dragon {
-    :port 5097
-    :output-dir "docs"
-    :base-path "/blog"
-    :posts-path "/blog/archives"
     :cli {
-      :log-level :trace}}
+      :log-level :info}}
   :profiles {
     :uberjar {:aot :all}
     :custom-repl {
@@ -52,6 +49,7 @@
         :init-ns dragon.dev
         :prompt ~get-prompt
         :init ~(println (get-banner))}}
+    :cli {}
     :dev {
       :source-paths ["dev-resources/src"]
       :main dragon.main
@@ -86,9 +84,11 @@
           :doc/format :markdown
           :doc "Documentation forthcoming"}}}}
   :aliases {
-    "blog"
-      ^{:doc (str "The Dragon CLI; type `lein dragon help` for commands\n")}
-      ["run" "-m" "dragon.main" "cli"]
+    "dragon"
+      ^{:doc (str "The Dragon blog CLI; type `lein dragon help` or `dragon help` "
+                  "for commands")}
+      ["with-profile" "+cli"
+       "run" "-m" "dragon.main" "cli"]
     "repl" ["with-profile" "+custom-repl" "repl"]
     "check-deps" ["with-profile" "+test" "ancient" "check" ":all"]
     "lint" ["with-profile" "+test" "kibit"]

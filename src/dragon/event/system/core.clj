@@ -35,14 +35,15 @@
   ([system-or-component event-type]
    (publish system-or-component event-type {}))
   ([system-or-component event-type data]
-   (let [system (util/component->system system-or-component)
-         dataflow (components/get-dataflow-pubsub system)
-         topic (get-topic dataflow)
-         msg (message/new-dataflow-event event-type data)]
-     (log/debug "Publishing message to" (message/get-route msg))
-     (log/trace "Sending message data:" (message/get-payload msg))
-     (async/>!! (get-chan dataflow) msg))
-   data))
+   (when-not (nil? system-or-component)
+     (let [system (util/component->system system-or-component)
+           dataflow (components/get-dataflow-pubsub system)
+           topic (get-topic dataflow)
+           msg (message/new-dataflow-event event-type data)]
+       (log/debug "Publishing message to" (message/get-route msg))
+       (log/trace "Sending message data:" (message/get-payload msg))
+       (async/>!! (get-chan dataflow) msg))
+     data)))
 
 (defn publish->
   ""
@@ -68,12 +69,13 @@
                                    "Using default subscriber callback for route"
                                    (message/get-route m)))))
   ([system event-type func]
-   (let [dataflow (components/get-dataflow-pubsub system)]
-     (async/go-loop []
-       (when-let [msg (async/<! (get-sub dataflow event-type))]
-         (log/debug "Received subscribed message for" (message/get-route msg))
-         (log/trace "Message data:" (message/get-payload msg))
-         (log/trace "Callback function:" func)
-         (func system msg)
-         (recur))))))
+   (when-not (nil? system)
+     (let [dataflow (components/get-dataflow-pubsub system)]
+       (async/go-loop []
+         (when-let [msg (async/<! (get-sub dataflow event-type))]
+           (log/debug "Received subscribed message for" (message/get-route msg))
+           (log/trace "Message data:" (message/get-payload msg))
+           (log/trace "Callback function:" func)
+           (func system msg)
+           (recur)))))))
 

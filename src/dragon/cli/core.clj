@@ -52,6 +52,7 @@
     :show (show/run system args)
     :gen (gen/run system)
     :help (docs/print-docstring #'run)
+    :run (gen/run system)
     :version (version-cmd)
     ;; Aliases
     :--help (docs/print-docstring #'run)
