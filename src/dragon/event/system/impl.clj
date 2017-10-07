@@ -1,6 +1,5 @@
 (ns dragon.event.system.impl
   (:require [clojure.core.async :as async]
-            [dragon.event.system.impl :as impl]
             [dragon.event.topic :as topic]
             [taoensso.timbre :as log]))
 
