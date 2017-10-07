@@ -6,6 +6,34 @@
             [taoensso.timbre :as log])
   (:refer-clojure :exclude [name read]))
 
+(def ^:private datomic-config
+  {:version "0.9.5561.62"
+   :host "localhost"
+   :port "8998"
+   :access-key "dragon"
+   :secret "dragon"
+   :db-name "dragon"})
+
+(def ^:private datomic-start
+  {:delay 5000
+   :home (str "/opt/datomic/" (:version datomic-config))
+   :executable "bin/run"
+   :entry-point "datomic.peer-server"
+   :host (:host datomic-config)
+   :port (:port datomic-config)
+   :db (format "%s,datomic:mem://%s" (:db-name datomic-config)
+                                    (:db-name datomic-config))
+   :auth (format "%s,%s" (:access-key datomic-config)
+                           (:secret datomic-config))})
+
+(def ^:private datomic-start-args
+  [(:executable datomic-start)
+   "-m" (:entry-point datomic-start)
+   "-h" (:host datomic-start)
+   "-p" (:port datomic-start)
+   "-d" (:db datomic-start)
+   "-a" (:auth datomic-start)])
+
 (def defaults
   {:port 5097
    :domain "dragon.github.io"
@@ -40,13 +68,18 @@
    :db {
      :type :datomic
      :datomic {
-       :account-id datomic/PRO_ACCOUNT
-       :region datomic/PRO_ACCOUNT
-       :service "peer-server"
-       :endpoint "localhost:8998"
-       :db-name "dragon"
-       :secret "dragon"
-       :access-key "dragon"}}})
+       :version (:version datomic-config)
+       :start (assoc datomic-start
+                   :args datomic-start-args)
+       :conn {
+         :account-id datomic/PRO_ACCOUNT
+         :region datomic/PRO_REGION
+         :service "peer-server"
+         :endpoint (format "%s:%s" (:host datomic-config)
+                                   (:port datomic-config))
+         :db-name (:db-name datomic-config)
+         :access-key (:access-key datomic-config)
+         :secret (:secret datomic-config)}}}})
 
 (defn build
   ""
@@ -192,5 +225,16 @@
 
 (defn db-config
   [system]
-  (let [db-type (db-type system)]
-    (db-type (db system))))
+  (:conn ((db-type system) (db system))))
+
+(defn db-start-config
+  [system]
+  (:start ((db-type system) (db system))))
+
+(defn db-start-delay
+  [system]
+  (get-in ((db-type system) (db system)) [:start :delay]))
+
+(defn db-version
+  [system]
+  (:version ((db-type system) (db system))))
