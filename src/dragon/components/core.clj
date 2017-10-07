@@ -20,3 +20,7 @@
   ""
   [system]
   (get-in system (concat [:event] dataflow-keys)))
+
+(defn get-db-conn
+  [system]
+  (get-in system [:db :conn]))
