@@ -9,28 +9,28 @@
 (def stub-metadata
 "{:title \"REQUIRED\"
  :subtitle \"\"
- :header-image \"\"
  :excerpt \"\"
  :author \"REQUIRED\"
  :twitter \"\"
  :category \"REQUIRED\"
  :tags []
  :comment-link \"\"
- :header-image \"\"}\n")
+ :header-image \"\"
+ :public? false}\n")
 
 (def clj-content
 "(defn metadata
   []
   {:title \"REQUIRED\"
    :subtitle \"\"
-   :header-image \"\"
    :excerpt \"\"
    :author \"REQUIRED\"
    :twitter \"\"
    :category \"REQUIRED\"
    :tags []
    :comment-link \"\"
-   :header-image \"\"})\n
+   :header-image \"\"
+   :public? false})\n
 (defn content
   []
   \"REQUIRED\")\n")
@@ -38,7 +38,6 @@
 (def edn-content
 "{:title \"REQUIRED\"
  :subtitle \"\"
- :header-image \"\"
  :excerpt \"\"
  :author \"REQUIRED\"
  :twitter \"\"
@@ -46,6 +45,7 @@
  :tags []
  :comment-link \"\"
  :header-image \"\"
+ :public? false
  :content \"REQUIRED\"}\n")
 
 ;; Note that rfc5322-content uses the standard field names, when something
@@ -67,7 +67,6 @@
 (def rfc5322-content
 "Subject: REQUIRED (title)
 Subtitle:
-Header-Image:
 Excerpt:
 From: REQUIRED (author)
 Twitter:
@@ -76,6 +75,7 @@ Keywords:
 Comments:
 Content-Type: md
 Header-Image: img/
+Public?: true
 
 [content goes here]\n")
 
