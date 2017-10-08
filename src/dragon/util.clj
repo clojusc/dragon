@@ -3,7 +3,8 @@
             [clojure.java.shell :as shell]
             [clojusc.twig :refer [pprint]]
             [selmer.parser :as selmer]
-            [taoensso.timbre :as log]))
+            [taoensso.timbre :as log])
+  (:refer-clojure :exclude [boolean]))
 
 (declare merge-val)
 
@@ -163,3 +164,22 @@
   (if (contains? system-or-component :event)
     system-or-component
     {:event system-or-component}))
+
+(defn boolean
+  "A filter that returns `true` if the post should be published on the front
+  page."
+  [post key]
+  (if (= (string/lower-case (or (key post) "")) "false")
+    false
+    true))
+
+(defn headline?
+  "A filter that returns `true` if the post should be published on the front
+  page."
+  [post]
+  (boolean post :headlines?))
+
+(defn public?
+  "A filter that returns `true` if the post should be published."
+  [post]
+  (boolean post :public?))
