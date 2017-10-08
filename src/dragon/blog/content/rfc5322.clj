@@ -17,16 +17,6 @@
    :keywords :tags
    :comments :comment-link})
 
-; (defn remap-keys
-;   "Update the keys in a map, converting them with the provided function."
-;   [mapper-fn ^clojure.lang.PersistentArrayMap data]
-;   (rename-keys
-;     data
-;     (->> data
-;          (keys)
-;          (map #(vector % (mapper-fn %)))
-;          (into {}))))
-
 (defn parse
   "Parse the given message, converting the parsed tree into a Clojure map."
   ([msg]
