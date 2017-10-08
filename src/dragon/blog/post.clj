@@ -9,6 +9,10 @@
             [markdown.core :as markdown]
             [taoensso.timbre :as log]))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defn md->html
   [system md]
   (markdown/md-to-html-string
@@ -23,7 +27,81 @@
       (str excerpt (config/period-ellipsis system))
       (str excerpt (config/ellipsis system)))))
 
-(defn convert-body
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Data Transforms   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn get-post-data
+  ""
+  [system data]
+  (let [file (:file data)]
+    (log/infof "Adding post data for '%s' ..." file)
+    (->> file
+         (content/parse system)
+         (merge data))))
+
+(defn get-post-counts
+  [data]
+  (log/debug "Adding counts ...")
+  (let [body (:body data)]
+    (log/trace "Body data:" data)
+    (assoc
+      data
+      :char-count (util/count-chars body)
+      :word-count (util/count-words body)
+      :line-count (util/count-lines body))))
+
+(defn get-file-data
+  [system data]
+  (log/debug "Adding file data ...")
+  (let [file-obj (:file data)
+        file-src (.getPath file-obj)
+        filename-old (.getName file-obj)
+        filename (format (config/output-file-tmpl system)
+                         (util/sanitize-str (:title data)))]
+    (assoc data
+           :filename filename
+           :src-file file-src
+           :src-dir (.getParent file-obj)
+           :uri-path (-> file-src
+                         (string/replace filename-old filename)
+                         (util/sanitize-post-path)
+                         (string/replace-first "posts/" "")))))
+
+(defn get-link
+  [system data]
+  (log/debug "Adding links ...")
+  (let [url (str (config/posts-path system) "/" (:uri-path data))
+        link (format (config/link-tmpl system) url (:title data))]
+    (assoc data :url url
+                :link link)))
+
+(defn get-dates
+  [data]
+  (log/debug "Adding post dates ...")
+  (let [date (util/path->date (:src-file data))
+        timestamp (util/format-timestamp date)
+        timestamp-clean (string/replace timestamp #"[^\d]" "")
+        datestamp (util/format-datestamp date)]
+    (assoc
+      data
+      :date date
+      :month (util/month->name (:month date))
+      :month-short (util/month->short-name (:month date))
+      :timestamp timestamp
+      :timestamp-long (Long/parseLong timestamp-clean)
+      :datestamp datestamp
+      :now-timestamp (util/format-timestamp (util/datetime-now))
+      :now-datestamp (util/format-datestamp (util/datetime-now)))))
+
+(defn get-tags
+  [system data]
+  (log/debug "Updating tags ...")
+  (assoc data :tags (apply sorted-set (string/split
+                                       (:tags data)
+                                       (config/tag-separator system)))))
+
+(defn get-converted-body
   [system data]
   (log/debug "Converting post body ...")
   (let [body (:body data)
@@ -47,87 +125,56 @@
                :excerpt-50 (md->html system excerpt-50)
                :excerpt-25 (md->html system excerpt-25)))))
 
-(defn update-tags
-  [system data]
-  (log/debug "Updating tags ...")
-  (assoc data :tags (apply sorted-set (string/split
-                                       (:tags data)
-                                       (config/tag-separator system)))))
-
-(defn add-file-data
-  [system data]
-  (log/debug "Adding file data ...")
-  (let [file-obj (:file data)
-        file-src (.getPath file-obj)
-        filename-old (.getName file-obj)
-        filename (format (config/output-file-tmpl system)
-                         (util/sanitize-str (:title data)))]
-    (assoc data
-           :filename filename
-           :src-file file-src
-           :src-dir (.getParent file-obj)
-           :uri-path (-> file-src
-                         (string/replace filename-old filename)
-                         (util/sanitize-post-path)
-                         (string/replace-first "posts/" "")))))
-
-(defn add-link
-  [system data]
-  (log/debug "Adding links ...")
-  (let [url (str (config/posts-path system) "/" (:uri-path data))
-        link (format (config/link-tmpl system) url (:title data))]
-    (assoc data :url url
-                :link link)))
-
-(defn add-dates
-  [system data]
-  (log/debug "Adding post dates ...")
-  (let [date (util/path->date (:src-file data))
-        timestamp (util/format-timestamp date)
-        timestamp-clean (string/replace timestamp #"[^\d]" "")
-        datestamp (util/format-datestamp date)]
-    (assoc
-      data
-      :date date
-      :month (util/month->name (:month date))
-      :month-short (util/month->short-name (:month date))
-      :timestamp timestamp
-      :timestamp-long (Long/parseLong timestamp-clean)
-      :datestamp datestamp
-      :now-timestamp (util/format-timestamp (util/datetime-now))
-      :now-datestamp (util/format-datestamp (util/datetime-now)))))
-
-(defn add-counts
-  [system data]
-  (log/debug "Adding counts ...")
-  (let [body (:body data)]
-    (log/trace "Body data:" data)
-    (assoc
-      data
-      :char-count (util/count-chars body)
-      :word-count (util/count-words body)
-      :line-count (util/count-lines body))))
-
-(defn add-post-data
-  ""
-  [system data]
-  (let [file (:file data)]
-    (log/infof "Adding post data for '%s' ..." file)
-    (->> file
-         (content/parse system)
-         (merge data))))
-
-(defn process
-  ""
+(defn send-pre-notification
   [system file-obj]
   (event/publish system tag/process-one-pre {:file-obj file-obj})
-  (->> file-obj
-       (add-post-data system)
-       (add-counts system)
-       (add-file-data system)
-       (add-link system)
-       (add-dates system)
-       (update-tags system)
-       (convert-body system)
+  file-obj)
+
+(defn send-post-notification
+  [system data]
+  (event/publish->> system tag/process-one-post {:data data})
+  data)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Transducers   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn process-xducer
+  [system]
+  (comp
+    (map (partial send-pre-notification system))
+    (map (partial get-post-data system))
+    (filter util/public?)
+    (map get-post-counts)
+    (map (partial get-file-data system))
+    (map (partial get-link system))
+    (map get-dates)
+    (map (partial get-tags system))
+    (map (partial get-converted-body system))
+    (map (partial send-post-notification system))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Processes   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn process-one
+  ""
+  [system file-obj]
+  (->> (send-pre-notification system file-obj)
+       (get-post-data system)
+       (get-post-counts)
+       (get-file-data system)
+       (get-link system)
+       (get-dates)
+       (get-tags system)
+       (get-converted-body system)
        (into {})
-       (event/publish->> system tag/process-one-post {:file-obj file-obj})))
+       (send-post-notification system)))
+
+(defn process-iter
+  [system file-objs]
+  (map (partial process-one system) file-objs))
+
+(defn process
+  [system file-objs]
+  (into [] (process-xducer system) file-objs))
