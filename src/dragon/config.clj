@@ -6,6 +6,39 @@
             [taoensso.timbre :as log])
   (:refer-clojure :exclude [name read]))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Redis   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def ^:private redis-config
+  {:container-id-file "/tmp/redis-dragon-docker-id"
+   :image-name "redis:4.0.2-alpine"
+   :host "localhost"
+   :port "6379"
+   :host-data-dir "data"
+   :guest-data-dir "/data"})
+
+(def ^:private redis-start
+  {:home (System/getProperty "user.dir")
+   :executable "docker"
+   :command "redis-server"})
+
+(def ^:private redis-start-args
+  [(:executable redis-start)
+   "run"
+   "-d"
+   "-v" (format "%s/%s:%s" (:home redis-start)
+                           (:host-data-dir redis-config)
+                           (:guest-data-dir redis-config))
+   "--cidfile" (:container-id-file redis-config)
+   (:image-name redis-config)
+   (:command redis-start)
+   "--appendonly" "yes"])
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Datomic   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (def ^:private datomic-config
   {:version "0.9.5561.62"
    :host "localhost"
@@ -16,6 +49,8 @@
 
 (def ^:private datomic-start
   {:delay 5000
+   :retry-delay 500
+   :retry-timeout 10000
    :home (str "/opt/datomic/" (:version datomic-config))
    :executable "bin/run"
    :entry-point "datomic.peer-server"
@@ -33,6 +68,10 @@
    "-p" (:port datomic-start)
    "-d" (:db datomic-start)
    "-a" (:auth datomic-start)])
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   All   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def defaults
   {:port 5097
@@ -66,11 +105,18 @@
      :log-level :error
      :log-nss '[dragon]}
    :db {
-     :type :datomic
+     :type :redis
+     :redis {
+       :start (assoc redis-start :args redis-start-args)
+       :container-id-file (:container-id-file redis-config)
+       :conn {
+         :pool {}
+         :spec {
+           :host (:host redis-config)
+           :port (Integer/parseInt (:port redis-config))}}}
      :datomic {
        :version (:version datomic-config)
-       :start (assoc datomic-start
-                   :args datomic-start-args)
+       :start (assoc datomic-start :args datomic-start-args)
        :conn {
          :account-id datomic/PRO_ACCOUNT
          :region datomic/PRO_REGION
@@ -225,16 +271,28 @@
 
 (defn db-config
   [system]
-  (:conn ((db-type system) (db system))))
+  ((db-type system) (db system)))
+
+(defn db-conn
+  [system]
+  (:conn (db-config system)))
 
 (defn db-start-config
   [system]
-  (:start ((db-type system) (db system))))
-
-(defn db-start-delay
-  [system]
-  (get-in ((db-type system) (db system)) [:start :delay]))
+  (:start (db-config system)))
 
 (defn db-version
   [system]
-  (:version ((db-type system) (db system))))
+  (:version (db-config system)))
+
+(defn db-start-delay
+  [system]
+  (get-in (db-config system) [:start :delay]))
+
+(defn db-start-retry
+  [system]
+  (get-in (db-config system) [:start :retry-delay]))
+
+(defn db-start-retry-timeout
+  [system]
+  (get-in (db-config system) [:start :retry-timeout]))
