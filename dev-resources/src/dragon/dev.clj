@@ -1,5 +1,5 @@
 (ns dragon.dev
-  "Dragon development namespace
+  "Dragon development namespace.
 
   This namespace is particularly useful when doing active development on depedent
   blog applications."
@@ -17,6 +17,7 @@
             [dragon.blog.content.rfc5322 :as rfc5322]
             [dragon.blog.generator :as generator]
             [dragon.cli.core :as cli]
+            [dragon.data.sources.redis :as redis-db]
             [dragon.components.core :as component-api]
             [dragon.components.system :as components]
             [dragon.config :as config]
@@ -24,11 +25,14 @@
             [dragon.util :as util]
             [markdown.core :as md]
             [selmer.parser :as selmer]
+            [taoensso.carmine :as car :refer [wcar]]
             [taoensso.timbre :as log]
             [trifl.core :refer [->int]]
             [trifl.java :refer [show-methods]]))
 
-(logger/set-level! '[dragon clojang] :debug)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   State & Transition Vars   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def state :stopped)
 (def system nil)
@@ -38,6 +42,20 @@
 (def invalid-start-transitions #{:started :running})
 (def invalid-stop-transitions #{:stopped})
 (def invalid-run-transitions #{:running})
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Initial Setup & Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(logger/set-level! '[dragon clojang] :debug)
+
+(defn redis
+  [& args]
+  (apply redis-db/cmd (concat [system] args)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   State Management   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn init
   ([]
@@ -100,6 +118,10 @@
       (alter-var-root #'state (fn [_] :running))))
   state)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Reloading Management   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defn -refresh
   ([]
     (repl/refresh))
@@ -119,6 +141,8 @@
   (deinit)
   (refresh :after 'dragon.dev/run))
 
-;;; Aliases
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Aliases   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def reload #'reset)

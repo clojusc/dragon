@@ -3,6 +3,7 @@
             [dragon.event.message :as message]
             [dragon.event.system.core :as event]
             [dragon.event.tag :as tag]
+            [dragon.event.topic :as topic]
             [dragon.util :as util]
             [taoensso.timbre :as log]))
 
@@ -43,7 +44,7 @@
   ""
   [system event-type subscriber-funcs]
   (doseq [func subscriber-funcs]
-    (log/debugf "Subscribing to %s ..." event-type)
+    (log/debugf "\tSubscribing to %s ..." event-type)
     (event/subscribe system event-type debug-subscriber)
     (event/subscribe system event-type trace-subscriber)
     (if (= func :default)
@@ -53,6 +54,7 @@
 (defn subscribe-all
   ""
   [system-or-component]
+  (log/debug "Adding subscribers ...")
   (let [system (util/component->system system-or-component)]
     (doseq [[event-type subscriber-funcs] subscribers]
       (subscribe-all-event system

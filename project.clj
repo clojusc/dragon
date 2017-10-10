@@ -30,6 +30,7 @@
     [clojusc/twig "0.3.2-SNAPSHOT"]
     [com.datomic/clj-client "0.8.606"]
     [com.stuartsierra/component "0.3.2"]
+    [com.taoensso/carmine "2.16.0"]
     [http-kit "2.2.0"]
     [leiningen-core "2.7.1"]
     [markdown-clj "1.0.1"]
@@ -41,7 +42,7 @@
     [stasis "2.3.0"]]
   :dragon {
     :cli {
-      :log-level :info}}
+      :log-level :trace}}
   :profiles {
     :uberjar {:aot :all}
     :custom-repl {
