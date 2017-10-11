@@ -24,18 +24,37 @@
     :name "Apache License, Version 2.0"
     :url "http://www.apache.org/licenses/LICENSE-2.0"}
   :dependencies [
-    [clojusc/env-ini "0.4.0-SNAPSHOT"]
-    [clojusc/rfc5322 "0.4.0-SNAPSHOT"]
-    [clojusc/trifl "0.2.0-SNAPSHOT"]
-    [clojusc/twig "0.3.2-SNAPSHOT"]
+    [clojusc/env-ini "0.4.1"]
+    [clojusc/rfc5322 "0.4.0"]
+    [clojusc/trifl "0.2.0"]
+    [clojusc/twig "0.3.2"]
     [com.datomic/clj-client "0.8.606"]
     [com.stuartsierra/component "0.3.2"]
-    [com.taoensso/carmine "2.16.0"]
+    [com.taoensso/carmine "2.16.0" :exclusions [
+      com.taoensso/encore
+      com.taoensso/truss]]
     [http-kit "2.2.0"]
-    [leiningen-core "2.7.1"]
+    [leiningen-core "2.7.1" :exclusions [
+      commons-logging
+      org.apache.maven.wagon/wagon-provider-api
+      org.apache.httpcomponents/httpclient
+      org.apache.httpcomponents/httpcore
+      org.codehaus.plexus/plexus-utils]]
     [markdown-clj "1.0.1"]
     [org.clojure/clojure "1.8.0"]
     [org.clojure/core.async "0.3.443"]
+    ;; The following two are need for onyx, to prevent version collision
+    ;; errors
+    [org.apache.maven.wagon/wagon-provider-api "3.0.0"]
+    [commons-logging "1.2"]
+    ;; end override
+    [org.onyxplatform/onyx "0.11.0" :exclusions [
+      com.google.guava/guava
+      commons-logging]]
+    [org.onyxplatform/onyx-redis "0.11.0.0" :exclusions [
+      com.google.guava/guava
+      commons-logging
+      log4j]]
     [potemkin "0.4.4"]
     [ring/ring-core "1.6.2"]
     [selmer "1.11.1" :exclusions [joda-time]]
@@ -44,7 +63,8 @@
     :cli {
       :log-level :trace}}
   :profiles {
-    :uberjar {:aot :all}
+    :ubercompile {
+      :aot :all}
     :custom-repl {
       :repl-options {
         :init-ns dragon.dev
@@ -103,6 +123,8 @@
       ["lint"]
       ["test"]
       ["compile"]
+      ["with-profile" "+ubercompile" "compile"]
+      ["clean"]
       ["docs"]
       ["uberjar"]]})
 
