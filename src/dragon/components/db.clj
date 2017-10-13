@@ -14,6 +14,8 @@
 ;;;   General DB Component Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; XXX Use protocols below & ditch the quick-fix; see ticket #17
+
 (defn start-db!
   [component]
   (case (config/db-type component)
