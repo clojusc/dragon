@@ -17,6 +17,14 @@
   []
   (:out (shell/sh "git" "rev-parse" "--short" "HEAD")))
 
+(defn shell!
+  [& args]
+  (log/trace "shell! args:" args)
+  (let [results (apply shell/sh args)
+        err (:err results)]
+    (when-not (empty? err)
+      (log/error err))))
+
 (defn post-now
   "Return the current time in two parts, ready to be used for creating
   blog post directories."
