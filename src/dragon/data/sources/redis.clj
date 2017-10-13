@@ -1,9 +1,11 @@
 (ns dragon.data.sources.redis
-  (:require [clojure.java.shell :as shell]
+  (:require [clojure.java.io :as io]
             [dragon.config :as config]
             [dragon.data.sources.core :as db-core]
+            [dragon.util :as util]
             [taoensso.carmine :as car :refer [wcar]]
-            [taoensso.timbre :as log]))
+            [taoensso.timbre :as log]
+            [trifl.fs :as fs]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Constants & Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -58,6 +60,7 @@
   [component]
   (let [id-file (:container-id-file (config/db-config component))]
     (->> (slurp id-file)
-         (shell/sh "docker" "stop" :in)
+         (util/shell! "docker" "stop")
          vec)
-    (shell/sh "rm" id-file)))
+    (when (fs/exists? (io/as-file id-file))
+      (util/shell! "rm" id-file))))
