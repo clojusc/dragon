@@ -1,8 +1,8 @@
 (ns dragon.blog.core
   (:require [clojure.java.io :as io]
-            [clojure.set :refer [union]]
             [clojure.string :as string]
             [dragon.blog.post :as post]
+            [dragon.blog.tags :as tags]
             [dragon.config :as config]
             [dragon.event.system.core :as event]
             [dragon.event.tag :as tag]
@@ -11,6 +11,10 @@
             [trifl.core :refer [->int]]
             [trifl.fs :as fs])
   (:import (java.io.File)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def legal-post-file-extensions
   #{".rfc5322"})
@@ -22,13 +26,17 @@
        (remove false?)
        (not-empty)))
 
-(defn get-files
-  [dir]
-  (->> dir
-       (io/file)
-       (file-seq)
-       (filter fs/file?)
-       (filter legal-content-file?)))
+(defn post-url
+  [uri-base post]
+  ;; XXX maybe use config function to get uri-based instead of passing it?
+  (format "%s/%s" uri-base (:uri-path post)))
+
+(defn data-for-logs
+  [data]
+  (log/trace "Dropping body from: " (vec data))
+  (cond
+    (map? data) (assoc data :body "...")
+    (coll? data) (map #(assoc % :body "...") data)))
 
 (defn compare-timestamp-desc
   [a b]
@@ -93,6 +101,18 @@
   {:author auth-key
    :posts auth-data})
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Core Processing Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn get-files
+  [dir]
+  (->> dir
+       (io/file)
+       (file-seq)
+       (filter fs/file?)
+       (filter legal-content-file?)))
+
 (defn get-posts
   ([system]
     (get-posts system (config/posts-path-src system)))
@@ -115,79 +135,37 @@
                            {:count (count processed-posts)})
          vec)))
 
-(defn get-tag-freqs
-  [data]
-  (->> data
-       (map (comp vec :tags))
-       (flatten)
-       (frequencies)))
+(defmulti group-data
+  (fn [type _] type))
 
-(defn add-tag-percents
-  [total highest tag-data]
-  (let [percent (float (/ (:count tag-data) highest))]
-    (assoc tag-data
-           :total total
-           :highest highest
-           :percent percent
-           :five-star (Math/round (* 5 percent))
-           :hundred (Math/round (* 100 percent)))))
-
-(defn add-tags-percents
-  [total highest tags-data]
-  (map #(add-tag-percents total highest %) tags-data))
-
-(defn tag-stats
-  [data]
-  (let [freqs (get-tag-freqs data)
-        total (reduce + (vals freqs))
-        highest (apply max (vals freqs))]
-    (->> freqs
-         (vec)
-         (map #(zipmap [:name :count] %))
-         (add-tags-percents total highest)
-         (sort-by :name))))
-
-(defn tags-unique
-  [data]
-  (->> data
-       (map :tags)
-       (apply union)))
-
-(defn data-for-archives
-  [data]
+(defmethod group-data :archives
+  [_type data]
   (->> data
        (group-by-year)
        (map group-year-by-month)))
 
-(defn data-for-categories
-  [data]
+(defmethod group-data :categories
+  [_type data]
   (->> data
        (group-by-category)
        (map update-category-groups)
        (sort compare-category)))
 
-(defn data-for-tags
-  [data]
-  (let [unique-tags (tags-unique data)]
+(defmethod group-data :tags
+  [_type data]
+  (let [unique-tags (tags/unique data)]
     (map (partial group-by-tag data) unique-tags)))
 
-(defn data-for-authors
-  [data]
+(defmethod group-data :authors
+  [_type data]
   (->> data
        (group-by-author)
        (map update-author-groups)
        (sort compare-author)))
 
-(defn data-minus-body
-  [data]
-  (log/trace "Dumping body from: " (vec data))
-  (cond
-    (map? data) (assoc data :body "...")
-    (coll? data) (map #(assoc % :body "...") data)))
-
-(defn post-url
-  [uri-base post]
-  (format "%s/%s" uri-base (:uri-path post)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Route-generating Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn get-archive-route
   [uri-base gen-func post-data]
@@ -197,19 +175,21 @@
 
 (defn get-archive-routes
   [data & {:keys [uri-base gen-func]}]
-  (log/trace "Got data:" (data-minus-body data))
+  (log/trace "Got data:" (data-for-logs data))
   (->> data
        (map (partial get-archive-route uri-base gen-func))
        (into {})))
 
 (defn get-indexed-archive-route
   [uri-base gen-func posts [post-idx post-data]]
+  ;; XXX get uri-base from configuration; don't pass
   (let [route (post-url uri-base post-data)
         len (count posts)
         prev-idx (when-not (= post-idx (dec len)) (inc post-idx))
         next-idx (when-not (zero? post-idx) (dec post-idx))]
     (log/infof "Generating route for %s ..." route)
-    (log/debugf "This index: %s (prev: %s; next: %s)" post-idx prev-idx next-idx)
+    (log/debugf "This index: %s (prev: %s; next: %s)"
+                post-idx prev-idx next-idx)
     [route
      (gen-func
        (assoc
