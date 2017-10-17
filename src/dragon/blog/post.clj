@@ -1,7 +1,7 @@
 (ns dragon.blog.post
   (:require [clojure.java.io :as io]
             [clojure.string :as string]
-            [dragon.config :as config]
+            [dragon.config.core :as config]
             [dragon.blog.content.core :as content]
             [dragon.event.system.core :as event]
             [dragon.event.tag :as tag]
@@ -19,6 +19,11 @@
    md
    :inhibit-separator (config/template-skip-marker system)))
 
+(defn convert-body
+  [system data content-type]
+  (case content-type
+    :md (update-in data [:body] (partial md->html system))))
+
 (defn join-excerpt
   [system words number]
   (let [excerpt (string/join (config/word-joiner system)
@@ -26,6 +31,16 @@
     (if (string/ends-with? excerpt (config/sentence-end system))
       (str excerpt (config/period-ellipsis system))
       (str excerpt (config/ellipsis system)))))
+
+(defn send-pre-notification
+  [system file-obj]
+  (event/publish system tag/process-one-pre {:file-obj file-obj})
+  file-obj)
+
+(defn send-post-notification
+  [system data]
+  (event/publish->> system tag/process-one-post {:data data})
+  data)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Data Transforms   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -39,17 +54,6 @@
     (->> file
          (content/parse system)
          (merge data))))
-
-(defn get-post-counts
-  [data]
-  (log/debug "Adding counts ...")
-  (let [body (:body data)]
-    (log/trace "Body data:" data)
-    (assoc
-      data
-      :char-count (util/count-chars body)
-      :word-count (util/count-words body)
-      :line-count (util/count-lines body))))
 
 (defn get-file-data
   [system data]
@@ -67,6 +71,17 @@
                          (string/replace filename-old filename)
                          (util/sanitize-post-path)
                          (string/replace-first "posts/" "")))))
+
+(defn get-post-counts
+  [data]
+  (log/debug "Adding counts ...")
+  (let [body (:body data)]
+    (log/trace "Body data:" data)
+    (assoc
+      data
+      :char-count (util/count-chars body)
+      :word-count (util/count-words body)
+      :line-count (util/count-lines body))))
 
 (defn get-link
   [system data]
@@ -105,8 +120,8 @@
   [system data]
   (log/debug "Converting post body ...")
   (let [body (:body data)
-        paragraphs (string/split body
-                                 (config/paragraph-separator system))
+        paragraphs (string/split
+                    body (config/paragraph-separator system))
         words (-> paragraphs
                   (first)
                   (string/split (config/word-separator system)))
@@ -118,22 +133,11 @@
     (-> data
         :content-type
         keyword
-        (case
-          :md (update-in data [:body] (partial md->html system)))
+        (partial convert-body system data)
         (event/publish-> system tag/parse-content-post {:body (:body data)})
         (assoc :excerpt-100 (md->html system excerpt-100)
                :excerpt-50 (md->html system excerpt-50)
                :excerpt-25 (md->html system excerpt-25)))))
-
-(defn send-pre-notification
-  [system file-obj]
-  (event/publish system tag/process-one-pre {:file-obj file-obj})
-  file-obj)
-
-(defn send-post-notification
-  [system data]
-  (event/publish->> system tag/process-one-post {:data data})
-  data)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Transducers   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -152,8 +156,8 @@
     (map (partial send-pre-notification system))
     (map (partial get-post-data system))
     (filter util/public?)
-    (map get-post-counts)
     (map (partial get-file-data system))
+    (map get-post-counts)
     (map (partial get-link system))
     (map get-dates)
     (map (partial get-tags system))

@@ -1,5 +1,5 @@
 (ns dragon.blog.generator
-  (:require [dragon.config :as config]
+  (:require [dragon.config.core :as config]
             [stasis.core :as stasis]
             [taoensso.timbre :as log]))
 

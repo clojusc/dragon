@@ -2,7 +2,7 @@
   (:require [clojusc.twig :as logger]
             [dragon.cli.core :as cli]
             [dragon.components.system :as components]
-            [dragon.config :as config]
+            [dragon.config.core :as config]
             [taoensso.timbre :as log]
             [trifl.java :as trifl])
   (:gen-class))

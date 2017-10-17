@@ -1,7 +1,7 @@
 (ns dragon.components.logging
   (:require [clojusc.twig :as logger]
             [com.stuartsierra.component :as component]
-            [dragon.config :as config]
+            [dragon.config.core :as config]
             [taoensso.timbre :as log]))
 
 (defrecord Logging []

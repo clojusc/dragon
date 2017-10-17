@@ -1,6 +1,6 @@
 (ns dragon.data.sources.core
   (:require [clojure.java.shell :as shell]
-            [dragon.config :as config]
+            [dragon.config.core :as config]
             [dragon.data.sources.impl.common :as common]
             [dragon.data.sources.impl.datomic :as datomic]
             [dragon.data.sources.impl.redis :as redis]

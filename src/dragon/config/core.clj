@@ -1,4 +1,4 @@
-(ns dragon.config
+(ns dragon.config.core
   (:require ;[datomic.client :as datomic]
             [dragon.components.core :as components]
             [dragon.util :as util]

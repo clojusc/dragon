@@ -1,7 +1,7 @@
 (ns dragon.cli.show
   (:require [clojure.pprint :refer [pprint]]
             [clojusc.twig :as logger]
-            [dragon.config :as config]
+            [dragon.config.core :as config]
             [dragon.util :as util]
             [taoensso.timbre :as log]
             [trifl.docs :as docs])
