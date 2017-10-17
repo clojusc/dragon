@@ -2866,158 +2866,242 @@ net.brehaut.ClojureTools = (function (SH) {
   };
 })(SyntaxHighlighter);
 </script><title>sockets -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name"><a href="https://github.com/clojusc/dragon">sockets</a></h1><h2 class="project-version">0.4.0-SNAPSHOT</h2><br /><p>Customised, Stasis-based Static Site Generator</p>
-</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">clojusc/env-ini</td><td class="dotted"><hr /></td><td class="dep-version">0.4.1</td></tr><tr><td class="dep-name">clojusc/rfc5322</td><td class="dotted"><hr /></td><td class="dep-version">0.4.0</td></tr><tr><td class="dep-name">clojusc/trifl</td><td class="dotted"><hr /></td><td class="dep-version">0.2.0</td></tr><tr><td class="dep-name">clojusc/twig</td><td class="dotted"><hr /></td><td class="dep-version">0.3.2</td></tr><tr><td class="dep-name">com.datomic/clj-client</td><td class="dotted"><hr /></td><td class="dep-version">0.8.606</td></tr><tr><td class="dep-name">com.stuartsierra/component</td><td class="dotted"><hr /></td><td class="dep-version">0.3.2</td></tr><tr><td class="dep-name">com.taoensso/carmine</td><td class="dotted"><hr /></td><td class="dep-version">2.16.0</td></tr><tr><td class="dep-name">http-kit</td><td class="dotted"><hr /></td><td class="dep-version">2.2.0</td></tr><tr><td class="dep-name">leiningen-core</td><td class="dotted"><hr /></td><td class="dep-version">2.7.1</td></tr><tr><td class="dep-name">markdown-clj</td><td class="dotted"><hr /></td><td class="dep-version">1.0.1</td></tr><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.8.0</td></tr><tr><td class="dep-name">org.clojure/core.async</td><td class="dotted"><hr /></td><td class="dep-version">0.3.443</td></tr><tr><td class="dep-name">org.apache.maven.wagon/wagon-provider-api</td><td class="dotted"><hr /></td><td class="dep-version">3.0.0</td></tr><tr><td class="dep-name">commons-logging</td><td class="dotted"><hr /></td><td class="dep-version">1.2</td></tr><tr><td class="dep-name">org.onyxplatform/onyx</td><td class="dotted"><hr /></td><td class="dep-version">0.11.0</td></tr><tr><td class="dep-name">org.onyxplatform/onyx-redis</td><td class="dotted"><hr /></td><td class="dep-version">0.11.0.0</td></tr><tr><td class="dep-name">potemkin</td><td class="dotted"><hr /></td><td class="dep-version">0.4.4</td></tr><tr><td class="dep-name">ring/ring-core</td><td class="dotted"><hr /></td><td class="dep-version">1.6.2</td></tr><tr><td class="dep-name">selmer</td><td class="dotted"><hr /></td><td class="dep-version">1.11.1</td></tr><tr><td class="dep-name">stasis</td><td class="dotted"><hr /></td><td class="dep-version">2.3.0</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#dragon.util">dragon.util</a></li><li><a href="#dragon.blog.post">dragon.blog.post</a></li><li><a href="#dragon.blog.generator">dragon.blog.generator</a></li><li><a href="#dragon.blog.core">dragon.blog.core</a></li><li><a href="#dragon.blog.content.rfc5322">dragon.blog.content.rfc5322</a></li><li><a href="#dragon.blog.content.core">dragon.blog.content.core</a></li><li><a href="#dragon.event.tag">dragon.event.tag</a></li><li><a href="#dragon.event.message">dragon.event.message</a></li><li><a href="#dragon.event.topic">dragon.event.topic</a></li><li><a href="#dragon.event.system.impl">dragon.event.system.impl</a></li><li><a href="#dragon.event.system.core">dragon.event.system.core</a></li><li><a href="#dragon.event.subscription">dragon.event.subscription</a></li><li><a href="#dragon.config">dragon.config</a></li><li><a href="#dragon.data.core">dragon.data.core</a></li><li><a href="#dragon.data.sources.core">dragon.data.sources.core</a></li><li><a href="#dragon.data.sources.redis">dragon.data.sources.redis</a></li><li><a href="#dragon.data.sources.datomic">dragon.data.sources.datomic</a></li><li><a href="#dragon.cli.new.post">dragon.cli.new.post</a></li><li><a href="#dragon.cli.new.core">dragon.cli.new.core</a></li><li><a href="#dragon.cli.new.stub">dragon.cli.new.stub</a></li><li><a href="#dragon.cli.core">dragon.cli.core</a></li><li><a href="#dragon.cli.show">dragon.cli.show</a></li><li><a href="#dragon.components.system">dragon.components.system</a></li><li><a href="#dragon.components.db">dragon.components.db</a></li><li><a href="#dragon.components.config">dragon.components.config</a></li><li><a href="#dragon.components.core">dragon.components.core</a></li><li><a href="#dragon.components.logging">dragon.components.logging</a></li><li><a href="#dragon.components.event">dragon.components.event</a></li><li><a href="#dragon.components.httpd">dragon.components.httpd</a></li><li><a href="#dragon.main">dragon.main</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.util" name="dragon.util"><h1 class="project-name">dragon.util</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.util
-  (:require [clojure.string :as string]
-            [clojure.java.shell :as shell]
-            [clojusc.twig :refer [pprint]]
-            [selmer.parser :as selmer]
-            [taoensso.timbre :as log])
-  (:refer-clojure :exclude [boolean]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(declare merge-val)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def char-regex #&quot;^a*&quot;)
-(def post-regex #&quot;(\./)?posts/(\d{4})-(\d{2})/(\d{2})-(\d{2})(\d{2})(\d{2})/.*&quot;)
-(def timestamp-format &quot;:year-:month-:day :hour::minute::second&quot;)
-(def datestamp-format &quot;:year-:month-:day&quot;)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-build
-  []
-  (:out (shell/sh &quot;git&quot; &quot;rev-parse&quot; &quot;--short&quot; &quot;HEAD&quot;)))</pre></td></tr><tr><td class="docs"><p>Return the current time in two parts, ready to be used for creating
-  blog post directories.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn post-now
-  []
-  (let [now (new java.util.Date)
-        ym-format (new java.text.SimpleDateFormat &quot;YYYY-MM&quot;)
-        dt-format (new java.text.SimpleDateFormat &quot;dd-HHmmss&quot;)]
-    {:ym (.format ym-format now)
-     :dt (.format dt-format now)}))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn path-&gt;date
-  [dir]
-  (dissoc
-    (-&gt;&gt; dir
-         (re-matches post-regex)
-         (zipmap [:all :dir-prefix :year :month :day :hour :minute :second]))
-    :all :dir-prefix))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn datetime-now
-  []
-  (let [{:keys [ym dt]} (post-now)]
-    (path-&gt;date (format &quot;posts/%s/%s/&quot; ym dt))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn now
-  ([]
-    (now :post-map))
-  ([date-format]
-    (case date-format
-      :datetime-map (datetime-now)
-      :post-map (post-now))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn format-date
-  [date-map formater]
-  (reduce
-    (fn [acc [k v]]
-      (string/replace acc (str k) v))
-    formater
-    date-map))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn format-timestamp
-  [date-map]
-  (format-date date-map timestamp-format))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn format-datestamp
-  [date-map]
-  (format-date date-map datestamp-format))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn sanitize-str
-  [data-str]
-  (-&gt; data-str
-      (string/replace #&quot;\W+&quot; &quot;-&quot;)
-      (string/lower-case)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn sanitize-post-path
-  [path-str]
-  (string/replace path-str #&quot;^\./&quot; ))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn month-&gt;name
-  [month]
-  (case month
-    1 &quot;January&quot;
-    2 &quot;February&quot;
-    3 &quot;March&quot;
-    4 &quot;April&quot;
-    5 &quot;May&quot;
-    6 &quot;June&quot;
-    7 &quot;July&quot;
-    8 &quot;August&quot;
-    9 &quot;September&quot;
-    10 &quot;October&quot;
-    11 &quot;November&quot;
-    12 &quot;December&quot;
-    &quot;01&quot; &quot;January&quot;
-    &quot;02&quot; &quot;February&quot;
-    &quot;03&quot; &quot;March&quot;
-    &quot;04&quot; &quot;April&quot;
-    &quot;05&quot; &quot;May&quot;
-    &quot;06&quot; &quot;June&quot;
-    &quot;07&quot; &quot;July&quot;
-    &quot;08&quot; &quot;August&quot;
-    &quot;09&quot; &quot;September&quot;
-    &quot;10&quot; &quot;October&quot;
-    &quot;11&quot; &quot;November&quot;
-    &quot;12&quot; &quot;December&quot;))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn month-&gt;short-name
-  [month]
-  (-&gt; month
-      (month-&gt;name)
-      (subs 0 3)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn dots-&gt;dashes
-  [str]
-  (string/replace str #&quot;\.&quot; &quot;-&quot;))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn count-chars
-  [str]
-  (log/trace &quot;Counting chars ...&quot;)
-  (count (re-seq #&quot;.&quot; str)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn count-words
-  [str]
-  (log/trace &quot;Counting words ...&quot;)
-  (count (re-seq #&quot;[^\s]+&quot; str)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn count-lines
-  [str]
-  (log/trace &quot;Counting lines ...&quot;)
-  (as-&gt; str data
-        (string/split data #&quot;\n&quot;)
-        (remove empty? data)
-        (count data)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn deep-merge
-  [data1 data2]
-  (merge-with merge-val data1 data2))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmulti merge-val
-  (fn [a b]
-    (type a)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmethod merge-val clojure.lang.PersistentVector
+</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">clojusc/env-ini</td><td class="dotted"><hr /></td><td class="dep-version">0.4.1</td></tr><tr><td class="dep-name">clojusc/rfc5322</td><td class="dotted"><hr /></td><td class="dep-version">0.4.0</td></tr><tr><td class="dep-name">clojusc/trifl</td><td class="dotted"><hr /></td><td class="dep-version">0.2.0</td></tr><tr><td class="dep-name">clojusc/twig</td><td class="dotted"><hr /></td><td class="dep-version">0.3.2</td></tr><tr><td class="dep-name">com.datomic/clj-client</td><td class="dotted"><hr /></td><td class="dep-version">0.8.606</td></tr><tr><td class="dep-name">com.stuartsierra/component</td><td class="dotted"><hr /></td><td class="dep-version">0.3.2</td></tr><tr><td class="dep-name">com.taoensso/carmine</td><td class="dotted"><hr /></td><td class="dep-version">2.16.0</td></tr><tr><td class="dep-name">http-kit</td><td class="dotted"><hr /></td><td class="dep-version">2.2.0</td></tr><tr><td class="dep-name">leiningen-core</td><td class="dotted"><hr /></td><td class="dep-version">2.7.1</td></tr><tr><td class="dep-name">markdown-clj</td><td class="dotted"><hr /></td><td class="dep-version">1.0.1</td></tr><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.8.0</td></tr><tr><td class="dep-name">org.clojure/core.async</td><td class="dotted"><hr /></td><td class="dep-version">0.3.443</td></tr><tr><td class="dep-name">org.apache.maven.wagon/wagon-provider-api</td><td class="dotted"><hr /></td><td class="dep-version">3.0.0</td></tr><tr><td class="dep-name">commons-logging</td><td class="dotted"><hr /></td><td class="dep-version">1.2</td></tr><tr><td class="dep-name">org.onyxplatform/onyx</td><td class="dotted"><hr /></td><td class="dep-version">0.11.1</td></tr><tr><td class="dep-name">org.onyxplatform/onyx-redis</td><td class="dotted"><hr /></td><td class="dep-version">0.11.1.0</td></tr><tr><td class="dep-name">pandect</td><td class="dotted"><hr /></td><td class="dep-version">0.6.1</td></tr><tr><td class="dep-name">potemkin</td><td class="dotted"><hr /></td><td class="dep-version">0.4.4</td></tr><tr><td class="dep-name">ring/ring-core</td><td class="dotted"><hr /></td><td class="dep-version">1.6.2</td></tr><tr><td class="dep-name">selmer</td><td class="dotted"><hr /></td><td class="dep-version">1.11.1</td></tr><tr><td class="dep-name">stasis</td><td class="dotted"><hr /></td><td class="dep-version">2.3.0</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#dragon.blog.content.core">dragon.blog.content.core</a></li><li><a href="#dragon.blog.content.rfc5322">dragon.blog.content.rfc5322</a></li><li><a href="#dragon.blog.core">dragon.blog.core</a></li><li><a href="#dragon.blog.generator">dragon.blog.generator</a></li><li><a href="#dragon.blog.post">dragon.blog.post</a></li><li><a href="#dragon.blog.tags">dragon.blog.tags</a></li><li><a href="#dragon.cli.core">dragon.cli.core</a></li><li><a href="#dragon.cli.new.core">dragon.cli.new.core</a></li><li><a href="#dragon.cli.new.post">dragon.cli.new.post</a></li><li><a href="#dragon.cli.new.stub">dragon.cli.new.stub</a></li><li><a href="#dragon.cli.show">dragon.cli.show</a></li><li><a href="#dragon.components.config">dragon.components.config</a></li><li><a href="#dragon.components.core">dragon.components.core</a></li><li><a href="#dragon.components.db">dragon.components.db</a></li><li><a href="#dragon.components.event">dragon.components.event</a></li><li><a href="#dragon.components.httpd">dragon.components.httpd</a></li><li><a href="#dragon.components.logging">dragon.components.logging</a></li><li><a href="#dragon.components.system">dragon.components.system</a></li><li><a href="#dragon.config">dragon.config</a></li><li><a href="#dragon.data.core">dragon.data.core</a></li><li><a href="#dragon.data.sources.core">dragon.data.sources.core</a></li><li><a href="#dragon.data.sources.impl.common">dragon.data.sources.impl.common</a></li><li><a href="#dragon.data.sources.impl.datomic">dragon.data.sources.impl.datomic</a></li><li><a href="#dragon.data.sources.impl.redis">dragon.data.sources.impl.redis</a></li><li><a href="#dragon.event.message">dragon.event.message</a></li><li><a href="#dragon.event.subscription">dragon.event.subscription</a></li><li><a href="#dragon.event.system.core">dragon.event.system.core</a></li><li><a href="#dragon.event.system.impl">dragon.event.system.impl</a></li><li><a href="#dragon.event.tag">dragon.event.tag</a></li><li><a href="#dragon.event.topic">dragon.event.topic</a></li><li><a href="#dragon.main">dragon.main</a></li><li><a href="#dragon.util">dragon.util</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.content.core" name="dragon.blog.content.core"><h1 class="project-name">dragon.blog.content.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.content.core
+  (:require [dragon.blog.content.rfc5322 :as rfc5322]
+            [dragon.event.system.core :as event]
+            [dragon.event.tag :as tag]
+            [trifl.fs :as fs]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn parse
+  [system file-obj]
+  (event/publish system tag/read-source-pre {:file file-obj})
+  (let [file-type (fs/extension file-obj)
+        content (slurp file-obj)]
+    (event/publish system tag/read-source-post {:file file-obj})
+    (assoc
+      (case file-type
+        :rfc5322 (rfc5322/parse system content)
+        :default {:raw-data content
+                  :error :parser-not-found})
+     :file-type file-type)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.content.rfc5322" name="dragon.blog.content.rfc5322"><h1 class="project-name">dragon.blog.content.rfc5322</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.content.rfc5322
+  (:require [clojure.set :refer [rename-keys]]
+            [clojure.string :as string]
+            [clojure.walk :as walk]
+            [dragon.event.system.core :as event]
+            [dragon.event.tag :as tag]
+            [instaparse.core :as instaparse]
+            [rfc5322.core :as rfc]
+            [rfc5322.dev :as rfc-dev]
+            [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs"><p>Used to convert to internet message header fields to internally-used
+  metadata fields.</p>
+</td><td class="codes"><pre class="brush: clojure">(def rfc5322-names-&gt;metadata-names
+  {:subject :title
+   :from :author
+   :keywords :tags
+   :comments :comment-link})</pre></td></tr><tr><td class="docs"><p>Parse the given message, converting the parsed tree into a Clojure map.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn parse
+  ([msg]
+    (parse nil msg))
+  ([system msg]
+    (log/debug &quot;Parsing message content ...&quot;)
+    (event/publish system tag/parse-file-pre)
+    (-&gt;&gt; msg
+         (instaparse/parse (rfc/make-lite-parser))
+         (rfc-dev/-&gt;map)
+         (walk/postwalk-replace rfc5322-names-&gt;metadata-names)
+         (into {})
+         (event/publish-&gt;&gt; system tag/parse-file-post))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.core" name="dragon.blog.core"><h1 class="project-name">dragon.blog.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.core
+  (:require [clojure.java.io :as io]
+            [clojure.string :as string]
+            [dragon.blog.post :as post]
+            [dragon.blog.tags :as tags]
+            [dragon.config :as config]
+            [dragon.event.system.core :as event]
+            [dragon.event.tag :as tag]
+            [dragon.util :as util]
+            [taoensso.timbre :as log]
+            [trifl.core :refer [-&gt;int]]
+            [trifl.fs :as fs])
+  (:import (java.io.File)))</pre></td></tr><tr><td class="docs"><p>  Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def legal-post-file-extensions
+  #{&quot;.rfc5322&quot;})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn legal-content-file?
+  [^java.io.File post]
+  (-&gt;&gt; legal-post-file-extensions
+       (map #(string/ends-with? (.getCanonicalPath post) %))
+       (remove false?)
+       (not-empty)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn post-url
+  [uri-base post]
+  ;; XXX maybe use config function to get uri-based instead of passing it?
+  (format &quot;%s/%s&quot; uri-base (:uri-path post)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn data-for-logs
+  [data]
+  (log/trace &quot;Dropping body from: &quot; (vec data))
+  (cond
+    (map? data) (assoc data :body &quot;...&quot;)
+    (coll? data) (map #(assoc % :body &quot;...&quot;) data)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn compare-timestamp-desc
   [a b]
-  (concat a b))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmethod merge-val clojure.lang.PersistentArrayMap
+  (&lt; (:timestamp-long b)
+     (:timestamp-long a)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn compare-timestamp
   [a b]
-  (deep-merge a b))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmethod merge-val :default
+  (&lt; (:timestamp-long a)
+     (:timestamp-long b)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn compare-category
   [a b]
-  b)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn render
-  [template data]
-  (log/tracef &quot;Rendering template %s with data %s&quot; template (pprint data))
-  (selmer/render-file
-    template
+  (compare (:category a)
+           (:category b)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn compare-author
+  [a b]
+  (compare (:author a)
+           (:author b)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn group-by-year
+  [data]
+  (group-by
+    #(-&gt;int (get-in % [:date :year]))
     data))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn component-&gt;system
-  [system-or-component]
-  (if (contains? system-or-component :event)
-    system-or-component
-    {:event system-or-component}))</pre></td></tr><tr><td class="docs"><p>A filter that returns <code>true</code> if the post should be published on the front
-  page.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn boolean
-  [post key]
-  (if (= (string/lower-case (or (key post) &quot;&quot;)) &quot;false&quot;)
-    false
-    true))</pre></td></tr><tr><td class="docs"><p>A filter that returns <code>true</code> if the post should be published on the front
-  page.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn headline?
-  [post]
-  (boolean post :headlines?))</pre></td></tr><tr><td class="docs"><p>A filter that returns <code>true</code> if the post should be published.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn public?
-  [post]
-  (boolean post :public?))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.post" name="dragon.blog.post"><h1 class="project-name">dragon.blog.post</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn group-by-month
+  [data]
+  (map
+    (fn [[month posts]]
+      {:month (util/month-&gt;name month) :posts posts})
+    (group-by
+      #(-&gt;int (get-in % [:date :month]))
+      data)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn group-by-category
+  [data]
+  (group-by :category data))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn group-by-tag
+  [data tag]
+  {:tag tag
+   :posts (filter #(contains? (:tags %) tag) data)})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn group-by-author
+  [data]
+  (group-by :author data))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn group-year-by-month
+  [[year-key  year-data]]
+  {:year year-key
+   :months (group-by-month year-data)})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn update-category-groups
+  [[cat-key cat-data]]
+  {:category cat-key
+   :posts cat-data})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn update-author-groups
+  [[auth-key auth-data]]
+  {:author auth-key
+   :posts auth-data})</pre></td></tr><tr><td class="docs"><p>  Core Processing Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-files
+  [dir]
+  (-&gt;&gt; dir
+       (io/file)
+       (file-seq)
+       (filter fs/file?)
+       (filter legal-content-file?)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-posts
+  [system]
+  (let [posts-path (config/posts-path-src system)]
+    (log/debugf &quot;Finding posts under '%s' dir ...&quot; posts-path)
+    (-&gt;&gt; posts-path
+         (get-files)
+         (map :file))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn ingest-post
+  [system data]
+  ;; XXX need to update dragon.data.sources to use protocols before using this
+  ;(when (db/post-changed? system data)
+  ;  ))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn process
+  [system]
+  (log/debug &quot;Processing posts ...&quot;)
+  (event/publish system tag/process-all-pre)
+  (let [raw-posts (get-posts system)
+        processed-posts (post/process system raw-posts)]
+    ;; XXX maybe doall here instead of using vec to realize?
+    (-&gt;&gt; processed-posts
+         (sort compare-timestamp-desc)
+         (event/publish-&gt;&gt; system
+                           tag/process-all-post
+                           {:count (count processed-posts)})
+         vec)))</pre></td></tr><tr><td class="docs"><p>  Core Grouping Multimethods   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmulti group-data
+  (fn [type _] type))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmethod group-data :archives
+  [_type data]
+  (-&gt;&gt; data
+       (group-by-year)
+       (map group-year-by-month)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmethod group-data :categories
+  [_type data]
+  (-&gt;&gt; data
+       (group-by-category)
+       (map update-category-groups)
+       (sort compare-category)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmethod group-data :tags
+  [_type data]
+  (let [unique-tags (tags/unique data)]
+    (map (partial group-by-tag data) unique-tags)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmethod group-data :authors
+  [_type data]
+  (-&gt;&gt; data
+       (group-by-author)
+       (map update-author-groups)
+       (sort compare-author)))</pre></td></tr><tr><td class="docs"><p>  Route-generating Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-archive-route
+  [uri-base gen-func post-data]
+  (let [route (post-url uri-base post-data)]
+    (log/infof &quot;Generating route for %s ...&quot; route)
+    [route (gen-func post-data)]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-archive-routes
+  [data &amp; {:keys [uri-base gen-func]}]
+  (log/trace &quot;Got data:&quot; (data-for-logs data))
+  (-&gt;&gt; data
+       (map (partial get-archive-route uri-base gen-func))
+       (into {})))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-indexed-archive-route
+  [uri-base gen-func posts [post-idx post-data]]
+  ;; XXX get uri-base from configuration; don't pass
+  (let [route (post-url uri-base post-data)
+        len (count posts)
+        prev-idx (when-not (= post-idx (dec len)) (inc post-idx))
+        next-idx (when-not (zero? post-idx) (dec post-idx))]
+    (log/infof &quot;Generating route for %s ...&quot; route)
+    (log/debugf &quot;This index: %s (prev: %s; next: %s)&quot;
+                post-idx prev-idx next-idx)
+    [route
+     (gen-func
+       (assoc
+         post-data
+         :prev-post (when prev-idx
+                      (post-url uri-base (second (nth posts prev-idx))))
+         :next-post (when next-idx
+                      (post-url uri-base (second (nth posts next-idx))))))]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-indexed-archive-routes
+  [data &amp; {:keys [uri-base gen-func]}]
+  (log/trace &quot;Got data:&quot; data)
+  (-&gt;&gt; data
+       (map (partial get-indexed-archive-route uri-base gen-func data))
+       (into {})))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.generator" name="dragon.blog.generator"><h1 class="project-name">dragon.blog.generator</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.generator
+  (:require [dragon.config :as config]
+            [stasis.core :as stasis]
+            [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn run
+  ([system]
+   (run system []))
+  ([system routes]
+   (let [out-dir (config/output-dir system)]
+     (when-not (seq routes)
+       (log/warn &quot;Routes are manually set to be empty! Please fix.&quot;))
+     (log/infof &quot;Generating static content to '%s' ...&quot; out-dir)
+     (stasis/export-pages routes out-dir)
+     (log/info &quot;Static generation complete.&quot;))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.post" name="dragon.blog.post"><h1 class="project-name">dragon.blog.post</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.post
   (:require [clojure.java.io :as io]
             [clojure.string :as string]
@@ -3137,7 +3221,13 @@ net.brehaut.ClojureTools = (function (SH) {
   (event/publish-&gt;&gt; system tag/process-one-post {:data data})
   data)</pre></td></tr><tr><td class="docs"><p>  Transducers   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn process-xducer
+</td><td class="codes"><pre class="brush: clojure">(defn process-file-data
+  [system]
+  (comp
+    (map (partial get-post-data system))
+    (filter util/public?)
+    (map (partial get-file-data system))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn process-one
   [system]
   (comp
     (map (partial send-pre-notification system))
@@ -3151,7 +3241,7 @@ net.brehaut.ClojureTools = (function (SH) {
     (map (partial get-converted-body system))
     (map (partial send-post-notification system))))</pre></td></tr><tr><td class="docs"><p>  Processes   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn process-one
+</td><td class="codes"><pre class="brush: clojure">(defn process-one-iter
   [system file-obj]
   (-&gt;&gt; (send-pre-notification system file-obj)
        (get-post-data system)
@@ -3165,130 +3255,27 @@ net.brehaut.ClojureTools = (function (SH) {
        (send-post-notification system)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn process-iter
   [system file-objs]
-  (map (partial process-one system) file-objs))</pre></td></tr><tr><td class="docs">
+  (map (partial process-one-iter system) file-objs))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn process
   [system file-objs]
-  (into [] (process-xducer system) file-objs))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.generator" name="dragon.blog.generator"><h1 class="project-name">dragon.blog.generator</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.generator
-  (:require [dragon.config :as config]
-            [stasis.core :as stasis]
-            [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn run
-  ([system]
-   (run system []))
-  ([system routes]
-   (let [out-dir (config/output-dir system)]
-     (when-not (seq routes)
-       (log/warn &quot;Routes are manually set to be empty! Please fix.&quot;))
-     (log/infof &quot;Generating static content to '%s' ...&quot; out-dir)
-     (stasis/export-pages routes out-dir)
-     (log/info &quot;Static generation complete.&quot;))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.core" name="dragon.blog.core"><h1 class="project-name">dragon.blog.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.core
-  (:require [clojure.java.io :as io]
-            [clojure.set :refer [union]]
-            [clojure.string :as string]
-            [dragon.blog.post :as post]
-            [dragon.config :as config]
-            [dragon.event.system.core :as event]
-            [dragon.event.tag :as tag]
-            [dragon.util :as util]
-            [taoensso.timbre :as log]
-            [trifl.core :refer [-&gt;int]]
-            [trifl.fs :as fs])
-  (:import (java.io.File)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def legal-post-file-extensions
-  #{&quot;.rfc5322&quot;})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn legal-content-file?
-  [^java.io.File post]
-  (-&gt;&gt; legal-post-file-extensions
-       (map #(string/ends-with? (.getCanonicalPath post) %))
-       (remove false?)
-       (not-empty)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-files
-  [dir]
-  (-&gt;&gt; dir
-       (io/file)
-       (file-seq)
-       (filter fs/file?)
-       (filter legal-content-file?)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn compare-timestamp-desc
-  [a b]
-  (&lt; (:timestamp-long b)
-     (:timestamp-long a)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn compare-timestamp
-  [a b]
-  (&lt; (:timestamp-long a)
-     (:timestamp-long b)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn compare-category
-  [a b]
-  (compare (:category a)
-           (:category b)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn compare-author
-  [a b]
-  (compare (:author a)
-           (:author b)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn group-by-year
-  [data]
-  (group-by
-    #(-&gt;int (get-in % [:date :year]))
-    data))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn group-by-month
-  [data]
-  (map
-    (fn [[month posts]]
-      {:month (util/month-&gt;name month) :posts posts})
-    (group-by
-      #(-&gt;int (get-in % [:date :month]))
-      data)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn group-by-category
-  [data]
-  (group-by :category data))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn group-by-tag
-  [data tag]
-  {:tag tag
-   :posts (filter #(contains? (:tags %) tag) data)})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn group-by-author
-  [data]
-  (group-by :author data))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn group-year-by-month
-  [[year-key  year-data]]
-  {:year year-key
-   :months (group-by-month year-data)})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn update-category-groups
-  [[cat-key cat-data]]
-  {:category cat-key
-   :posts cat-data})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn update-author-groups
-  [[auth-key auth-data]]
-  {:author auth-key
-   :posts auth-data})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-posts
-  ([system]
-    (get-posts system (config/posts-path-src system)))
-  ([system posts-path]
-    (log/debugf &quot;Finding posts under '%s' dir ...&quot; posts-path)
-    (map (fn [x]
-           {:file x})
-         (get-files posts-path))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn process
-  [system]
-  (log/debug &quot;Processing posts ...&quot;)
-  (event/publish system tag/process-all-pre)
-  (let [raw-posts (get-posts system)
-        processed-posts (post/process system raw-posts)]
-    (-&gt;&gt; processed-posts
-         (sort compare-timestamp-desc)
-         (event/publish-&gt;&gt; system
-                           tag/process-all-post
-                           {:count (count processed-posts)})
-         vec)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-tag-freqs
+  (into [] (process-one system) file-objs))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.tags" name="dragon.blog.tags"><h1 class="project-name">dragon.blog.tags</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.tags
+  (:require [clojure.set :refer [union]]))</pre></td></tr><tr><td class="docs"><p>  Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn unique
   [data]
   (-&gt;&gt; data
+       (map :tags)
+       (apply union)))</pre></td></tr><tr><td class="docs"><p>  Core Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-freqs
+  [data]
+  (-&gt;&gt; data
+       ;; XXX use mapcat here instead
        (map (comp vec :tags))
        (flatten)
        (frequencies)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn add-tag-percents
+</td><td class="codes"><pre class="brush: clojure">(defn add-percents
   [total highest tag-data]
   (let [percent (float (/ (:count tag-data) highest))]
     (assoc tag-data
@@ -3297,352 +3284,538 @@ net.brehaut.ClojureTools = (function (SH) {
            :percent percent
            :five-star (Math/round (* 5 percent))
            :hundred (Math/round (* 100 percent)))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn add-tags-percents
+</td><td class="codes"><pre class="brush: clojure">(defn add-all-percents
   [total highest tags-data]
-  (map #(add-tag-percents total highest %) tags-data))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn tag-stats
+  (map #(add-percents total highest %) tags-data))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-stats
   [data]
-  (let [freqs (get-tag-freqs data)
+  (let [freqs (get-freqs data)
         total (reduce + (vals freqs))
         highest (apply max (vals freqs))]
     (-&gt;&gt; freqs
-         (vec)
+         vec
          (map #(zipmap [:name :count] %))
-         (add-tags-percents total highest)
-         (sort-by :name))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn tags-unique
-  [data]
-  (-&gt;&gt; data
-       (map :tags)
-       (apply union)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn data-for-archives
-  [data]
-  (-&gt;&gt; data
-       (group-by-year)
-       (map group-year-by-month)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn data-for-categories
-  [data]
-  (-&gt;&gt; data
-       (group-by-category)
-       (map update-category-groups)
-       (sort compare-category)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn data-for-tags
-  [data]
-  (let [unique-tags (tags-unique data)]
-    (map (partial group-by-tag data) unique-tags)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn data-for-authors
-  [data]
-  (-&gt;&gt; data
-       (group-by-author)
-       (map update-author-groups)
-       (sort compare-author)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn data-minus-body
-  [data]
-  (log/trace &quot;Dumping body from: &quot; (vec data))
-  (cond
-    (map? data) (assoc data :body &quot;...&quot;)
-    (coll? data) (map #(assoc % :body &quot;...&quot;) data)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn post-url
-  [uri-base post]
-  (format &quot;%s/%s&quot; uri-base (:uri-path post)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-archive-route
-  [uri-base gen-func post-data]
-  (let [route (post-url uri-base post-data)]
-    (log/infof &quot;Generating route for %s ...&quot; route)
-    [route (gen-func post-data)]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-archive-routes
-  [data &amp; {:keys [uri-base gen-func]}]
-  (log/trace &quot;Got data:&quot; (data-minus-body data))
-  (-&gt;&gt; data
-       (map (partial get-archive-route uri-base gen-func))
-       (into {})))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-indexed-archive-route
-  [uri-base gen-func posts [post-idx post-data]]
-  (let [route (post-url uri-base post-data)
-        len (count posts)
-        prev-idx (when-not (= post-idx (dec len)) (inc post-idx))
-        next-idx (when-not (zero? post-idx) (dec post-idx))]
-    (log/infof &quot;Generating route for %s ...&quot; route)
-    (log/debugf &quot;This index: %s (prev: %s; next: %s)&quot; post-idx prev-idx next-idx)
-    [route
-     (gen-func
-       (assoc
-         post-data
-         :prev-post (when prev-idx
-                      (post-url uri-base (second (nth posts prev-idx))))
-         :next-post (when next-idx
-                      (post-url uri-base (second (nth posts next-idx))))))]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-indexed-archive-routes
-  [data &amp; {:keys [uri-base gen-func]}]
-  (log/trace &quot;Got data:&quot; data)
-  (-&gt;&gt; data
-       (map (partial get-indexed-archive-route uri-base gen-func data))
-       (into {})))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.content.rfc5322" name="dragon.blog.content.rfc5322"><h1 class="project-name">dragon.blog.content.rfc5322</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.content.rfc5322
-  (:require [clojure.set :refer [rename-keys]]
-            [clojure.string :as string]
-            [clojure.walk :as walk]
+         (add-all-percents total highest)
+         (sort-by :name))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.cli.core" name="dragon.cli.core"><h1 class="project-name">dragon.cli.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.cli.core
+  (:require [clojure.pprint :refer [pprint]]
+            [clojusc.twig :as logger]
+            [dragon.blog.generator :as gen]
+            [dragon.cli.new.core :as new]
+            [dragon.cli.show :as show]
             [dragon.event.system.core :as event]
             [dragon.event.tag :as tag]
-            [instaparse.core :as instaparse]
-            [rfc5322.core :as rfc]
-            [rfc5322.dev :as rfc-dev]
-            [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs"><p>Used to convert to internet message header fields to internally-used
-  metadata fields.</p>
-</td><td class="codes"><pre class="brush: clojure">(def rfc5322-names-&gt;metadata-names
-  {:subject :title
-   :from :author
-   :keywords :tags
-   :comments :comment-link})</pre></td></tr><tr><td class="docs"><p>Parse the given message, converting the parsed tree into a Clojure map.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn parse
-  ([msg]
-    (parse nil msg))
-  ([system msg]
-    (log/debug &quot;Parsing message content ...&quot;)
-    (event/publish system tag/parse-file-pre)
-    (-&gt;&gt; msg
-         (instaparse/parse (rfc/make-lite-parser))
-         (rfc-dev/-&gt;map)
-         (walk/postwalk-replace rfc5322-names-&gt;metadata-names)
-         (into {})
-         (event/publish-&gt;&gt; system tag/parse-file-post))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.content.core" name="dragon.blog.content.core"><h1 class="project-name">dragon.blog.content.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.content.core
-  (:require [dragon.blog.content.rfc5322 :as rfc5322]
-            [dragon.event.system.core :as event]
-            [dragon.event.tag :as tag]
-            [trifl.fs :as fs]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn parse
-  [system file-obj]
-  (event/publish system tag/read-source-pre {:file file-obj})
-  (let [file-type (fs/extension file-obj)
-        content (slurp file-obj)]
-    (event/publish system tag/read-source-post {:file file-obj})
-    (assoc
-      (case file-type
-        :rfc5322 (rfc5322/parse system content)
-        :default {:raw-data content
-                  :error :parser-not-found})
-     :file-type file-type)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.event.tag" name="dragon.event.tag"><h1 class="project-name">dragon.event.tag</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.event.tag)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def read-config-pre ::read-config-pre)
-(def read-config ::read-config)
-(def read-config-post ::read-config-post)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def subscribers-added-pre ::subscribers-added-pre)
-(def subscribers-added ::subscribers-added)
-(def subscribers-added-post ::subscribers-added-post)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def run-cli-pre ::run-cli-pre)
-(def run-cli ::run-cli)
-(def run-cli-post ::run-cli-post)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def process-one-pre ::process-one-pre)
-(def process-one ::process-one)
-(def process-one-post ::process-one-post)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def process-all-pre ::process-all-pre)
-(def process-all ::process-all)
-(def process-all-post ::process-all-post)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def read-source-pre ::read-source-pre)
-(def read-source ::read-source)
-(def read-source-post ::read-source-post)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def parse-file-pre ::parse-file-pre)
-(def parse-file ::parse-file)
-(def parse-file-post ::parse-file-post)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def parse-content-pre ::parse-content-pre)
-(def parse-content ::parse-content)
-(def parse-content-post ::parse-content-post)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def write-output-pre ::write-output-pre)
-(def write-output ::write-output)
-(def write-output-post ::write-output-post)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def generate-routes-pre ::generate-routes-pre)
-(def generate-routes ::generate-routes)
-(def generate-routes-post ::generate-routes-post)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def shutdown-cli-pre ::shutdown-cli-pre)
-(def shutdown-cli ::shutdown-cli)
-(def shutdown-cli-post ::shutdown-cli-post)</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.event.message" name="dragon.event.message"><h1 class="project-name">dragon.event.message</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.event.message
-  (:require [dragon.event.topic :as topic]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn new-dataflow-event
-  [tag data]
-  {topic/dataflow-events tag
-   :data data})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-payload
-  [msg]
-  (:data msg))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-route
-  [msg]
-  (dissoc msg :data))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.event.topic" name="dragon.event.topic"><h1 class="project-name">dragon.event.topic</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.event.topic)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def dataflow-events ::dataflow-events)</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.event.system.impl" name="dragon.event.system.impl"><h1 class="project-name">dragon.event.system.impl</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.event.system.impl
-  (:require [clojure.core.async :as async]
-            [dragon.event.topic :as topic]
-            [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defrecord PubSub
-  [topic chan pub])</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-topic
-  [this]
-  (:topic this))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-chan
-  [this]
-  (:chan this))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-pub
-  [this]
-  (:pub this))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-sub
-  [this tag]
-  (let [sub-chan (async/chan 1)]
-    (async/sub (get-pub this) tag sub-chan)
-    #_sub-chan))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn delete
-  [this]
-  (-&gt; this
-      (get-chan)
-      (async/close!))
-  :deleted)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def pubsub-behaviour
-  {:get-topic get-topic
-   :get-chan get-chan
-   :get-pub get-pub
-   :get-sub get-sub
-   :delete delete})</pre></td></tr><tr><td class="docs"><p>Constructor for a pub-sub messenger. Takes one parameter, a publisher topic,
-  that is used to perform lookups.</p>
-
-<p>  Since topics are keywords, the data sent on the publish channel needs to have
-  the topic as one of the keys, or a subscriber will not receive the message.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn create-pubsub
-  [topic]
-  (log/debug &quot;Creating pubsub manager ...&quot;)
-  (log/trace &quot;Using topic&quot; topic)
-  (let [channel (async/chan 1)]
-    (map-&gt;PubSub
-     {:topic topic
-      :chan channel
-      :pub (async/pub channel topic)})))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn create-dataflow-pubsub
+            [dragon.util :as util]
+            [taoensso.timbre :as log]
+            [trifl.core :refer [sys-prop]]
+            [trifl.docs :as docs]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn version-cmd
   []
-  (create-pubsub topic/dataflow-events))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.event.system.core" name="dragon.event.system.core"><h1 class="project-name">dragon.event.system.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.event.system.core
-  (:require [clojure.core.async :as async]
-            [dragon.components.core :as components]
-            [dragon.event.message :as message]
-            [dragon.event.system.impl :as impl]
-            [dragon.event.topic :as topic]
+  (let [version (sys-prop &quot;dragon.version&quot;)
+        build (util/get-build)]
+    (print (format &quot;Dragon version %s, build %s\n&quot; version build))))</pre></td></tr><tr><td class="docs"><p>  Usage:
+  ```
+    dragon COMMAND [help | arg...]
+    dragon [-h | --help | -v | --version]
+  ```</p>
+
+<p>  Commands:
+  ```
+    new      Create files of a given type; see 'dragon new help'
+    show     Display various blog data in the terminal
+    gen      Generate updated static content for a site
+    run      Run the dragon site locally as a Ring app
+    help     Display this usage message
+    version  Display the current dragon version
+  ```</p>
+
+<p>  More information:</p>
+
+<pre><code>Each command takes an optional 'help' subcommand that will provide
+usage information about the particular command in question, e.g.:
+</code></pre>
+
+<p>  ```
+    $ dragon new help
+  ```</p>
+</td><td class="codes"><pre class="brush: clojure">(defn run
+  [system [cmd &amp; args]]
+  (log/debug &quot;Got cmd:&quot; cmd)
+  (log/debug &quot;Got args:&quot; args)
+  (event/publish system tag/run-cli {:cmd cmd :args args})
+  (case cmd
+    :new (new/run system args)
+    :show (show/run system args)
+    :gen (gen/run system)
+    :help (docs/print-docstring #'run)
+    :run (gen/run system)
+    :version (version-cmd)
+    ;; Aliases
+    :--help (docs/print-docstring #'run)
+    :--version (version-cmd)
+    :-h (docs/print-docstring #'run)
+    :-v (version-cmd))
+  (event/publish system tag/shutdown-cli))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.cli.new.core" name="dragon.cli.new.core"><h1 class="project-name">dragon.cli.new.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.cli.new.core
+  (:require [clojure.pprint :refer [pprint]]
+            [clojusc.twig :as logger]
+            [dragon.cli.new.post :as post]
             [dragon.util :as util]
-            [potemkin :refer [import-vars]]
-            [taoensso.timbre :as log])
-  (:import [dragon.event.system.impl PubSub]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(import-vars
- [impl create-pubsub
-       create-dataflow-pubsub])</pre></td></tr><tr><td class="docs"><p>The API for Dragon pubsub messenging.</p>
-</td><td class="codes"><pre class="brush: clojure">(defprotocol PubSubAPI
-  (get-topic [this]
-    &quot;Get the topic with which the messenger was instantiated.&quot;)
-  (get-chan [this]
-    &quot;Get the core.async channel associated with the publisher.&quot;)
-  (get-pub [this]
-    &quot;Get the core.async pub associated with the publisher.&quot;)
-  (get-sub [this tag]
-    &quot;Create and return a subscriber channel for a given tag (event-type).&quot;)
-  (delete [this]
-    &quot;Delete the publisher.&quot;))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(extend PubSub
-        PubSubAPI
-        impl/pubsub-behaviour)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn publish
-  ([system-or-component event-type]
-   (publish system-or-component event-type {}))
-  ([system-or-component event-type data]
-   (when-not (nil? system-or-component)
-     (let [system (util/component-&gt;system system-or-component)
-           dataflow (components/get-dataflow-pubsub system)
-           topic (get-topic dataflow)
-           msg (message/new-dataflow-event event-type data)]
-       (log/debug &quot;Publishing message to&quot; (message/get-route msg))
-       (log/trace &quot;Sending message data:&quot; (message/get-payload msg))
-       (async/&gt;!! (get-chan dataflow) msg))
-     data)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn publish-&gt;
-  ([other-data system-or-component event-type]
-   (publish-&gt; other-data system-or-component event-type {}))
-  ([other-data system-or-component event-type data]
-   (publish system-or-component event-type data)
-   other-data))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn publish-&gt;&gt;
-  ([system-or-component event-type other-data]
-   (publish-&gt;&gt; system-or-component event-type {} other-data))
-  ([system-or-component event-type data other-data]
-   (publish system-or-component event-type data)
-   other-data))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn subscribe
-  ([system event-type]
-   (subscribe system event-type (fn [s m]
-                                  (log/warn
-                                   &quot;Using default subscriber callback for route&quot;
-                                   (message/get-route m)))))
-  ([system event-type func]
-   (when-not (nil? system)
-     (let [dataflow (components/get-dataflow-pubsub system)]
-       (async/go-loop []
-         (when-let [msg (async/&lt;! (get-sub dataflow event-type))]
-           (log/debug &quot;Received subscribed message for&quot; (message/get-route msg))
-           (log/trace &quot;Message data:&quot; (message/get-payload msg))
-           (log/trace &quot;Callback function:&quot; func)
-           (func system msg)
-           (recur)))))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.event.subscription" name="dragon.event.subscription"><h1 class="project-name">dragon.event.subscription</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.event.subscription
+            [taoensso.timbre :as log]
+            [trifl.docs :as docs]))</pre></td></tr><tr><td class="docs"><p>  Usage:
+  ```
+    dragon new [SUBCOMMAND | help]
+  ```</p>
+
+<p>  If no SUBCOMMAND is provided, the default 'post' will be used (with the
+  default content type ':md').</p>
+
+<p>  Subcommands:
+  ```
+    post    Create a new dragon post stub; takes a subcommand for the type of
+              content to create; see 'dragon new post help' for usage
+  ```</p>
+</td><td class="codes"><pre class="brush: clojure">(defn run
+  [system [cmd &amp; args]]
+  (log/debug &quot;Got cmd:&quot; cmd)
+  (log/debug &quot;Got args:&quot; args)
+  (case cmd
+    :post (post/run system args)
+    :help (docs/print-docstring #'run)
+    (post/run system [:md])))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.cli.new.post" name="dragon.cli.new.post"><h1 class="project-name">dragon.cli.new.post</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.cli.new.post
+  (:require [clojure.pprint :refer [pprint]]
+            [dragon.cli.new.stub :as stub]
+            [dragon.util :as util]
+            [taoensso.timbre :as log]
+            [trifl.docs :as docs]))</pre></td></tr><tr><td class="docs"><p>  Usage:
+  ```
+    dragon new post SUBCOMMAND [help]
+  ```</p>
+
+<p>  A SUBCOMMAND is required.</p>
+
+<p>  Subcommands:
+  ```
+    md         Create a new post stub in Markdown format
+    clj        Create a new post stub in Clojure format
+    edn        Create a new post stub in EDN format
+    html       Create a new post stub in HTML format
+    rfc5322    Create a new post stub in a format based on email messages;
+                 in this case, no metadata file is created (message headers
+                 are used instead) and the <code>content-type</code> field is used to
+                 indicate the content type of the body of the message (i.e.,
+                 blog post)
+  ```</p>
+</td><td class="codes"><pre class="brush: clojure">(defn run
+  [system [cmd &amp; args]]
+  (log/debug &quot;Got cmd:&quot; cmd)
+  (log/debug &quot;Got args:&quot; args)
+  (let [passed-date (first args)
+        date (or passed-date (util/now))]
+    (case cmd
+      :md (stub/make-markdown-post date)
+      :clj (stub/make-clojure-post date)
+      :edn (stub/make-edn-post date)
+      :html (stub/make-html-post date)
+      :rfc5322 (stub/make-rfc5322-post date)
+      (docs/print-docstring #'run))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.cli.new.stub" name="dragon.cli.new.stub"><h1 class="project-name">dragon.cli.new.stub</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.cli.new.stub
+  (:require [clojure.pprint :refer [pprint]]
+            [clojure.java.io :as io]
+            [clojusc.twig :as logger]
+            [dragon.config :as config]
+            [dragon.util :as util]
+            [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def stub-metadata
+&quot;{:title \&quot;REQUIRED\&quot;
+ :subtitle \&quot;\&quot;
+ :excerpt \&quot;\&quot;
+ :author \&quot;REQUIRED\&quot;
+ :twitter \&quot;\&quot;
+ :category \&quot;REQUIRED\&quot;
+ :tags []
+ :comment-link \&quot;\&quot;
+ :header-image \&quot;\&quot;
+ :public? false}\n&quot;)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def clj-content
+&quot;(defn metadata
+  []
+  {:title \&quot;REQUIRED\&quot;
+   :subtitle \&quot;\&quot;
+   :excerpt \&quot;\&quot;
+   :author \&quot;REQUIRED\&quot;
+   :twitter \&quot;\&quot;
+   :category \&quot;REQUIRED\&quot;
+   :tags []
+   :comment-link \&quot;\&quot;
+   :header-image \&quot;\&quot;
+   :public? false})\n
+(defn content
+  []
+  \&quot;REQUIRED\&quot;)\n&quot;)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def edn-content
+&quot;{:title \&quot;REQUIRED\&quot;
+ :subtitle \&quot;\&quot;
+ :excerpt \&quot;\&quot;
+ :author \&quot;REQUIRED\&quot;
+ :twitter \&quot;\&quot;
+ :category \&quot;REQUIRED\&quot;
+ :tags []
+ :comment-link \&quot;\&quot;
+ :header-image \&quot;\&quot;
+ :public? false
+ :content \&quot;REQUIRED\&quot;}\n&quot;)</pre></td></tr><tr><td class="docs"><p>Note that rfc5322-content uses the standard field names, when something
+close exists. The following show how the RFC 5322 fields map to our metadata
+fields:</p>
+
+<ul>
+<li>Subject -> title</li>
+<li>From -> author (Fistname Lastname)</li>
+<li>Keywords -> tags (comma-separated)</li>
+<li>Comments -> comment-link</li>
+</ul>
+
+<p>The rest of the fields used are defined as "optional" in RFC 5322:</p>
+
+<ul>
+<li>Subtitle</li>
+<li>Excerpt</li>
+<li>Category</li>
+<li>Content-Type</li>
+</ul>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def rfc5322-content
+&quot;Subject: REQUIRED (title)
+Subtitle:
+Excerpt:
+From: REQUIRED (author)
+Twitter:
+Category:
+Keywords:
+Comments:
+Content-Type: md
+Header-Image: img/
+Public?: true
+[content goes here]\n&quot;)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn stub-content
+  [content-type]
+  (case content-type
+    :md 
+    :html 
+    :clj clj-content
+    :edn edn-content
+    :rfc5322 rfc5322-content))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn write-content
+  [path content-type]
+  (with-open [writer (io/writer (format
+                                  &quot;%s/content.%s&quot; path (name content-type)))]
+    (.write writer (stub-content content-type))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn write-edn
+  [path]
+  (with-open [writer (io/writer (format &quot;%s/meta.edn&quot; path))]
+    (.write writer stub-metadata)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn write-files
+  [{ym :ym dt :dt} content-type]
+  (let [path (format &quot;posts/%s/%s&quot; ym dt)]
+    (log/infof &quot;Writing content and metadata files to %s ...&quot; path)
+    (io/make-parents (str path &quot;/child&quot;))
+    (write-content path content-type)
+    (when-not (or (= content-type :rfc5322)
+                  (= content-type :edn)
+                  (= content-type :clj))
+      (write-edn path))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn make-markdown-post
+  [date]
+  (write-files date :md))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn make-clojure-post
+  [date]
+  (write-files date :clj))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn make-edn-post
+  [date]
+  (write-files date :edn))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn make-html-post
+  [date]
+  (write-files date :html))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn make-rfc5322-post
+  [date]
+  (write-files date :rfc5322))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.cli.show" name="dragon.cli.show"><h1 class="project-name">dragon.cli.show</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.cli.show
+  (:require [clojure.pprint :refer [pprint]]
+            [clojusc.twig :as logger]
+            [dragon.config :as config]
+            [dragon.util :as util]
+            [taoensso.timbre :as log]
+            [trifl.docs :as docs])
+  (:refer-clojure :exclude [meta]))</pre></td></tr><tr><td class="docs"><p>  Usage:
+  ```
+    dragon show [SUBCOMMAND | help]
+  ```</p>
+
+<p>  If no SUBCOMMAND is provided, the default 'config' will be used.</p>
+
+<p>  Subcommands:
+  ```
+    config          Display the current dragon configuration
+    port            Display the HTTP port configuration
+    metadata        Display the metadata for all posts
+    metadata POST   Display the metadata for a given post
+  ```</p>
+</td><td class="codes"><pre class="brush: clojure">(defn run
+  [system [cmd &amp; args]]
+  (log/debug &quot;Got cmd:&quot; cmd)
+  (log/debug &quot;Got args:&quot; args)
+  (case cmd
+    :all (pprint (:config system))
+    :port (pprint (config/port system))
+    :metadata ;(if-let [post (first args)]
+              (println &quot;\nCurrently this operation is not supported.\n&quot;)
+    :help (docs/print-docstring #'run)
+    (pprint (:config system))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.config" name="dragon.components.config"><h1 class="project-name">dragon.components.config</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.components.config
   (:require [com.stuartsierra.component :as component]
-            [dragon.event.message :as message]
+            [dragon.config :as config]
+            [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord Config [
+  builder]
+  component/Lifecycle
+  (start [component]
+    (log/info &quot;Starting config component ...&quot;)
+    (log/debug &quot;Started config component.&quot;)
+    (let [cfg (builder)]
+      (log/trace &quot;Built configuration:&quot; cfg)
+      (assoc component :dragon cfg)))
+  (stop [component]
+    (log/info &quot;Stopping config component ...&quot;)
+    (log/debug &quot;Stopped config component.&quot;)
+    (assoc component :dragon nil)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn create-config-component
+  [config-builder-fn]
+  (map-&gt;Config
+    {:builder config-builder-fn}))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.core" name="dragon.components.core"><h1 class="project-name">dragon.components.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><p>System component access functions.</p>
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.components.core)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def dataflow-keys [:pubsub :dataflow])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-config
+  [system &amp; args]
+  (let [base-keys [:config :dragon]]
+    (if-not (seq args)
+      (get-in system base-keys)
+      (get-in system (concat base-keys args)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-pubsub
+  [system]
+  (get-in system [:event :pubsub]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-dataflow-pubsub
+  [system]
+  (get-in system (concat [:event] dataflow-keys)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-db-conn
+  [system]
+  (get-in system [:db :conn]))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.db" name="dragon.components.db"><h1 class="project-name">dragon.components.db</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.components.db
+  (:require [com.stuartsierra.component :as component]
+            [dragon.config :as config]
+            [dragon.data.core :as data]
+            [dragon.data.sources.core :as data-source]
+            [dragon.event.subscription :as subscription]
+            [dragon.event.tag :as tag]
+            [dragon.event.topic :as topic]
+            [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs"><p>  General DB Component Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn run-setup-tasks
+  [connector]
+  (log/debug &quot;Starting setup tasks ...&quot;)
+  (data-source/setup-schemas connector)
+  (data-source/setup-subscribers connector)
+  (log/debug &quot;Finished setup tasks.&quot;))</pre></td></tr><tr><td class="docs"><p>  Components   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord DataBase []
+  component/Lifecycle
+  (start [component]
+    (log/info &quot;Starting db component ...&quot;)
+    (log/debug &quot;Database component backend is&quot; (config/db-type component))
+    (let [connector (data-source/new-connector component)
+          _ (data-source/start-db! connector)
+          component (data-source/add-connection connector)]
+      (run-setup-tasks connector)
+      (assoc component :connector connector
+                       :querier (data-source/new-querier component))))
+  (stop [component]
+    (log/info &quot;Stopping db component ...&quot;)
+    (let [connector (:connector component)]
+      (log/debug &quot;Stopped db component.&quot;)
+      (data-source/stop-db! connector)
+      (-&gt; connector
+          (data-source/remove-connection)
+          (assoc :querier nil)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn create-db-component
+  []
+  (-&gt;DataBase))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.event" name="dragon.components.event"><h1 class="project-name">dragon.components.event</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.components.event
+  (:require [com.stuartsierra.component :as component]
+            [dragon.components.core :as component-api]
+            [dragon.event.subscription :as subscription]
             [dragon.event.system.core :as event]
             [dragon.event.tag :as tag]
             [dragon.event.topic :as topic]
-            [dragon.util :as util]
             [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn debug-subscriber
-  [system msg]
-  (log/debug &quot;Debug subscriber got system with keys:&quot; (keys system))
-  (log/debug &quot;Debug subscriber got msg payload:&quot; (message/get-payload msg)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn trace-subscriber
-  [system msg]
-  (log/trace &quot;Trace subscriber got system:&quot; system)
-  (log/trace &quot;Trace subscriber got full msg:&quot; msg))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn shutdown-subscriber
-  [system msg]
-  (log/info &quot;Shutting down system ...&quot;)
-  (component/stop system)
-  (shutdown-agents))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def subscribers
-  {tag/subscribers-added [:default]
-   tag/process-all-pre [:default]
-   tag/process-all-post [:default]
-   tag/run-cli [:default]
-   tag/read-source-pre [:default]
-   tag/read-source-post [:default]
-   tag/parse-file-pre [:default]
-   tag/parse-file-post [:default]
-   tag/parse-content-pre [:default]
-   tag/parse-content-post [:default]
-   tag/write-output-pre [:default]
-   tag/write-output-post [:default]
-   tag/generate-routes-pre [:default]
-   tag/generate-routes-post [:default]
-   tag/shutdown-cli [shutdown-subscriber]})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn subscribe-all-event
-  [system event-type subscriber-funcs]
-  (doseq [func subscriber-funcs]
-    (log/debugf &quot;\tSubscribing to %s ...&quot; event-type)
-    (event/subscribe system event-type debug-subscriber)
-    (event/subscribe system event-type trace-subscriber)
-    (if (= func :default)
-      (event/subscribe system event-type)
-      (event/subscribe system event-type func))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn subscribe-all
-  [system-or-component]
-  (log/debug &quot;Adding subscribers ...&quot;)
-  (let [system (util/component-&gt;system system-or-component)]
-    (doseq [[event-type subscriber-funcs] subscribers]
-      (subscribe-all-event system
-                           event-type
-                           subscriber-funcs))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.config" name="dragon.config"><h1 class="project-name">dragon.config</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord Event [pubsub]
+  component/Lifecycle
+  (start [component]
+    (log/info &quot;Starting event component ...&quot;)
+    (log/debug &quot;Started event component.&quot;)
+    (let [dataflow (event/create-dataflow-pubsub)
+          component (assoc-in component component-api/dataflow-keys dataflow)]
+      (log/info &quot;Adding subscribers ...&quot;)
+      component))
+  (stop [component]
+    (log/info &quot;Stopping event component ...&quot;)
+    (event/delete (get-in component component-api/dataflow-keys))
+    (let [component (assoc-in component component-api/dataflow-keys nil)]
+      (log/debug &quot;Stopped event component.&quot;)
+      component)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn create-event-component
+  []
+  (map-&gt;Event
+   {:pubsub {}}))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.httpd" name="dragon.components.httpd"><h1 class="project-name">dragon.components.httpd</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.components.httpd
+  (:require [com.stuartsierra.component :as component]
+            [dragon.components.core :as component-api]
+            [dragon.config :as config]
+            [dragon.event.subscription :as subscription]
+            [dragon.event.system.core :as event]
+            [dragon.event.tag :as tag]
+            [dragon.event.topic :as topic]
+            [org.httpkit.server :as server]
+            [ring.middleware.file :as ring-file]
+            [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord HTTPD []
+  component/Lifecycle
+  (start [component]
+    (log/info &quot;Starting httpd component ...&quot;)
+    (let [port (config/port component)
+          docroot (config/output-dir component)
+          main-handler {}
+          site (ring-file/wrap-file main-handler docroot)
+          server (server/run-server site {:port port})]
+      (log/debugf &quot;Serving files from %s and listening on port %s&quot;
+                  docroot port)
+      (log/debug &quot;Started httpd component.&quot;)
+      (assoc component :server server)))
+  (stop [component]
+    (log/info &quot;Stopping httpd component ...&quot;)
+    (if-let [server (:server component)]
+      (server))
+    (assoc component :server nil)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn create-httpd-component
+  []
+  (-&gt;HTTPD))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.logging" name="dragon.components.logging"><h1 class="project-name">dragon.components.logging</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.components.logging
+  (:require [clojusc.twig :as logger]
+            [com.stuartsierra.component :as component]
+            [dragon.config :as config]
+            [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord Logging []
+  component/Lifecycle
+  (start [component]
+    (log/info &quot;Starting logging component ...&quot;)
+    (let [log-level (config/log-level component)
+          log-nss (vec (config/log-nss component))]
+      (log/debug &quot;Setting up logging with level&quot; log-level)
+      (log/debug &quot;Logging namespaces:&quot; log-nss)
+      (logger/set-level! log-nss log-level)
+      (log/debug &quot;Started logging component.&quot;)
+      component))
+  (stop [component]
+    (log/info &quot;Stopping logging component ...&quot;)
+    (log/debug &quot;Stopped logging component.&quot;)
+    component))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn create-logging-component
+  []
+  (-&gt;Logging))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.system" name="dragon.components.system"><h1 class="project-name">dragon.components.system</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.components.system
+  (:require [com.stuartsierra.component :as component]
+            [dragon.components.config :as config]
+            [dragon.components.db :as db]
+            [dragon.components.event :as event]
+            [dragon.components.httpd :as httpd]
+            [dragon.components.logging :as logging]
+            [dragon.config :refer [build] :rename {build build-config}]))</pre></td></tr><tr><td class="docs"><p>  Common Configuration Components   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn cfg
+  [builder]
+  {:config (config/create-config-component builder)})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def log
+  {:logging (component/using
+             (logging/create-logging-component)
+             [:config])})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def evt-no-log
+  {:event (component/using
+           (event/create-event-component)
+           [:config])})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def data-no-log
+  {:db (component/using
+        (db/create-db-component)
+        [:config :event])})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def evt
+  {:event (component/using
+           (event/create-event-component)
+           [:config :logging])})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def data
+  {:db (component/using
+        (db/create-db-component)
+        [:config :logging :event])})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def http
+  {:httpd (component/using
+           (httpd/create-httpd-component)
+           [:config :logging :db :event])})</pre></td></tr><tr><td class="docs"><p>  Component Intilizations   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn initialize-default
+  ([]
+    (initialize-default build-config))
+  ([config-builder]
+    (component/map-&gt;SystemMap
+      (merge (cfg config-builder)
+             log
+             data
+             evt))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn initialize-bare-bones
+  ([]
+    (initialize-bare-bones build-config))
+  ([config-builder]
+    (component/map-&gt;SystemMap
+      (merge (cfg config-builder)
+             data-no-log
+             evt-no-log))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn initialize-with-web
+  ([]
+    (initialize-with-web build-config))
+  ([config-builder]
+    (component/map-&gt;SystemMap
+      (merge (cfg config-builder)
+             log
+             data
+             evt
+             http))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def init
+  {:default initialize-default
+   :basic initialize-bare-bones
+   :web initialize-with-web})</pre></td></tr><tr><td class="docs"><p>  Managment Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def stop #'component/stop)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn start
+  ([config-builder]
+   (start (initialize-default config-builder)))
+  ([config-builder system-type]
+   (case system-type
+     :web (component/start (initialize-with-web config-builder))
+     :basic (component/start (initialize-bare-bones config-builder))
+     :cli (component/start (initialize-default config-builder)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn restart
+  ([system]
+   (-&gt; system
+       (component/stop)
+       (component/start))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.config" name="dragon.config"><h1 class="project-name">dragon.config</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.config
-  (:require [datomic.client :as datomic]
+  (:require ;[datomic.client :as datomic]
             [dragon.components.core :as components]
             [dragon.util :as util]
             [leiningen.core.project :as project]
@@ -3668,6 +3841,7 @@ net.brehaut.ClojureTools = (function (SH) {
                            (:host-data-dir redis-config)
                            (:guest-data-dir redis-config))
    &quot;--cidfile&quot; (:container-id-file redis-config)
+   &quot;-p&quot; (format &quot;%s:%s&quot; (:port redis-config) (:port redis-config))
    (:image-name redis-config)
    (:command redis-start)
    &quot;--appendonly&quot; &quot;yes&quot;])</pre></td></tr><tr><td class="docs"><p>  Datomic   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
@@ -3745,8 +3919,8 @@ net.brehaut.ClojureTools = (function (SH) {
        :version (:version datomic-config)
        :start (assoc datomic-start :args datomic-start-args)
        :conn {
-         :account-id datomic/PRO_ACCOUNT
-         :region datomic/PRO_REGION
+         ;:account-id datomic/PRO_ACCOUNT
+         ;:region datomic/PRO_REGION
          :service &quot;peer-server&quot;
          :endpoint (format &quot;%s:%s&quot; (:host datomic-config)
                                    (:port datomic-config))
@@ -3903,72 +4077,89 @@ net.brehaut.ClojureTools = (function (SH) {
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.data.sources.core
   (:require [clojure.java.shell :as shell]
             [dragon.config :as config]
+            [dragon.data.sources.impl.common :as common]
+            [dragon.data.sources.impl.datomic :as datomic]
+            [dragon.data.sources.impl.redis :as redis]
+            [dragon.util :as util]
+            [taoensso.timbre :as log])
+  (:import (dragon.data.sources.impl.datomic DatomicConnector
+                                             DatomicQuerier)
+           (dragon.data.sources.impl.redis RedisConnector
+                                           RedisQuerier)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defprotocol DBConnector
+  (start-db! [this])
+  (execute-db-command! [this])
+  (setup-schemas [this])
+  (setup-subscribers [this])
+  (add-connection [this])
+  (remove-connection [this])
+  (stop-db! [this]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(extend DatomicConnector
+        DBConnector
+        (merge common/connection-behaviour
+               datomic/connection-behaviour))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(extend RedisConnector
+        DBConnector
+        (merge common/connection-behaviour
+               redis/connection-behaviour))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn new-connector
+  [component]
+  (case (config/db-type component)
+    :redis (redis/new-connector component)
+    :datomic (datomic/new-connector component)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defprotocol DBQuerier
+  (get-post-checksum [this post-key])
+  (get-post-content [this post-key])
+  (get-post-metadata [this post-key])
+  (get-post-tags [this post-key])
+  (get-post-stats [this post-key])
+  (get-all-categories [this])
+  (get-all-tags [this])
+  (get-all-stats [this])
+  (post-changed? [this post-key]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(extend DatomicQuerier
+        DBQuerier
+        datomic/query-behaviour)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(extend RedisQuerier
+        DBQuerier
+        redis/query-behaviour)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn new-querier
+  [component]
+  (case (config/db-type component)
+    :redis (redis/new-querier component)
+    :datomic (datomic/new-querier component)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.data.sources.impl.common" name="dragon.data.sources.impl.common"><h1 class="project-name">dragon.data.sources.impl.common</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.data.sources.impl.common
+  (:require [clojure.java.shell :as shell]
+            [dragon.config :as config]
+            [dragon.util :as util]
             [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn execute-db-command!
-  [component]
-  (let [start-cfg (config/db-start-config component)
+  [this]
+  (let [start-cfg (config/db-start-config (:component this))
         home (:home start-cfg)
         args (:args start-cfg)]
     (shell/with-sh-dir home
       (log/debugf &quot;Running command in %s ...&quot; home)
       (log/debug &quot;Using shell/sh args:&quot; args)
-      (apply shell/sh args))))</pre></td></tr><tr><td class="docs">
+      (apply util/shell! args))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn remove-connection
-  [component]
-  (assoc component :conn nil))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.data.sources.redis" name="dragon.data.sources.redis"><h1 class="project-name">dragon.data.sources.redis</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.data.sources.redis
-  (:require [clojure.java.shell :as shell]
-            [dragon.config :as config]
-            [dragon.data.sources.core :as db-core]
-            [taoensso.carmine :as car :refer [wcar]]
-            [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs"><p>  Constants &amp; Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def redis-schemas
-  ;; Keys  &amp; val types:
-  ;; * path-segment:content / string
-  ;; * path-segment:metadata / hash (binary)
-  ;; * path-segment:stats / hash (binary)
-  ;; * all-posts:metadata / hash (binary)
-  ;; * all-posts:stats / hash (binary))</pre></td></tr><tr><td class="docs"><p>With this function we can do things like the following in the REPL (for
-  querying Redis):</p>
-
-<p>  ```clj
-  => (redis/cmd 'ping)
-  => (redis/cmd 'get "testkey")
-  => (redis/cmd 'set "foo" "bar")
-  ```</p>
-
-<p>  (Note that the escaped strings are for the docstring, and not what you'd
-  actually type in the REPL.)</p>
-</td><td class="codes"><pre class="brush: clojure">(defn cmd
-  [component-or-system cmd &amp; args]
-  (car/wcar (:conn (config/db-config component-or-system))
-            (apply (resolve (symbol (str &quot;car/&quot; cmd))) args)))</pre></td></tr><tr><td class="docs"><p>  Dragon DB API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn start-db!
-  [component]
-  (db-core/execute-db-command! component))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn setup-schemas
-  [component])</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn setup-subscribers
-  [component])</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn add-connection
-  [component]
-  (assoc component :conn (config/db-conn component)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn stop-db!
-  [component]
-  (let [id-file (:container-id-file (config/db-config component))]
-    (-&gt;&gt; (slurp id-file)
-         (shell/sh &quot;docker&quot; &quot;stop&quot; :in)
-         vec)
-    (shell/sh &quot;rm&quot; id-file)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.data.sources.datomic" name="dragon.data.sources.datomic"><h1 class="project-name">dragon.data.sources.datomic</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.data.sources.datomic
+  [this]
+  (assoc (:component this) :conn nil))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def connection-behaviour
+  {:start-db! execute-db-command!
+   :execute-db-command! execute-db-command!
+   :setup-schemas :not-implemented
+   :setup-subscribers :not-implemented
+   :add-connection :not-implemented
+   :stop-db! :not-implemented
+   :remove-connection remove-connection})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.data.sources.impl.datomic" name="dragon.data.sources.impl.datomic"><h1 class="project-name">dragon.data.sources.impl.datomic</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.data.sources.impl.datomic
   (:require [clojure.core.async :as async]
             [clojure.java.shell :as shell]
             [clojure.string :as string]
             [datomic.client :as datomic]
             [dragon.config :as config]
-            [dragon.data.sources.core :as db-core]
+            [dragon.data.sources.impl.common :as common]
             [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs"><p>  Schemas &amp; Support Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def subscriber-registry-topic
@@ -4004,41 +4195,52 @@ net.brehaut.ClojureTools = (function (SH) {
     (add-schemas conn default-schemas))
   ([conn schemas]
     (log/debug &quot;Adding schemas ...&quot;)
-    (map (partial add-schema conn) schemas)))</pre></td></tr><tr><td class="docs"><p>  Dragon DB API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn start-db!
+    (map (partial add-schema conn) schemas)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord DatomicQuerier [component])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn new-querier
   [component]
+  (-&gt;DatomicQuerier component))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def query-behaviour
+  {})</pre></td></tr><tr><td class="docs"><p>  Dragon DB API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord DatomicConnector [component])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn new-connector
+  [component]
+  (-&gt;DatomicConnector component))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn start-db!
+  [this]
   (async/go-loop []
     (log/debug &quot;Starting database ...&quot;)
-    (let [ch (async/thread (db-core/execute-db-command! component))]
+    (let [ch (async/thread (common/execute-db-command! this))]
       (when-let [result (async/&lt;! ch)]
         (log/info &quot;Previous database processes had been shutdown.&quot;)
         result)))
-  (Thread/sleep (config/db-start-delay component)))</pre></td></tr><tr><td class="docs">
+  (Thread/sleep (config/db-start-delay (:component this))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn setup-schemas
-  [component]
+  [this]
   ;; XXX Add check to see if schema already exists ... maybe? Or compact the db
   ;;     after it's been run many times?
-  (log/trace (-&gt; component
+  (log/trace (-&gt; this
+                 :component
                  :conn
                  (add-schemas)
                  vec)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn setup-subscribers
-  [component])</pre></td></tr><tr><td class="docs">
+  [this])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn add-connection
-  [component]
-  (let [conn-cfg (config/db-conn component)
+  [this]
+  (let [conn-cfg (config/db-conn (:component this))
         conn (async/&lt;!! (datomic/connect conn-cfg))]
     (log/debug &quot;Using configuration:&quot; conn-cfg)
     (if (:cognitect.anomalies/category conn)
       (do
         (log/error (:cognitect.anomalies/message conn))
-        component)
+        this)
       (do
         (log/debug &quot;Started db component.&quot;)
-        (assoc component :conn conn)))))</pre></td></tr><tr><td class="docs">
+        (assoc (:component this) :conn conn)))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn stop-db!
-  [component]
+  [this]
   (-&gt;&gt; (shell/sh &quot;ps&quot; &quot;-eo&quot; &quot;pid,command&quot;)
        :out
        (shell/sh &quot;grep&quot; &quot;datomic.peer-server&quot; :in)
@@ -4047,547 +4249,336 @@ net.brehaut.ClojureTools = (function (SH) {
        (map (comp first #(string/split % #&quot;\s&quot;)))
        vec
        (concat [&quot;xargs&quot; &quot;kill&quot;])
-       (apply shell/sh)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.cli.new.post" name="dragon.cli.new.post"><h1 class="project-name">dragon.cli.new.post</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.cli.new.post
-  (:require [clojure.pprint :refer [pprint]]
-            [dragon.cli.new.stub :as stub]
-            [dragon.util :as util]
-            [taoensso.timbre :as log]
-            [trifl.docs :as docs]))</pre></td></tr><tr><td class="docs"><p>  Usage:
-  ```
-    dragon new post SUBCOMMAND [help]
-  ```</p>
-
-<p>  A SUBCOMMAND is required.</p>
-
-<p>  Subcommands:
-  ```
-    md         Create a new post stub in Markdown format
-    clj        Create a new post stub in Clojure format
-    edn        Create a new post stub in EDN format
-    html       Create a new post stub in HTML format
-    rfc5322    Create a new post stub in a format based on email messages;
-                 in this case, no metadata file is created (message headers
-                 are used instead) and the <code>content-type</code> field is used to
-                 indicate the content type of the body of the message (i.e.,
-                 blog post)
-  ```</p>
-</td><td class="codes"><pre class="brush: clojure">(defn run
-  [system [cmd &amp; args]]
-  (log/debug &quot;Got cmd:&quot; cmd)
-  (log/debug &quot;Got args:&quot; args)
-  (let [passed-date (first args)
-        date (or passed-date (util/now))]
-    (case cmd
-      :md (stub/make-markdown-post date)
-      :clj (stub/make-clojure-post date)
-      :edn (stub/make-edn-post date)
-      :html (stub/make-html-post date)
-      :rfc5322 (stub/make-rfc5322-post date)
-      (docs/print-docstring #'run))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.cli.new.core" name="dragon.cli.new.core"><h1 class="project-name">dragon.cli.new.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.cli.new.core
-  (:require [clojure.pprint :refer [pprint]]
-            [clojusc.twig :as logger]
-            [dragon.cli.new.post :as post]
-            [dragon.util :as util]
-            [taoensso.timbre :as log]
-            [trifl.docs :as docs]))</pre></td></tr><tr><td class="docs"><p>  Usage:
-  ```
-    dragon new [SUBCOMMAND | help]
-  ```</p>
-
-<p>  If no SUBCOMMAND is provided, the default 'post' will be used (with the
-  default content type ':md').</p>
-
-<p>  Subcommands:
-  ```
-    post    Create a new dragon post stub; takes a subcommand for the type of
-              content to create; see 'dragon new post help' for usage
-  ```</p>
-</td><td class="codes"><pre class="brush: clojure">(defn run
-  [system [cmd &amp; args]]
-  (log/debug &quot;Got cmd:&quot; cmd)
-  (log/debug &quot;Got args:&quot; args)
-  (case cmd
-    :post (post/run system args)
-    :help (docs/print-docstring #'run)
-    (post/run system [:md])))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.cli.new.stub" name="dragon.cli.new.stub"><h1 class="project-name">dragon.cli.new.stub</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.cli.new.stub
-  (:require [clojure.pprint :refer [pprint]]
-            [clojure.java.io :as io]
-            [clojusc.twig :as logger]
+       (apply shell/sh)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def connection-behaviour
+  {:start-db! start-db!
+   :setup-schemas setup-schemas
+   :add-connection add-connection
+   :stop-db! stop-db!})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.data.sources.impl.redis" name="dragon.data.sources.impl.redis"><h1 class="project-name">dragon.data.sources.impl.redis</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.data.sources.impl.redis
+  (:require [clojure.java.io :as io]
             [dragon.config :as config]
+            [dragon.data.sources.impl.common :as common]
             [dragon.util :as util]
-            [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def stub-metadata
-&quot;{:title \&quot;REQUIRED\&quot;
- :subtitle \&quot;\&quot;
- :excerpt \&quot;\&quot;
- :author \&quot;REQUIRED\&quot;
- :twitter \&quot;\&quot;
- :category \&quot;REQUIRED\&quot;
- :tags []
- :comment-link \&quot;\&quot;
- :header-image \&quot;\&quot;
- :public? false}\n&quot;)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def clj-content
-&quot;(defn metadata
-  []
-  {:title \&quot;REQUIRED\&quot;
-   :subtitle \&quot;\&quot;
-   :excerpt \&quot;\&quot;
-   :author \&quot;REQUIRED\&quot;
-   :twitter \&quot;\&quot;
-   :category \&quot;REQUIRED\&quot;
-   :tags []
-   :comment-link \&quot;\&quot;
-   :header-image \&quot;\&quot;
-   :public? false})\n
-(defn content
-  []
-  \&quot;REQUIRED\&quot;)\n&quot;)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def edn-content
-&quot;{:title \&quot;REQUIRED\&quot;
- :subtitle \&quot;\&quot;
- :excerpt \&quot;\&quot;
- :author \&quot;REQUIRED\&quot;
- :twitter \&quot;\&quot;
- :category \&quot;REQUIRED\&quot;
- :tags []
- :comment-link \&quot;\&quot;
- :header-image \&quot;\&quot;
- :public? false
- :content \&quot;REQUIRED\&quot;}\n&quot;)</pre></td></tr><tr><td class="docs"><p>Note that rfc5322-content uses the standard field names, when something
-close exists. The following show how the RFC 5322 fields map to our metadata
-fields:</p>
-
-<ul>
-<li>Subject -> title</li>
-<li>From -> author (Fistname Lastname)</li>
-<li>Keywords -> tags (comma-separated)</li>
-<li>Comments -> comment-link</li>
-</ul>
-
-<p>The rest of the fields used are defined as "optional" in RFC 5322:</p>
-
-<ul>
-<li>Subtitle</li>
-<li>Excerpt</li>
-<li>Category</li>
-<li>Content-Type</li>
-</ul>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def rfc5322-content
-&quot;Subject: REQUIRED (title)
-Subtitle:
-Excerpt:
-From: REQUIRED (author)
-Twitter:
-Category:
-Keywords:
-Comments:
-Content-Type: md
-Header-Image: img/
-Public?: true
-[content goes here]\n&quot;)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn stub-content
-  [content-type]
-  (case content-type
-    :md 
-    :html 
-    :clj clj-content
-    :edn edn-content
-    :rfc5322 rfc5322-content))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn write-content
-  [path content-type]
-  (with-open [writer (io/writer (format
-                                  &quot;%s/content.%s&quot; path (name content-type)))]
-    (.write writer (stub-content content-type))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn write-edn
-  [path]
-  (with-open [writer (io/writer (format &quot;%s/meta.edn&quot; path))]
-    (.write writer stub-metadata)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn write-files
-  [{ym :ym dt :dt} content-type]
-  (let [path (format &quot;posts/%s/%s&quot; ym dt)]
-    (log/infof &quot;Writing content and metadata files to %s ...&quot; path)
-    (io/make-parents (str path &quot;/child&quot;))
-    (write-content path content-type)
-    (when-not (or (= content-type :rfc5322)
-                  (= content-type :edn)
-                  (= content-type :clj))
-      (write-edn path))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn make-markdown-post
-  [date]
-  (write-files date :md))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn make-clojure-post
-  [date]
-  (write-files date :clj))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn make-edn-post
-  [date]
-  (write-files date :edn))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn make-html-post
-  [date]
-  (write-files date :html))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn make-rfc5322-post
-  [date]
-  (write-files date :rfc5322))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.cli.core" name="dragon.cli.core"><h1 class="project-name">dragon.cli.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.cli.core
-  (:require [clojure.pprint :refer [pprint]]
-            [clojusc.twig :as logger]
-            [dragon.blog.generator :as gen]
-            [dragon.cli.new.core :as new]
-            [dragon.cli.show :as show]
-            [dragon.event.system.core :as event]
-            [dragon.event.tag :as tag]
-            [dragon.util :as util]
+            [taoensso.carmine :as car :refer [wcar]]
             [taoensso.timbre :as log]
-            [trifl.core :refer [sys-prop]]
-            [trifl.docs :as docs]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn version-cmd
-  []
-  (let [version (sys-prop &quot;dragon.version&quot;)
-        build (util/get-build)]
-    (print (format &quot;Dragon version %s, build %s\n&quot; version build))))</pre></td></tr><tr><td class="docs"><p>  Usage:
-  ```
-    dragon COMMAND [help | arg...]
-    dragon [-h | --help | -v | --version]
+            [trifl.fs :as fs]))</pre></td></tr><tr><td class="docs"><p>  Constants &amp; Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>For the special case when <code>path-segment</code> is the string value <code>all-posts</code>,
+  the cumulative data for all posts is referenced. This is applicable to
+  <code>categoies</code>, <code>tags</code>, and <code>stats</code>.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn schemas
+  [path-segment]
+  {:checksum (str path-segment &quot;:checksum&quot;)
+   :content (str path-segment &quot;:content&quot;)
+   :metadata (str path-segment &quot;:metadata&quot;)
+   :categories (str path-segment &quot;:categories&quot;)
+   :tags (str path-segment &quot;:tags&quot;)
+   :stats (str path-segment &quot;:stats&quot;)})</pre></td></tr><tr><td class="docs"><p>With this function we can do things like the following in the REPL (for
+  querying Redis):</p>
+
+<p>  ```clj
+  => (redis/cmd 'ping)
+  => (redis/cmd 'get "testkey")
+  => (redis/cmd 'set "foo" "bar")
   ```</p>
 
-<p>  Commands:
-  ```
-    new      Create files of a given type; see 'dragon new help'
-    show     Display various blog data in the terminal
-    gen      Generate updated static content for a site
-    run      Run the dragon site locally as a Ring app
-    help     Display this usage message
-    version  Display the current dragon version
-  ```</p>
-
-<p>  More information:</p>
-
-<pre><code>Each command takes an optional 'help' subcommand that will provide
-usage information about the particular command in question, e.g.:
-</code></pre>
-
-<p>  ```
-    $ dragon new help
-  ```</p>
-</td><td class="codes"><pre class="brush: clojure">(defn run
-  [system [cmd &amp; args]]
-  (log/debug &quot;Got cmd:&quot; cmd)
-  (log/debug &quot;Got args:&quot; args)
-  (event/publish system tag/run-cli {:cmd cmd :args args})
-  (case cmd
-    :new (new/run system args)
-    :show (show/run system args)
-    :gen (gen/run system)
-    :help (docs/print-docstring #'run)
-    :run (gen/run system)
-    :version (version-cmd)
-    ;; Aliases
-    :--help (docs/print-docstring #'run)
-    :--version (version-cmd)
-    :-h (docs/print-docstring #'run)
-    :-v (version-cmd))
-  (event/publish system tag/shutdown-cli))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.cli.show" name="dragon.cli.show"><h1 class="project-name">dragon.cli.show</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.cli.show
-  (:require [clojure.pprint :refer [pprint]]
-            [clojusc.twig :as logger]
-            [dragon.config :as config]
-            [dragon.util :as util]
-            [taoensso.timbre :as log]
-            [trifl.docs :as docs])
-  (:refer-clojure :exclude [meta]))</pre></td></tr><tr><td class="docs"><p>  Usage:
-  ```
-    dragon show [SUBCOMMAND | help]
-  ```</p>
-
-<p>  If no SUBCOMMAND is provided, the default 'config' will be used.</p>
-
-<p>  Subcommands:
-  ```
-    config          Display the current dragon configuration
-    port            Display the HTTP port configuration
-    metadata        Display the metadata for all posts
-    metadata POST   Display the metadata for a given post
-  ```</p>
-</td><td class="codes"><pre class="brush: clojure">(defn run
-  [system [cmd &amp; args]]
-  (log/debug &quot;Got cmd:&quot; cmd)
-  (log/debug &quot;Got args:&quot; args)
-  (case cmd
-    :all (pprint (:config system))
-    :port (pprint (config/port system))
-    :metadata ;(if-let [post (first args)]
-              (println &quot;\nCurrently this operation is not supported.\n&quot;)
-    :help (docs/print-docstring #'run)
-    (pprint (:config system))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.system" name="dragon.components.system"><h1 class="project-name">dragon.components.system</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.components.system
-  (:require [com.stuartsierra.component :as component]
-            [dragon.components.config :as config]
-            [dragon.components.db :as db]
-            [dragon.components.event :as event]
-            [dragon.components.httpd :as httpd]
-            [dragon.components.logging :as logging]
-            [dragon.config :refer [build] :rename {build build-config}]))</pre></td></tr><tr><td class="docs"><p>  Common Configuration Components   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+<p>  (Note that the escaped strings are for the docstring, and not what you'd
+  actually type in the REPL.)</p>
+</td><td class="codes"><pre class="brush: clojure">(defn cmd
+  [component-or-system cmd &amp; args]
+  (car/wcar (:conn (config/db-config component-or-system))
+            (apply (resolve (symbol (str &quot;car/&quot; cmd))) args)))</pre></td></tr><tr><td class="docs"><p>  Dragon Query API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn cfg
-  [builder]
-  {:config (config/create-config-component builder)})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def log
-  {:logging (component/using
-             (logging/create-logging-component)
-             [:config])})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def evt-no-log
-  {:event (component/using
-           (event/create-event-component)
-           [:config])})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def data-no-log
-  {:db (component/using
-        (db/create-db-component)
-        [:config :event])})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def evt
-  {:event (component/using
-           (event/create-event-component)
-           [:config :logging])})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def data
-  {:db (component/using
-        (db/create-db-component)
-        [:config :logging :event])})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def http
-  {:httpd (component/using
-           (httpd/create-httpd-component)
-           [:config :logging :db :event])})</pre></td></tr><tr><td class="docs"><p>  Component Intilizations   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"><pre class="brush: clojure">(defn get-post-checksum
+  [this post-key]
+  (cmd (:component this) 'get (:checksum (schemas post-key))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-post-content
+  [this post-key]
+  (cmd (:component this) 'get (:content (schemas post-key))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-post-metadata
+  [this post-key]
+  (cmd (:component this) 'get (:metadata (schemas post-key))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-post-tags
+  [this post-key]
+  (cmd (:component this) 'get (:tags (schemas post-key))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-post-stats
+  [this post-key]
+  (cmd (:component this) 'get (:stats (schemas post-key))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-all-categories
+  [this]
+  (cmd (:component this) 'get (:categories (schemas &quot;all-posts&quot;))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-all-tags
+  [this]
+  (cmd (:component this) 'get (:tags (schemas &quot;all-posts&quot;))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-all-stats
+  [this]
+  (cmd (:component this) 'get (:stats (schemas &quot;all-posts&quot;))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmulti post-changed?
+  (fn [this &amp; _] (config/db-type (:component this))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn post-changed?
+  [this post-data]
+  (let [post-key (:uri-path post-data)
+        checksum (util/check-sum (str post-data))]
+    (not= checksum (get-post-checksum this post-key))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord RedisQuerier [component])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn new-querier
+  [component]
+  (-&gt;RedisQuerier component))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def query-behaviour
+  {:get-post-checksum get-post-checksum
+   :get-post-content get-post-content
+   :get-post-metadata get-post-metadata
+   :get-post-tags get-post-tags
+   :get-post-stats get-post-stats
+   :get-all-categories get-all-categories
+   :get-all-tags get-all-tags
+   :get-all-stats get-all-stats
+   :post-changed? post-changed?})</pre></td></tr><tr><td class="docs"><p>  Dragon Connection API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn initialize-default
-  ([]
-    (initialize-default build-config))
-  ([config-builder]
-    (component/map-&gt;SystemMap
-      (merge (cfg config-builder)
-             log
-             data
-             evt))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn initialize-bare-bones
-  ([]
-    (initialize-bare-bones build-config))
-  ([config-builder]
-    (component/map-&gt;SystemMap
-      (merge (cfg config-builder)
-             data-no-log
-             evt-no-log))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn initialize-with-web
-  ([]
-    (initialize-with-web build-config))
-  ([config-builder]
-    (component/map-&gt;SystemMap
-      (merge (cfg config-builder)
-             log
-             data
-             evt
-             http))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def init
-  {:default initialize-default
-   :basic initialize-bare-bones
-   :web initialize-with-web})</pre></td></tr><tr><td class="docs"><p>  Managment Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def stop #'component/stop)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn start
-  ([config-builder]
-   (start (initialize-default config-builder)))
-  ([config-builder system-type]
-   (case system-type
-     :web (component/start (initialize-with-web config-builder))
-     :basic (component/start (initialize-bare-bones config-builder))
-     :cli (component/start (initialize-default config-builder)))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn restart
-  ([system]
-   (-&gt; system
-       (component/stop)
-       (component/start))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.db" name="dragon.components.db"><h1 class="project-name">dragon.components.db</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.components.db
-  (:require [com.stuartsierra.component :as component]
-            [dragon.config :as config]
-            [dragon.data.core :as data]
-            [dragon.data.sources.core :as db-core]
-            [dragon.data.sources.datomic :as datomic]
-            [dragon.data.sources.redis :as redis]
-            [dragon.event.subscription :as subscription]
-            [dragon.event.tag :as tag]
-            [dragon.event.topic :as topic]
-            [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs"><p>  General DB Component Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord RedisConnector [component])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn new-connector
+  [component]
+  (-&gt;RedisConnector component))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn start-db!
-  [component]
-  (case (config/db-type component)
-    :datomic (datomic/start-db! component)
-    :redis (redis/start-db! component)))</pre></td></tr><tr><td class="docs">
+  [this]
+  (common/execute-db-command! this))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn setup-schemas
-  [component]
-  (case (config/db-type component)
-    :datomic (datomic/setup-schemas component)
-    :redis (redis/setup-schemas component)))</pre></td></tr><tr><td class="docs">
+  [this])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn setup-subscribers
-  [component]
-  (case (config/db-type component)
-    :datomic (datomic/setup-subscribers component)
-    :redis (redis/setup-subscribers component)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn run-setup-tasks
-  [component]
-  (log/debug &quot;Starting setup tasks ...&quot;)
-  (setup-schemas component)
-  (setup-subscribers component)
-  (log/debug &quot;Finished setup tasks.&quot;))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn stop-db!
-  [component]
-  (case (config/db-type component)
-    :datomic (datomic/stop-db! component)
-    :redis (redis/stop-db! component)))</pre></td></tr><tr><td class="docs">
+  [this])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn add-connection
-  [component]
-  (case (config/db-type component)
-    :datomic (datomic/add-connection component)
-    :redis (redis/add-connection component)))</pre></td></tr><tr><td class="docs"><p>  Components   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defrecord DataBase []
-  component/Lifecycle
-  (start [component]
-    (log/info &quot;Starting db component ...&quot;)
-    (log/debug &quot;Database component backend is&quot; (config/db-type component))
-    (start-db! component)
-    (let [component (add-connection component)]
-      (run-setup-tasks component)
-      component))
-  (stop [component]
-    (log/info &quot;Stopping db component ...&quot;)
-    (let [a &quot;b&quot;]
-      (log/debug &quot;Stopped db component.&quot;)
-      (stop-db! component)
-      (db-core/remove-connection component))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn create-db-component
-  []
-  (-&gt;DataBase))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.config" name="dragon.components.config"><h1 class="project-name">dragon.components.config</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.components.config
+  [this]
+  (assoc (:component this) :conn (config/db-conn (:component this))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn stop-db!
+  [this]
+  (let [id-file (:container-id-file (config/db-config (:component this)))]
+    (when (fs/exists? (io/as-file id-file))
+      (-&gt;&gt; (slurp id-file)
+           (util/shell! &quot;docker&quot; &quot;stop&quot;)
+           vec)
+      (util/shell! &quot;rm&quot; id-file))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def connection-behaviour
+  {:start-db! start-db!
+   :add-connection add-connection
+   :stop-db! stop-db!})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.event.message" name="dragon.event.message"><h1 class="project-name">dragon.event.message</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.event.message
+  (:require [dragon.event.topic :as topic]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn new-dataflow-event
+  [tag data]
+  {topic/dataflow-events tag
+   :data data})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-payload
+  [msg]
+  (:data msg))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-route
+  [msg]
+  (dissoc msg :data))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.event.subscription" name="dragon.event.subscription"><h1 class="project-name">dragon.event.subscription</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.event.subscription
   (:require [com.stuartsierra.component :as component]
-            [dragon.config :as config]
-            [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defrecord Config [
-  builder]
-  component/Lifecycle
-  (start [component]
-    (log/info &quot;Starting config component ...&quot;)
-    (log/debug &quot;Started config component.&quot;)
-    (let [cfg (builder)]
-      (log/trace &quot;Built configuration:&quot; cfg)
-      (assoc component :dragon cfg)))
-  (stop [component]
-    (log/info &quot;Stopping config component ...&quot;)
-    (log/debug &quot;Stopped config component.&quot;)
-    (assoc component :dragon nil)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn create-config-component
-  [config-builder-fn]
-  (map-&gt;Config
-    {:builder config-builder-fn}))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.core" name="dragon.components.core"><h1 class="project-name">dragon.components.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><p>System component access functions.</p>
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.components.core)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def dataflow-keys [:pubsub :dataflow])</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-config
-  [system &amp; args]
-  (let [base-keys [:config :dragon]]
-    (if-not (seq args)
-      (get-in system base-keys)
-      (get-in system (concat base-keys args)))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-pubsub
-  [system]
-  (get-in system [:event :pubsub]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-dataflow-pubsub
-  [system]
-  (get-in system (concat [:event] dataflow-keys)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-db-conn
-  [system]
-  (get-in system [:db :conn]))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.logging" name="dragon.components.logging"><h1 class="project-name">dragon.components.logging</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.components.logging
-  (:require [clojusc.twig :as logger]
-            [com.stuartsierra.component :as component]
-            [dragon.config :as config]
-            [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defrecord Logging []
-  component/Lifecycle
-  (start [component]
-    (log/info &quot;Starting logging component ...&quot;)
-    (let [log-level (config/log-level component)
-          log-nss (vec (config/log-nss component))]
-      (log/debug &quot;Setting up logging with level&quot; log-level)
-      (log/debug &quot;Logging namespaces:&quot; log-nss)
-      (logger/set-level! log-nss log-level)
-      (log/debug &quot;Started logging component.&quot;)
-      component))
-  (stop [component]
-    (log/info &quot;Stopping logging component ...&quot;)
-    (log/debug &quot;Stopped logging component.&quot;)
-    component))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn create-logging-component
-  []
-  (-&gt;Logging))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.event" name="dragon.components.event"><h1 class="project-name">dragon.components.event</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.components.event
-  (:require [com.stuartsierra.component :as component]
-            [dragon.components.core :as component-api]
-            [dragon.event.subscription :as subscription]
+            [dragon.event.message :as message]
             [dragon.event.system.core :as event]
             [dragon.event.tag :as tag]
             [dragon.event.topic :as topic]
+            [dragon.util :as util]
             [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defrecord Event [pubsub]
-  component/Lifecycle
-  (start [component]
-    (log/info &quot;Starting event component ...&quot;)
-    (log/debug &quot;Started event component.&quot;)
-    (let [dataflow (event/create-dataflow-pubsub)
-          component (assoc-in component component-api/dataflow-keys dataflow)]
-      (log/info &quot;Adding subscribers ...&quot;)
-      component))
-  (stop [component]
-    (log/info &quot;Stopping event component ...&quot;)
-    (event/delete (get-in component component-api/dataflow-keys))
-    (let [component (assoc-in component component-api/dataflow-keys nil)]
-      (log/debug &quot;Stopped event component.&quot;)
-      component)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn create-event-component
-  []
-  (map-&gt;Event
-   {:pubsub {}}))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.httpd" name="dragon.components.httpd"><h1 class="project-name">dragon.components.httpd</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.components.httpd
-  (:require [com.stuartsierra.component :as component]
-            [dragon.components.core :as component-api]
-            [dragon.config :as config]
-            [dragon.event.subscription :as subscription]
-            [dragon.event.system.core :as event]
-            [dragon.event.tag :as tag]
+</td><td class="codes"><pre class="brush: clojure">(defn debug-subscriber
+  [system msg]
+  (log/debug &quot;Debug subscriber got system with keys:&quot; (keys system))
+  (log/debug &quot;Debug subscriber got msg payload:&quot; (message/get-payload msg)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn trace-subscriber
+  [system msg]
+  (log/trace &quot;Trace subscriber got system:&quot; system)
+  (log/trace &quot;Trace subscriber got full msg:&quot; msg))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn shutdown-subscriber
+  [system msg]
+  (log/info &quot;Shutting down system ...&quot;)
+  (component/stop system)
+  (shutdown-agents))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def subscribers
+  {tag/subscribers-added [:default]
+   tag/process-all-pre [:default]
+   tag/process-all-post [:default]
+   tag/run-cli [:default]
+   tag/read-source-pre [:default]
+   tag/read-source-post [:default]
+   tag/parse-file-pre [:default]
+   tag/parse-file-post [:default]
+   tag/parse-content-pre [:default]
+   tag/parse-content-post [:default]
+   tag/write-output-pre [:default]
+   tag/write-output-post [:default]
+   tag/generate-routes-pre [:default]
+   tag/generate-routes-post [:default]
+   tag/shutdown-cli [shutdown-subscriber]})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn subscribe-all-event
+  [system event-type subscriber-funcs]
+  (doseq [func subscriber-funcs]
+    (log/debugf &quot;\tSubscribing to %s ...&quot; event-type)
+    (event/subscribe system event-type debug-subscriber)
+    (event/subscribe system event-type trace-subscriber)
+    (if (= func :default)
+      (event/subscribe system event-type)
+      (event/subscribe system event-type func))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn subscribe-all
+  [system-or-component]
+  (log/debug &quot;Adding subscribers ...&quot;)
+  (let [system (util/component-&gt;system system-or-component)]
+    (doseq [[event-type subscriber-funcs] subscribers]
+      (subscribe-all-event system
+                           event-type
+                           subscriber-funcs))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.event.system.core" name="dragon.event.system.core"><h1 class="project-name">dragon.event.system.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.event.system.core
+  (:require [clojure.core.async :as async]
+            [dragon.components.core :as components]
+            [dragon.event.message :as message]
+            [dragon.event.system.impl :as impl]
             [dragon.event.topic :as topic]
-            [org.httpkit.server :as server]
-            [ring.middleware.file :as ring-file]
+            [dragon.util :as util]
+            [potemkin :refer [import-vars]]
+            [taoensso.timbre :as log])
+  (:import [dragon.event.system.impl PubSub]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(import-vars
+ [impl create-pubsub
+       create-dataflow-pubsub])</pre></td></tr><tr><td class="docs"><p>The API for Dragon pubsub messenging.</p>
+</td><td class="codes"><pre class="brush: clojure">(defprotocol PubSubAPI
+  (get-topic [this]
+    &quot;Get the topic with which the messenger was instantiated.&quot;)
+  (get-chan [this]
+    &quot;Get the core.async channel associated with the publisher.&quot;)
+  (get-pub [this]
+    &quot;Get the core.async pub associated with the publisher.&quot;)
+  (get-sub [this tag]
+    &quot;Create and return a subscriber channel for a given tag (event-type).&quot;)
+  (delete [this]
+    &quot;Delete the publisher.&quot;))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(extend PubSub
+        PubSubAPI
+        impl/pubsub-behaviour)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn publish
+  ([system-or-component event-type]
+   (publish system-or-component event-type {}))
+  ([system-or-component event-type data]
+   (when-not (nil? system-or-component)
+     (let [system (util/component-&gt;system system-or-component)
+           dataflow (components/get-dataflow-pubsub system)
+           topic (get-topic dataflow)
+           msg (message/new-dataflow-event event-type data)]
+       (log/debug &quot;Publishing message to&quot; (message/get-route msg))
+       (log/trace &quot;Sending message data:&quot; (message/get-payload msg))
+       (async/&gt;!! (get-chan dataflow) msg))
+     data)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn publish-&gt;
+  ([other-data system-or-component event-type]
+   (publish-&gt; other-data system-or-component event-type {}))
+  ([other-data system-or-component event-type data]
+   (publish system-or-component event-type data)
+   other-data))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn publish-&gt;&gt;
+  ([system-or-component event-type other-data]
+   (publish-&gt;&gt; system-or-component event-type {} other-data))
+  ([system-or-component event-type data other-data]
+   (publish system-or-component event-type data)
+   other-data))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn subscribe
+  ([system event-type]
+   (subscribe system event-type (fn [s m]
+                                  (log/warn
+                                   &quot;Using default subscriber callback for route&quot;
+                                   (message/get-route m)))))
+  ([system event-type func]
+   (when-not (nil? system)
+     (let [dataflow (components/get-dataflow-pubsub system)]
+       (async/go-loop []
+         (when-let [msg (async/&lt;! (get-sub dataflow event-type))]
+           (log/debug &quot;Received subscribed message for&quot; (message/get-route msg))
+           (log/trace &quot;Message data:&quot; (message/get-payload msg))
+           (log/trace &quot;Callback function:&quot; func)
+           (func system msg)
+           (recur)))))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.event.system.impl" name="dragon.event.system.impl"><h1 class="project-name">dragon.event.system.impl</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.event.system.impl
+  (:require [clojure.core.async :as async]
+            [dragon.event.topic :as topic]
             [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defrecord HTTPD []
-  component/Lifecycle
-  (start [component]
-    (log/info &quot;Starting httpd component ...&quot;)
-    (let [port (config/port component)
-          docroot (config/output-dir component)
-          main-handler {}
-          site (ring-file/wrap-file main-handler docroot)
-          server (server/run-server site {:port port})]
-      (log/debugf &quot;Serving files from %s and listening on port %s&quot;
-                  docroot port)
-      (log/debug &quot;Started httpd component.&quot;)
-      (assoc component :server server)))
-  (stop [component]
-    (log/info &quot;Stopping httpd component ...&quot;)
-    (if-let [server (:server component)]
-      (server))
-    (assoc component :server nil)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn create-httpd-component
+</td><td class="codes"><pre class="brush: clojure">(defrecord PubSub
+  [topic chan pub])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-topic
+  [this]
+  (:topic this))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-chan
+  [this]
+  (:chan this))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-pub
+  [this]
+  (:pub this))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-sub
+  [this tag]
+  (let [sub-chan (async/chan 1)]
+    (async/sub (get-pub this) tag sub-chan)
+    #_sub-chan))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn delete
+  [this]
+  (-&gt; this
+      (get-chan)
+      (async/close!))
+  :deleted)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def pubsub-behaviour
+  {:get-topic get-topic
+   :get-chan get-chan
+   :get-pub get-pub
+   :get-sub get-sub
+   :delete delete})</pre></td></tr><tr><td class="docs"><p>Constructor for a pub-sub messenger. Takes one parameter, a publisher topic,
+  that is used to perform lookups.</p>
+
+<p>  Since topics are keywords, the data sent on the publish channel needs to have
+  the topic as one of the keys, or a subscriber will not receive the message.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn create-pubsub
+  [topic]
+  (log/debug &quot;Creating pubsub manager ...&quot;)
+  (log/trace &quot;Using topic&quot; topic)
+  (let [channel (async/chan 1)]
+    (map-&gt;PubSub
+     {:topic topic
+      :chan channel
+      :pub (async/pub channel topic)})))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn create-dataflow-pubsub
   []
-  (-&gt;HTTPD))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.main" name="dragon.main"><h1 class="project-name">dragon.main</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+  (create-pubsub topic/dataflow-events))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.event.tag" name="dragon.event.tag"><h1 class="project-name">dragon.event.tag</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.event.tag)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def read-config-pre ::read-config-pre)
+(def read-config ::read-config)
+(def read-config-post ::read-config-post)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def subscribers-added-pre ::subscribers-added-pre)
+(def subscribers-added ::subscribers-added)
+(def subscribers-added-post ::subscribers-added-post)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def run-cli-pre ::run-cli-pre)
+(def run-cli ::run-cli)
+(def run-cli-post ::run-cli-post)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def process-one-pre ::process-one-pre)
+(def process-one ::process-one)
+(def process-one-post ::process-one-post)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def process-all-pre ::process-all-pre)
+(def process-all ::process-all)
+(def process-all-post ::process-all-post)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def read-source-pre ::read-source-pre)
+(def read-source ::read-source)
+(def read-source-post ::read-source-post)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def parse-file-pre ::parse-file-pre)
+(def parse-file ::parse-file)
+(def parse-file-post ::parse-file-post)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def parse-content-pre ::parse-content-pre)
+(def parse-content ::parse-content)
+(def parse-content-post ::parse-content-post)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def write-output-pre ::write-output-pre)
+(def write-output ::write-output)
+(def write-output-post ::write-output-post)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def generate-routes-pre ::generate-routes-pre)
+(def generate-routes ::generate-routes)
+(def generate-routes-post ::generate-routes-post)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def shutdown-cli-pre ::shutdown-cli-pre)
+(def shutdown-cli ::shutdown-cli)
+(def shutdown-cli-post ::shutdown-cli-post)</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.event.topic" name="dragon.event.topic"><h1 class="project-name">dragon.event.topic</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.event.topic)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def dataflow-events ::dataflow-events)</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.main" name="dragon.main"><h1 class="project-name">dragon.main</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.main
   (:require [clojusc.twig :as logger]
             [dragon.cli.core :as cli]
@@ -4636,7 +4627,169 @@ usage information about the particular command in question, e.g.:
    (case (keyword mode)
      :cli (cli/run system (map keyword args)))
    ;; Do a full shut-down upon ^c
-   (trifl/add-shutdown-handler #(components/stop system))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/gdeer81/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a><div id="floating-toc"><ul><li class="floating-toc-li" id="floating-toc_dragon.util">dragon.util</li><li class="floating-toc-li" id="floating-toc_dragon.blog.post">dragon.blog.post</li><li class="floating-toc-li" id="floating-toc_dragon.blog.generator">dragon.blog.generator</li><li class="floating-toc-li" id="floating-toc_dragon.blog.core">dragon.blog.core</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.rfc5322">dragon.blog.content.rfc5322</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.core">dragon.blog.content.core</li><li class="floating-toc-li" id="floating-toc_dragon.event.tag">dragon.event.tag</li><li class="floating-toc-li" id="floating-toc_dragon.event.message">dragon.event.message</li><li class="floating-toc-li" id="floating-toc_dragon.event.topic">dragon.event.topic</li><li class="floating-toc-li" id="floating-toc_dragon.event.system.impl">dragon.event.system.impl</li><li class="floating-toc-li" id="floating-toc_dragon.event.system.core">dragon.event.system.core</li><li class="floating-toc-li" id="floating-toc_dragon.event.subscription">dragon.event.subscription</li><li class="floating-toc-li" id="floating-toc_dragon.config">dragon.config</li><li class="floating-toc-li" id="floating-toc_dragon.data.core">dragon.data.core</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.core">dragon.data.sources.core</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.redis">dragon.data.sources.redis</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.datomic">dragon.data.sources.datomic</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.post">dragon.cli.new.post</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.core">dragon.cli.new.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.stub">dragon.cli.new.stub</li><li class="floating-toc-li" id="floating-toc_dragon.cli.core">dragon.cli.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.show">dragon.cli.show</li><li class="floating-toc-li" id="floating-toc_dragon.components.system">dragon.components.system</li><li class="floating-toc-li" id="floating-toc_dragon.components.db">dragon.components.db</li><li class="floating-toc-li" id="floating-toc_dragon.components.config">dragon.components.config</li><li class="floating-toc-li" id="floating-toc_dragon.components.core">dragon.components.core</li><li class="floating-toc-li" id="floating-toc_dragon.components.logging">dragon.components.logging</li><li class="floating-toc-li" id="floating-toc_dragon.components.event">dragon.components.event</li><li class="floating-toc-li" id="floating-toc_dragon.components.httpd">dragon.components.httpd</li><li class="floating-toc-li" id="floating-toc_dragon.main">dragon.main</li></ul></div></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
+   (trifl/add-shutdown-handler #(components/stop system))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.util" name="dragon.util"><h1 class="project-name">dragon.util</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.util
+  (:require [clojure.string :as string]
+            [clojure.java.shell :as shell]
+            [clojusc.twig :refer [pprint]]
+            [pandect.algo.crc32 :refer [crc32]]
+            [selmer.parser :as selmer]
+            [taoensso.timbre :as log])
+  (:refer-clojure :exclude [boolean]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(declare merge-val)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def char-regex #&quot;^a*&quot;)
+(def post-regex #&quot;(\./)?posts/(\d{4})-(\d{2})/(\d{2})-(\d{2})(\d{2})(\d{2})/.*&quot;)
+(def timestamp-format &quot;:year-:month-:day :hour::minute::second&quot;)
+(def datestamp-format &quot;:year-:month-:day&quot;)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-build
+  []
+  (:out (shell/sh &quot;git&quot; &quot;rev-parse&quot; &quot;--short&quot; &quot;HEAD&quot;)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn shell!
+  [&amp; args]
+  (log/trace &quot;shell! args:&quot; args)
+  (let [results (apply shell/sh args)
+        err (:err results)]
+    (when (seq err)
+      (log/error err))))</pre></td></tr><tr><td class="docs"><p>Return the current time in two parts, ready to be used for creating
+  blog post directories.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn post-now
+  []
+  (let [now (new java.util.Date)
+        ym-format (new java.text.SimpleDateFormat &quot;YYYY-MM&quot;)
+        dt-format (new java.text.SimpleDateFormat &quot;dd-HHmmss&quot;)]
+    {:ym (.format ym-format now)
+     :dt (.format dt-format now)}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn path-&gt;date
+  [dir]
+  (dissoc
+    (-&gt;&gt; dir
+         (re-matches post-regex)
+         (zipmap [:all :dir-prefix :year :month :day :hour :minute :second]))
+    :all :dir-prefix))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn datetime-now
+  []
+  (let [{:keys [ym dt]} (post-now)]
+    (path-&gt;date (format &quot;posts/%s/%s/&quot; ym dt))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn now
+  ([]
+    (now :post-map))
+  ([date-format]
+    (case date-format
+      :datetime-map (datetime-now)
+      :post-map (post-now))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn format-date
+  [date-map formater]
+  (reduce
+    (fn [acc [k v]]
+      (string/replace acc (str k) v))
+    formater
+    date-map))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn format-timestamp
+  [date-map]
+  (format-date date-map timestamp-format))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn format-datestamp
+  [date-map]
+  (format-date date-map datestamp-format))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn sanitize-str
+  [data-str]
+  (-&gt; data-str
+      (string/replace #&quot;\W+&quot; &quot;-&quot;)
+      (string/lower-case)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn sanitize-post-path
+  [path-str]
+  (string/replace path-str #&quot;^\./&quot; ))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn month-&gt;name
+  [month]
+  (case month
+    1 &quot;January&quot;
+    2 &quot;February&quot;
+    3 &quot;March&quot;
+    4 &quot;April&quot;
+    5 &quot;May&quot;
+    6 &quot;June&quot;
+    7 &quot;July&quot;
+    8 &quot;August&quot;
+    9 &quot;September&quot;
+    10 &quot;October&quot;
+    11 &quot;November&quot;
+    12 &quot;December&quot;
+    &quot;01&quot; &quot;January&quot;
+    &quot;02&quot; &quot;February&quot;
+    &quot;03&quot; &quot;March&quot;
+    &quot;04&quot; &quot;April&quot;
+    &quot;05&quot; &quot;May&quot;
+    &quot;06&quot; &quot;June&quot;
+    &quot;07&quot; &quot;July&quot;
+    &quot;08&quot; &quot;August&quot;
+    &quot;09&quot; &quot;September&quot;
+    &quot;10&quot; &quot;October&quot;
+    &quot;11&quot; &quot;November&quot;
+    &quot;12&quot; &quot;December&quot;))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn month-&gt;short-name
+  [month]
+  (-&gt; month
+      (month-&gt;name)
+      (subs 0 3)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn dots-&gt;dashes
+  [str]
+  (string/replace str #&quot;\.&quot; &quot;-&quot;))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn count-chars
+  [str]
+  (log/trace &quot;Counting chars ...&quot;)
+  (count (re-seq #&quot;.&quot; str)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn count-words
+  [str]
+  (log/trace &quot;Counting words ...&quot;)
+  (count (re-seq #&quot;[^\s]+&quot; str)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn count-lines
+  [str]
+  (log/trace &quot;Counting lines ...&quot;)
+  (as-&gt; str data
+        (string/split data #&quot;\n&quot;)
+        (remove empty? data)
+        (count data)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn deep-merge
+  [data1 data2]
+  (merge-with merge-val data1 data2))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmulti merge-val
+  (fn [a b]
+    (type a)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmethod merge-val clojure.lang.PersistentVector
+  [a b]
+  (concat a b))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmethod merge-val clojure.lang.PersistentArrayMap
+  [a b]
+  (deep-merge a b))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmethod merge-val :default
+  [a b]
+  b)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn render
+  [template data]
+  (log/tracef &quot;Rendering template %s with data %s&quot; template (pprint data))
+  (selmer/render-file
+    template
+    data))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn component-&gt;system
+  [system-or-component]
+  (if (contains? system-or-component :event)
+    system-or-component
+    {:event system-or-component}))</pre></td></tr><tr><td class="docs"><p>A filter that returns <code>true</code> if the post should be published on the front
+  page.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn boolean
+  [post key]
+  (if (= (string/lower-case (or (key post) &quot;&quot;)) &quot;false&quot;)
+    false
+    true))</pre></td></tr><tr><td class="docs"><p>A filter that returns <code>true</code> if the post should be published on the front
+  page.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn headline?
+  [post]
+  (boolean post :headlines?))</pre></td></tr><tr><td class="docs"><p>A filter that returns <code>true</code> if the post should be published.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn public?
+  [post]
+  (boolean post :public?))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn check-sum
+  [data]
+  (crc32 (str data)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/gdeer81/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a><div id="floating-toc"><ul><li class="floating-toc-li" id="floating-toc_dragon.blog.content.core">dragon.blog.content.core</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.rfc5322">dragon.blog.content.rfc5322</li><li class="floating-toc-li" id="floating-toc_dragon.blog.core">dragon.blog.core</li><li class="floating-toc-li" id="floating-toc_dragon.blog.generator">dragon.blog.generator</li><li class="floating-toc-li" id="floating-toc_dragon.blog.post">dragon.blog.post</li><li class="floating-toc-li" id="floating-toc_dragon.blog.tags">dragon.blog.tags</li><li class="floating-toc-li" id="floating-toc_dragon.cli.core">dragon.cli.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.core">dragon.cli.new.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.post">dragon.cli.new.post</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.stub">dragon.cli.new.stub</li><li class="floating-toc-li" id="floating-toc_dragon.cli.show">dragon.cli.show</li><li class="floating-toc-li" id="floating-toc_dragon.components.config">dragon.components.config</li><li class="floating-toc-li" id="floating-toc_dragon.components.core">dragon.components.core</li><li class="floating-toc-li" id="floating-toc_dragon.components.db">dragon.components.db</li><li class="floating-toc-li" id="floating-toc_dragon.components.event">dragon.components.event</li><li class="floating-toc-li" id="floating-toc_dragon.components.httpd">dragon.components.httpd</li><li class="floating-toc-li" id="floating-toc_dragon.components.logging">dragon.components.logging</li><li class="floating-toc-li" id="floating-toc_dragon.components.system">dragon.components.system</li><li class="floating-toc-li" id="floating-toc_dragon.config">dragon.config</li><li class="floating-toc-li" id="floating-toc_dragon.data.core">dragon.data.core</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.core">dragon.data.sources.core</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.impl.common">dragon.data.sources.impl.common</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.impl.datomic">dragon.data.sources.impl.datomic</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.impl.redis">dragon.data.sources.impl.redis</li><li class="floating-toc-li" id="floating-toc_dragon.event.message">dragon.event.message</li><li class="floating-toc-li" id="floating-toc_dragon.event.subscription">dragon.event.subscription</li><li class="floating-toc-li" id="floating-toc_dragon.event.system.core">dragon.event.system.core</li><li class="floating-toc-li" id="floating-toc_dragon.event.system.impl">dragon.event.system.impl</li><li class="floating-toc-li" id="floating-toc_dragon.event.tag">dragon.event.tag</li><li class="floating-toc-li" id="floating-toc_dragon.event.topic">dragon.event.topic</li><li class="floating-toc-li" id="floating-toc_dragon.main">dragon.main</li><li class="floating-toc-li" id="floating-toc_dragon.util">dragon.util</li></ul></div></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
 SyntaxHighlighter.all();
 
 // hackity hack

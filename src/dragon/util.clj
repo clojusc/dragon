@@ -2,6 +2,7 @@
   (:require [clojure.string :as string]
             [clojure.java.shell :as shell]
             [clojusc.twig :refer [pprint]]
+            [pandect.algo.crc32 :refer [crc32]]
             [selmer.parser :as selmer]
             [taoensso.timbre :as log])
   (:refer-clojure :exclude [boolean]))
@@ -16,6 +17,14 @@
 (defn get-build
   []
   (:out (shell/sh "git" "rev-parse" "--short" "HEAD")))
+
+(defn shell!
+  [& args]
+  (log/trace "shell! args:" args)
+  (let [results (apply shell/sh args)
+        err (:err results)]
+    (when (seq err)
+      (log/error err))))
 
 (defn post-now
   "Return the current time in two parts, ready to be used for creating
@@ -183,3 +192,7 @@
   "A filter that returns `true` if the post should be published."
   [post]
   (boolean post :public?))
+
+(defn check-sum
+  [data]
+  (crc32 (str data)))

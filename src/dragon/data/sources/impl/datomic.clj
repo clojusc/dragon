@@ -1,10 +1,10 @@
-(ns dragon.data.sources.datomic
+(ns dragon.data.sources.impl.datomic
   (:require [clojure.core.async :as async]
             [clojure.java.shell :as shell]
             [clojure.string :as string]
             [datomic.client :as datomic]
             [dragon.config :as config]
-            [dragon.data.sources.core :as db-core]
+            [dragon.data.sources.impl.common :as common]
             [taoensso.timbre :as log]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -52,48 +52,65 @@
     (log/debug "Adding schemas ...")
     (map (partial add-schema conn) schemas)))
 
+(defrecord DatomicQuerier [component])
+
+(defn new-querier
+  [component]
+  (->DatomicQuerier component))
+
+(def query-behaviour
+  {})
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Dragon DB API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn start-db!
+(defrecord DatomicConnector [component])
+
+(defn new-connector
   [component]
+  (->DatomicConnector component))
+
+(defn start-db!
+  [this]
   (async/go-loop []
     (log/debug "Starting database ...")
-    (let [ch (async/thread (db-core/execute-db-command! component))]
+    (let [ch (async/thread (common/execute-db-command! this))]
       (when-let [result (async/<! ch)]
         (log/info "Previous database processes had been shutdown.")
         result)))
-  (Thread/sleep (config/db-start-delay component)))
+  (Thread/sleep (config/db-start-delay (:component this))))
 
 (defn setup-schemas
-  [component]
+  [this]
   ;; XXX Add check to see if schema already exists ... maybe? Or compact the db
   ;;     after it's been run many times?
-  (log/trace (-> component
+  (log/trace (-> this
+                 :component
                  :conn
                  (add-schemas)
                  vec)))
 
 (defn setup-subscribers
-  [component]
+  [this]
   )
 
 (defn add-connection
-  [component]
-  (let [conn-cfg (config/db-conn component)
+  [this]
+  (let [conn-cfg (config/db-conn (:component this))
         conn (async/<!! (datomic/connect conn-cfg))]
     (log/debug "Using configuration:" conn-cfg)
     (if (:cognitect.anomalies/category conn)
       (do
         (log/error (:cognitect.anomalies/message conn))
-        component)
+        this)
       (do
         (log/debug "Started db component.")
-        (assoc component :conn conn)))))
+        (assoc (:component this) :conn conn)))))
 
 (defn stop-db!
-  [component]
+  [this]
   (->> (shell/sh "ps" "-eo" "pid,command")
        :out
        (shell/sh "grep" "datomic.peer-server" :in)
@@ -103,3 +120,9 @@
        vec
        (concat ["xargs" "kill"])
        (apply shell/sh)))
+
+(def connection-behaviour
+  {:start-db! start-db!
+   :setup-schemas setup-schemas
+   :add-connection add-connection
+   :stop-db! stop-db!})

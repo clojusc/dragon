@@ -139,7 +139,14 @@
 ;;;   Transducers   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn process-xducer
+(defn process-file-data
+  [system]
+  (comp
+    (map (partial get-post-data system))
+    (filter util/public?)
+    (map (partial get-file-data system))))
+
+(defn process-one
   [system]
   (comp
     (map (partial send-pre-notification system))
@@ -157,7 +164,7 @@
 ;;;   Processes   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn process-one
+(defn process-one-iter
   ""
   [system file-obj]
   (->> (send-pre-notification system file-obj)
@@ -173,8 +180,8 @@
 
 (defn process-iter
   [system file-objs]
-  (map (partial process-one system) file-objs))
+  (map (partial process-one-iter system) file-objs))
 
 (defn process
   [system file-objs]
-  (into [] (process-xducer system) file-objs))
+  (into [] (process-one system) file-objs))
