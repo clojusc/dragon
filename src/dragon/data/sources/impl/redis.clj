@@ -40,8 +40,14 @@
             (apply (resolve (symbol (str "car/" cmd))) args)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;   Dragon Query API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Dragon Query Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defrecord RedisQuerier [component])
+
+(defn new-querier
+  [component]
+  (->RedisQuerier component))
 
 (defn get-post-checksum
   [this post-key]
@@ -76,19 +82,14 @@
   (cmd (:component this) 'get (:stats (schemas "all-posts"))))
 
 (defmulti post-changed?
-  (fn [this & _] (config/db-type (:component this))))
+  (fn [this & _]
+    (config/db-type (:component this))))
 
 (defn post-changed?
   [this post-data]
   (let [post-key (:uri-path post-data)
         checksum (util/check-sum (str post-data))]
     (not= checksum (get-post-checksum this post-key))))
-
-(defrecord RedisQuerier [component])
-
-(defn new-querier
-  [component]
-  (->RedisQuerier component))
 
 (def query-behaviour
   {:get-post-checksum get-post-checksum
@@ -102,7 +103,7 @@
    :post-changed? post-changed?})
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;   Dragon Connection API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Dragon Connection Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defrecord RedisConnector [component])
