@@ -48,10 +48,10 @@
     [org.apache.maven.wagon/wagon-provider-api "3.0.0"]
     [commons-logging "1.2"]
     ;; end override
-    [org.onyxplatform/onyx "0.11.0" :exclusions [
+    [org.onyxplatform/onyx "0.11.1" :exclusions [
       com.google.guava/guava
       commons-logging]]
-    [org.onyxplatform/onyx-redis "0.11.0.0" :exclusions [
+    [org.onyxplatform/onyx-redis "0.11.1.0" :exclusions [
       com.google.guava/guava
       commons-logging
       log4j]]
@@ -83,8 +83,8 @@
       :exclusions [org.clojure/clojure]
       :plugins [
         [lein-ancient "0.6.12"]
-        [jonase/eastwood "0.2.4"]
-        [lein-bikeshed "0.4.1"]
+        [jonase/eastwood "0.2.5"]
+        [lein-bikeshed "0.5.0"]
         [lein-kibit "0.1.5"]
         [venantius/yagni "0.1.4"]]}
     :docs {
@@ -112,6 +112,7 @@
       ["with-profile" "+cli"
        "run" "-m" "dragon.main" "cli"]
     "repl" ["with-profile" "+custom-repl" "repl"]
+    "ubercompile" ["with-profile" "+ubercompile" "compile"]
     "check-deps" ["with-profile" "+test" "ancient" "check" ":all"]
     "lint" ["with-profile" "+test" "kibit"]
     "docs" ["with-profile" "+docs" "do"
@@ -122,10 +123,10 @@
     "build" ["with-profile" "+test" "do"
       ["check-deps"]
       ["lint"]
-      ["test"]
-      ["compile"]
-      ["with-profile" "+ubercompile" "compile"]
-      ["clean"]
       ["docs"]
-      ["uberjar"]]})
+      ["ubercompile"]
+      ["clean"]
+      ["uberjar"]
+      ["clean"]
+      ["test"]]})
 
