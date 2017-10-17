@@ -1,5 +1,5 @@
 (ns dragon.config
-  (:require [datomic.client :as datomic]
+  (:require ;[datomic.client :as datomic]
             [dragon.components.core :as components]
             [dragon.util :as util]
             [leiningen.core.project :as project]
@@ -31,6 +31,7 @@
                            (:host-data-dir redis-config)
                            (:guest-data-dir redis-config))
    "--cidfile" (:container-id-file redis-config)
+   "-p" (format "%s:%s" (:port redis-config) (:port redis-config))
    (:image-name redis-config)
    (:command redis-start)
    "--appendonly" "yes"])
@@ -118,8 +119,8 @@
        :version (:version datomic-config)
        :start (assoc datomic-start :args datomic-start-args)
        :conn {
-         :account-id datomic/PRO_ACCOUNT
-         :region datomic/PRO_REGION
+         ;:account-id datomic/PRO_ACCOUNT
+         ;:region datomic/PRO_REGION
          :service "peer-server"
          :endpoint (format "%s:%s" (:host datomic-config)
                                    (:port datomic-config))

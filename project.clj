@@ -55,6 +55,7 @@
       com.google.guava/guava
       commons-logging
       log4j]]
+    [pandect "0.6.1"]
     [potemkin "0.4.4"]
     [ring/ring-core "1.6.2"]
     [selmer "1.11.1" :exclusions [joda-time]]

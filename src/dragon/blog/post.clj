@@ -139,6 +139,13 @@
 ;;;   Transducers   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defn process-file-data
+  [system]
+  (comp
+    (map (partial get-post-data system))
+    (filter util/public?)
+    (map (partial get-file-data system))))
+
 (defn process-one
   [system]
   (comp

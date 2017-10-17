@@ -114,13 +114,19 @@
        (filter legal-content-file?)))
 
 (defn get-posts
-  ([system]
-    (get-posts system (config/posts-path-src system)))
-  ([system posts-path]
+  [system]
+  (let [posts-path (config/posts-path-src system)]
     (log/debugf "Finding posts under '%s' dir ..." posts-path)
-    (map (fn [x]
-           {:file x})
-         (get-files posts-path))))
+    (->> posts-path
+         (get-files)
+         (map :file))))
+
+(defn ingest-post
+  [system data]
+  ;; XXX need to update dragon.data.sources to use protocols before using this
+  ;(when (db/post-changed? system data)
+  ;  )
+  )
 
 (defn process
   [system]
@@ -128,12 +134,17 @@
   (event/publish system tag/process-all-pre)
   (let [raw-posts (get-posts system)
         processed-posts (post/process system raw-posts)]
+    ;; XXX maybe doall here instead of using vec to realize?
     (->> processed-posts
          (sort compare-timestamp-desc)
          (event/publish->> system
                            tag/process-all-post
                            {:count (count processed-posts)})
          vec)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Core Grouping Multimethods   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defmulti group-data
   (fn [type _] type))

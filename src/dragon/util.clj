@@ -2,6 +2,7 @@
   (:require [clojure.string :as string]
             [clojure.java.shell :as shell]
             [clojusc.twig :refer [pprint]]
+            [pandect.algo.crc32 :refer [crc32]]
             [selmer.parser :as selmer]
             [taoensso.timbre :as log])
   (:refer-clojure :exclude [boolean]))
@@ -191,3 +192,7 @@
   "A filter that returns `true` if the post should be published."
   [post]
   (boolean post :public?))
+
+(defn check-sum
+  [data]
+  (crc32 (str data)))
