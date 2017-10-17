@@ -1,6 +1,6 @@
 (ns dragon.data.sources.impl.redis
   (:require [clojure.java.io :as io]
-            [dragon.config :as config]
+            [dragon.config.core :as config]
             [dragon.data.sources.impl.common :as common]
             [dragon.util :as util]
             [taoensso.carmine :as car :refer [wcar]]

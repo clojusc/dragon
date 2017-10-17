@@ -2,7 +2,7 @@
   (:require [clojure.pprint :refer [pprint]]
             [clojure.java.io :as io]
             [clojusc.twig :as logger]
-            [dragon.config :as config]
+            [dragon.config.core :as config]
             [dragon.util :as util]
             [taoensso.timbre :as log]))
 

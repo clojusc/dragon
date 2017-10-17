@@ -5,7 +5,8 @@
             [dragon.components.event :as event]
             [dragon.components.httpd :as httpd]
             [dragon.components.logging :as logging]
-            [dragon.config :refer [build] :rename {build build-config}]))
+            [dragon.config.core :refer [build]
+                                :rename {build build-config}]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Common Configuration Components   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

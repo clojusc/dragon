@@ -1,6 +1,6 @@
 (ns dragon.components.config
   (:require [com.stuartsierra.component :as component]
-            [dragon.config :as config]
+            [dragon.config.core :as config]
             [taoensso.timbre :as log]))
 
 (defrecord Config [

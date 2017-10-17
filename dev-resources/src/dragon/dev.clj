@@ -21,7 +21,7 @@
             [dragon.data.sources.impl.redis :as redis-db]
             [dragon.components.core :as component-api]
             [dragon.components.system :as components]
-            [dragon.config :as config]
+            [dragon.config.core :as config]
             [dragon.main :as main]
             [dragon.util :as util]
             [markdown.core :as md]
