@@ -23,7 +23,7 @@
   (log/trace "shell! args:" args)
   (let [results (apply shell/sh args)
         err (:err results)]
-    (when-not (empty? err)
+    (when (seq err)
       (log/error err))))
 
 (defn post-now

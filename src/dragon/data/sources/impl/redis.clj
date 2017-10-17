@@ -82,7 +82,7 @@
   [this post-data]
   (let [post-key (:uri-path post-data)
         checksum (util/check-sum (str post-data))]
-    (not (= checksum (get-post-checksum this post-key)))))
+    (not= checksum (get-post-checksum this post-key))))
 
 (defrecord RedisQuerier [component])
 
@@ -131,10 +131,10 @@
   [this]
   (let [id-file (:container-id-file (config/db-config (:component this)))]
     (when (fs/exists? (io/as-file id-file))
-      (do (->> (slurp id-file)
-               (util/shell! "docker" "stop")
-               vec)
-          (util/shell! "rm" id-file)))))
+      (->> (slurp id-file)
+           (util/shell! "docker" "stop")
+           vec)
+      (util/shell! "rm" id-file))))
 
 (def connection-behaviour
   {:start-db! start-db!
