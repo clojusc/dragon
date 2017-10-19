@@ -138,7 +138,7 @@
     (->> posts-path
          (get-files)
          ((fn [x] (log/debugf "Found %s files ..." (count x)) x))
-         (map :file))))
+         (map #(hash-map :file %)))))
 
 (defn ingest-posts
   [system processor data]
@@ -150,6 +150,7 @@
   (let [raw-posts (get-posts system)
         processor-type (config/processor-type system)
         processor (post/new-processor-fn system)]
+    (log/trace "Posts:" (into [] raw-posts))
     (log/debug "Processor type:" processor-type)
     (log/debug "Processor constructor key:"
                (config/processor-constructor system))
