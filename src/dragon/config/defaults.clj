@@ -33,6 +33,10 @@
    :cli {
      :log-level :error
      :log-nss '[dragon]}
+   :processor {
+     :type :iterator
+     ;:type :transducer
+     :constructor :default}
    :db {
      :type :redis
      :redis redis/config

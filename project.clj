@@ -129,4 +129,3 @@
       ["uberjar"]
       ["clean"]
       ["test"]]})
-

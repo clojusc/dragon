@@ -45,7 +45,8 @@
   (get-all-categories [this])
   (get-all-tags [this])
   (get-all-stats [this])
-  (post-changed? [this post-key]))
+  (post-changed? [this post-key])
+  (save-post [this data]))
 
 (extend DatomicQuerier
         DBQuerier

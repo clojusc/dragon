@@ -91,6 +91,41 @@
         checksum (util/check-sum (str post-data))]
     (not= checksum (get-post-checksum this post-key))))
 
+(defn save-post-checksum
+  [this post-data]
+  (let [post-key (:uri-path post-data)
+        checksum (util/check-sum (str post-data))]
+    (cmd (:component this)
+         'set
+         (:checksum (schemas post-key))
+         checksum)))
+
+(defn save-post-content
+  [this post-data]
+  (let [post-key (:uri-path post-data)]
+    (cmd (:component this)
+         'set
+         (:content (schemas post-key))
+         (:data post-data))))
+
+(defn save-post-metadata
+  [this post-data]
+  (let [post-key (:uri-path post-data)]
+    (cmd (:component this)
+         'set
+         (:metadata (schemas post-key))
+         (dissoc post-data :data))))
+
+(defn save-post
+  [this post-data]
+  (save-post-checksum this post-data)
+  (save-post-content this post-data)
+  (save-post-metadata this post-data)
+  ; (save-post-categories this post-data)
+  ; (save-post-tags this post-data)
+  ; (save-post-stats this post-data)
+  post-data)
+
 (def query-behaviour
   {:get-post-checksum get-post-checksum
    :get-post-content get-post-content
@@ -100,7 +135,8 @@
    :get-all-categories get-all-categories
    :get-all-tags get-all-tags
    :get-all-stats get-all-stats
-   :post-changed? post-changed?})
+   :post-changed? post-changed?
+   :save-post save-post})
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Dragon Connection Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

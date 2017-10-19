@@ -175,3 +175,11 @@
 (defn db-start-retry-timeout
   [system]
   (get-in (db-config system) [:start :retry-timeout]))
+
+(defn processor-type
+  [system]
+  (components/get-config system :processor :type))
+
+(defn processor-constructor
+  [system]
+  (components/get-config system :processor :constructor))

@@ -24,3 +24,11 @@
 (defn get-db-conn
   [system]
   (get-in system [:db :conn]))
+
+(defn get-db-connector
+  [system]
+  (get-in system [:db :connector]))
+
+(defn get-db-querier
+  [system]
+  (get-in system [:db :querier]))
