@@ -34,7 +34,7 @@
       com.taoensso/encore
       com.taoensso/truss]]
     [http-kit "2.2.0"]
-    [leiningen-core "2.7.1" :exclusions [
+    [leiningen-core "2.8.0" :exclusions [
       commons-logging
       org.apache.maven.wagon/wagon-provider-api
       org.apache.httpcomponents/httpclient
