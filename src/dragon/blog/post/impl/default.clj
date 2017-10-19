@@ -109,11 +109,13 @@
   (log/debug "Converting post body ...")
   (let [system (:system this)]
     (event/publish system tag/parse-content-pre {:body (:body data)})
-    (-> data
-        :content-type
-        keyword
-        (partial post-util/convert-body! system data)
-        (event/publish-> system tag/parse-content-post {:body (:body data)}))))
+    (->> data
+         :content-type
+         keyword
+         (post-util/convert-body! system data)
+         (event/publish->> system
+                           tag/parse-content-post
+                           {:body (:body data)}))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
