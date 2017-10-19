@@ -150,7 +150,7 @@
   (let [raw-posts (get-posts system)
         processor-type (config/processor-type system)
         processor (post/new-processor-fn system)]
-    (log/trace "Posts:" (into [] raw-posts))
+    (log/trace "Posts:" (vec raw-posts))
     (log/debug "Processor type:" processor-type)
     (log/debug "Processor constructor key:"
                (config/processor-constructor system))
