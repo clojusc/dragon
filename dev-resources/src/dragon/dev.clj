@@ -15,6 +15,7 @@
             [com.stuartsierra.component :as component]
             [datomic.client :as datomic]
             [dragon.blog.content.rfc5322 :as rfc5322]
+            [dragon.blog.core :as blog]
             [dragon.blog.generator :as generator]
             [dragon.cli.core :as cli]
             [dragon.data.sources.core :as data-source]
