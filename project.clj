@@ -121,7 +121,7 @@
               "--file" "marginalia.html"
               "--name" "sockets"]]
     "build" ["with-profile" "+test" "do"
-      ["check-deps"]
+      ;["check-deps"]
       ["lint"]
       ["docs"]
       ["ubercompile"]
