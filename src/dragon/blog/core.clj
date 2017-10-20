@@ -4,6 +4,7 @@
             [dragon.blog.post.core :as post]
             [dragon.blog.post.impl.default :as default]
             [dragon.blog.tags :as tags]
+            [dragon.blog.workflow.core :as workflow]
             [dragon.components.core :as component-api]
             [dragon.config.core :as config]
             [dragon.data.sources.core :as data-source]
@@ -105,21 +106,6 @@
    :posts auth-data})
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;   Transducers   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defn ingest-transducer
-  ([system querier]
-    (ingest-transducer system querier default/new-processor))
-  ([system querier processor]
-    (comp
-      (post/process-one-file-data processor)
-      (filter (partial data-source/post-changed? querier))
-      (map (partial data-source/save-post querier))
-      (post/process-one-metadata processor)
-      (post/process-one-content processor))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Core Processing Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -140,30 +126,13 @@
          ((fn [x] (log/debugf "Found %s files ..." (count x)) x))
          (map #(hash-map :file %)))))
 
-(defn ingest-posts
-  [system processor data]
-  (let [querier (component-api/get-db-querier system)]
-    (into [] (ingest-transducer system querier (processor)) data)))
-
-(defn- process-posts
-  [system]
-  (let [raw-posts (get-posts system)
-        processor-type (config/processor-type system)
-        processor (post/new-processor-fn system)]
-    (log/trace "Posts:" (vec raw-posts))
-    (log/debug "Processor type:" processor-type)
-    (log/debug "Processor constructor key:"
-               (config/processor-constructor system))
-    (log/debug "Processor constructor function:" processor)
-    (case processor-type
-      :transducer (ingest-posts system processor raw-posts)
-      :iterator (post/process-iter system processor raw-posts))))
-
 (defn process
   [system]
   (log/debug "Processing posts ...")
   (event/publish system tag/process-all-pre)
-  (let [processed-posts (process-posts system)]
+  (let [raw-posts (get-posts system)
+        wf (workflow/new-workflow system)
+        processed-posts (workflow/files->data wf raw-posts)]
   ;; XXX maybe doall here instead of using vec to realize?
   (->> processed-posts
        (sort compare-timestamp-desc)
