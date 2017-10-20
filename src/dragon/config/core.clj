@@ -183,3 +183,7 @@
 (defn processor-constructor
   [system]
   (components/get-config system :processor :constructor))
+
+(defn processor-storage
+  [system]
+  (components/get-config system :processor :storage))

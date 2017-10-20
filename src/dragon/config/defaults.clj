@@ -36,7 +36,9 @@
    :processor {
      :type :iterator
      ;:type :transducer
-     :constructor :default}
+     :constructor :default
+     ;:storage :db
+     :storage nil}
    :db {
      :type :redis
      :redis redis/config
