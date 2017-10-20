@@ -33,11 +33,7 @@
 ;;;   Constructor   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn new-processor-fn
-  [system]
-  (case (config/processor-constructor system)
-    :default (fn [] (default/new-processor system))))
-
 (defn new-processor
   [system]
-  (default/new-processor system))
+  (case (config/processor-constructor system)
+    :default (default/new-processor system)))
