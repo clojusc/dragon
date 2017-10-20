@@ -176,14 +176,19 @@
   [system]
   (get-in (db-config system) [:start :retry-timeout]))
 
-(defn processor-type
-  [system]
-  (components/get-config system :processor :type))
-
 (defn processor-constructor
   [system]
   (components/get-config system :processor :constructor))
 
-(defn processor-storage
+(defn workflow-type
   [system]
-  (components/get-config system :processor :storage))
+  (components/get-config system :workflow :type))
+
+(defn workflow-storage
+  [system]
+  (components/get-config system :workflow :storage))
+
+(defn workflow-qualifier
+  [system]
+  [(components/get-config system :workflow :type)
+   (components/get-config system :workflow :storage)])

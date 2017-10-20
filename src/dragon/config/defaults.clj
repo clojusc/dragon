@@ -34,11 +34,12 @@
      :log-level :error
      :log-nss '[dragon]}
    :processor {
-     :type :iterator
+     :constructor :default}
+   :workflow {
      ;:type :transducer
-     :constructor :default
+     :type :iterator
      ;:storage :db
-     :storage nil}
+     :storage :memory}
    :db {
      :type :redis
      :redis redis/config
