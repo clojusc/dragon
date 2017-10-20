@@ -50,12 +50,11 @@
 (defn new-processor-fn
   [system]
   (case (config/processor-constructor system)
-    :default default/new-processor))
+    :default (fn [] (default/new-processor system))))
 
 (defn new-processor
   [system]
-  ((new-processor system)))
-
+  (default/new-processor system))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Transducers   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -99,20 +98,35 @@
 ;;;
 ;;; The data transformed
 
+(defn process-one-file-data-iter
+  [processor data]
+  (->> data
+       (get-post-data processor)
+       (get-post-file-data processor)))
+
+(defn process-one-metadata-iter
+  [processor data]
+  (->> data
+       (get-post-counts processor)
+       (get-post-link processor)
+       (get-post-dates processor)
+       (get-post-tags processor)))
+
+(defn process-one-content-iter
+  [processor data]
+  (->> data
+       (get-post-excerpts processor)
+       (get-post-body processor)))
+
 (defn process-one-iter
   ([system file-obj]
-    (process-one-iter system default/new-processor file-obj))
+    (process-one-iter system (new-processor-fn system) file-obj))
   ([system processor-constructor file-obj]
-    (let [processor (processor-constructor system)]
+    (let [processor (processor-constructor)]
       (->> (send-pre-notification system file-obj)
-           (get-post-data processor)
-           (get-post-counts processor)
-           (get-post-file-data processor)
-           (get-post-link processor)
-           (get-post-dates processor)
-           (get-post-tags processor)
-           (get-post-excerpts processor)
-           (get-post-body processor)
+           (process-one-file-data-iter processor)
+           (process-one-metadata-iter processor)
+           (process-one-content-iter processor)
            (into {})
            (send-post-notification system)))))
 
@@ -127,18 +141,6 @@
     (process-file-data system file-objs default/new-processor))
   ([system file-objs processor-constructor]
     (into [] (process-one-file-data (processor-constructor system)) file-objs)))
-
-(defn process-metadata
-  ([system file-objs]
-    (process-metadata system file-objs default/new-processor))
-  ([system file-objs processor-constructor]
-    (into [] (process-one-metadata (processor-constructor system)) file-objs)))
-
-(defn process-content
-  ([system file-objs]
-    (process-content system file-objs default/new-processor))
-  ([system file-objs processor-constructor]
-    (into [] (process-one-content (processor-constructor system)) file-objs)))
 
 (defn process
   ([system file-objs]

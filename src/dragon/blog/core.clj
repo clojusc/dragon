@@ -143,7 +143,7 @@
 (defn ingest-posts
   [system processor data]
   (let [querier (component-api/get-db-querier system)]
-    (into [] (ingest-transducer system querier processor) data)))
+    (into [] (ingest-transducer system querier (processor)) data)))
 
 (defn- process-posts
   [system]
