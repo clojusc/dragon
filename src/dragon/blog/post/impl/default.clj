@@ -13,7 +13,7 @@
 ;;;   Data Transforms   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn get-post-data
+(defn get-data
   ""
   [this data]
   (let [file (:file data)]
@@ -23,7 +23,7 @@
          (merge data)
          (post-util/copy-original-body))))
 
-(defn get-post-file-data
+(defn get-file-data
   [this data]
   (log/debug "Adding file data ...")
   (let [file-obj (:file data)
@@ -40,7 +40,7 @@
                          (util/sanitize-post-path)
                          (string/replace-first "posts/" "")))))
 
-(defn get-post-counts
+(defn get-counts
   [this data]
   (log/debug "Adding counts ...")
   (let [body (:body data)]
@@ -51,7 +51,7 @@
       :word-count (util/count-words body)
       :line-count (util/count-lines body))))
 
-(defn get-post-link
+(defn get-link
   [this data]
   (log/debug "Adding post link ...")
   (let [system (:system this)
@@ -60,7 +60,7 @@
     (assoc data :url url
                 :link link)))
 
-(defn get-post-dates
+(defn get-dates
   [this data]
   (log/debug "Adding post dates ...")
   (let [date (util/path->date (:src-file data))
@@ -78,7 +78,7 @@
       :now-timestamp (util/format-timestamp (util/datetime-now))
       :now-datestamp (util/format-datestamp (util/datetime-now)))))
 
-(defn get-post-tags
+(defn get-tags
   [this data]
   (log/debug "Updating tags ...")
   (assoc data :tags (apply sorted-set (string/split
@@ -86,7 +86,7 @@
                                        (config/tag-separator
                                         (:system this))))))
 
-(defn get-post-excerpts
+(defn get-excerpts
   [this data]
   (log/debug "Converting post body ...")
   (let [system (:system this)
@@ -104,7 +104,7 @@
            :excerpt-50 (post-util/md->html system excerpt-50)
            :excerpt-25 (post-util/md->html system excerpt-25))))
 
-(defn get-post-body
+(defn get-body
   [this data]
   (log/debug "Converting post body ...")
   (let [system (:system this)]
@@ -124,14 +124,14 @@
 (defrecord DefaultBlogPostProcessor [system])
 
 (def behaviour
-  {:get-post-data get-post-data
-   :get-post-file-data get-post-file-data
-   :get-post-counts get-post-counts
-   :get-post-link get-post-link
-   :get-post-dates get-post-dates
-   :get-post-tags get-post-tags
-   :get-post-excerpts get-post-excerpts
-   :get-post-body get-post-body})
+  {:get-data get-data
+   :get-file-data get-file-data
+   :get-counts get-counts
+   :get-link get-link
+   :get-dates get-dates
+   :get-tags get-tags
+   :get-excerpts get-excerpts
+   :get-body get-body})
 
 (defn new-processor
   [system]
