@@ -75,18 +75,23 @@
     :dev {
       :source-paths ["dev-resources/src"]
       :main dragon.main
-      :plugins [
-        [lein-simpleton "1.3.0"]]
       :dependencies [
-        [org.clojure/tools.namespace "0.2.11"]]}
+        [org.clojure/tools.namespace "0.2.11"]]
+      :plugins [
+        [lein-simpleton "1.3.0"]]}
     :test {
       :exclusions [org.clojure/clojure]
+      :dependencies [
+        [clojusc/ltest "0.3.0-SNAPSHOT"]]
       :plugins [
-        [lein-ancient "0.6.12"]
         [jonase/eastwood "0.2.5"]
+        [lein-ancient "0.6.12"]
         [lein-bikeshed "0.5.0"]
         [lein-kibit "0.1.5"]
-        [venantius/yagni "0.1.4"]]}
+        [lein-ltest "0.3.0-SNAPSHOT"]
+        [venantius/yagni "0.1.4"]]
+        :test-selectors {
+          :select :select}}
     :docs {
       :dependencies [
         [codox-theme-rdash "0.1.2"]]
@@ -111,10 +116,11 @@
                   "for commands")}
       ["with-profile" "+cli"
        "run" "-m" "dragon.main" "cli"]
-    "repl" ["with-profile" "+custom-repl" "repl"]
+    "repl" ["with-profile" "+custom-repl,+test" "repl"]
     "ubercompile" ["with-profile" "+ubercompile" "compile"]
     "check-deps" ["with-profile" "+test" "ancient" "check" ":all"]
     "lint" ["with-profile" "+test" "kibit"]
+    "ltest" ["with-profile" "+test" "ltest"]
     "docs" ["with-profile" "+docs" "do"
       ["codox"]
       ["marg" "--dir" "docs/current"
