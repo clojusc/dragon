@@ -32,6 +32,7 @@
             [taoensso.carmine :as car :refer [wcar]]
             [taoensso.timbre :as log]
             [trifl.core :refer [->int]]
+            [trifl.fs :as fs]
             [trifl.java :refer [show-methods]]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

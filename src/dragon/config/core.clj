@@ -1,10 +1,19 @@
 (ns dragon.config.core
-  (:require [dragon.components.core :as components]
+  (:require [clojure.string :as string]
+            [dragon.components.core :as components]
             [dragon.config.defaults :as default]
             [dragon.util :as util]
             [leiningen.core.project :as project]
-            [taoensso.timbre :as log])
+            [taoensso.timbre :as log]
+            [trifl.fs :as fs])
   (:refer-clojure :exclude [name read]))
+
+(defn read-home-file
+  [file-path]
+  (-> file-path
+      fs/expand-home
+      slurp
+      string/trim))
 
 (defn build
   ""
@@ -192,3 +201,18 @@
   [system]
   [(components/get-config system :workflow :type)
    (components/get-config system :workflow :storage)])
+
+(defn apis
+  [system]
+  (components/get-config system :apis))
+
+(defn flickr-api
+  [system]
+  (components/get-config system :apis :flickr))
+
+(defn flickr-api-access-key
+  [system]
+  (-> system
+      (components/get-config :apis :flickr :access)
+      read-home-file))
+
