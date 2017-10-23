@@ -216,3 +216,26 @@
       (components/get-config :apis :flickr :access)
       read-home-file))
 
+(defn twitter-api-app-consumer-key
+  [system]
+  (-> system
+      (components/get-config :apis :twitter :app-consumer :key)
+      read-home-file))
+
+(defn twitter-api-app-consumer-secret
+  [system]
+  (-> system
+      (components/get-config :apis :twitter :app-consumer :secret)
+      read-home-file))
+
+(defn twitter-api-user-access-token
+  [system]
+  (-> system
+      (components/get-config :apis :twitter :user-access :token)
+      read-home-file))
+
+(defn twitter-api-user-access-secret
+  [system]
+  (-> system
+      (components/get-config :apis :twitter :user-access :secret)
+      read-home-file))

@@ -35,7 +35,14 @@
      :log-nss '[dragon]}
    :apis {
      :flickr {
-       :access "~/.flickr/access.key"}}
+       :access "~/.flickr/access.key"}
+     :twitter {
+       :app-consumer {
+         :key "~/.twitter/app-consumer.key"
+         :secret "~/.twitter/app-consumer.secret"}
+       :user-access {
+         :token "~/.twitter/user-access.token"
+         :secret "~/.twitter/user-access.secret"}}}
    :processor {
      :constructor :default}
    :workflow {
