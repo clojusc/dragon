@@ -117,5 +117,4 @@
          (get-block-files legal-names legal-extensions extension-separator)
          (map (partial get-block legal-names legal-extensions extension-separator))
          (remove empty?)
-         ((fn [x] (println "Got:" x) x))
          (into {}))))
