@@ -33,6 +33,9 @@
    :cli {
      :log-level :error
      :log-nss '[dragon]}
+   :apis {
+     :flickr {
+       :access "~/.flickr/access.key"}}
    :processor {
      :constructor :default}
    :workflow {
