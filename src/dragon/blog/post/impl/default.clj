@@ -111,7 +111,6 @@
     (event/publish system tag/parse-content-pre {:body (:body data)})
     (->> data
          :content-type
-         keyword
          (post-util/convert-body! system data)
          (event/publish->> system
                            tag/parse-content-post
