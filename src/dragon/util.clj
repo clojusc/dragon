@@ -3,7 +3,6 @@
             [clojure.java.shell :as shell]
             [clojusc.twig :refer [pprint]]
             [pandect.algo.crc32 :refer [crc32]]
-            [selmer.parser :as selmer]
             [taoensso.timbre :as log])
   (:refer-clojure :exclude [boolean]))
 
@@ -159,13 +158,6 @@
 (defmethod merge-val :default
   [a b]
   b)
-
-(defn render
-  [template data]
-  (log/tracef "Rendering template %s with data %s" template (pprint data))
-  (selmer/render-file
-    template
-    data))
 
 (defn component->system
   ""
