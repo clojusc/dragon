@@ -133,7 +133,6 @@
   (let [raw-posts (get-posts system)
         wf (workflow/new-workflow system)
         processed-posts (workflow/files->data wf raw-posts)]
-  ;; XXX maybe doall here instead of using vec to realize?
   (->> processed-posts
        (sort compare-timestamp-desc)
        (event/publish->> system

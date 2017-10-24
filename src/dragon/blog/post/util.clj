@@ -5,6 +5,7 @@
             [dragon.event.tag :as tag]
             [dragon.util :as util]
             [markdown.core :as markdown]
+            [selmer.parser :as selmer]
             [taoensso.timbre :as log]))
 
 (defn md->html
@@ -13,10 +14,33 @@
    md
    :inhibit-separator (config/template-skip-marker system)))
 
+(defn selmer->html
+  [system content]
+  (selmer/render content {}))
+
+(defn md+selmer->html
+  [system content]
+  (->> content
+       (md->html system)
+       (selmer->html system)))
+
+(defn selmer+md->html
+  [system content]
+  (->> content
+       (selmer->html system)
+       (md->html system)))
+
 (defn convert-body!
   [system data content-type]
   (case content-type
-    :md (update-in data [:body] (partial md->html system))))
+    :md
+      (update-in data [:body] (partial md->html system))
+    :selmer
+      (update-in data [:body] (partial selmer->html system))
+    [:md :selmer]
+      (update-in data [:body] (partial md+selmer->html system))
+    [:selmer :md]
+      (update-in data [:body] (partial selmer+md->html system))))
 
 (defn join-excerpt
   [system words number]
