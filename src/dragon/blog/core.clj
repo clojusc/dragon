@@ -30,9 +30,9 @@
        (not-empty)))
 
 (defn post-url
-  [uri-base post]
+  [post]
   ;; XXX maybe use config function to get uri-based instead of passing it?
-  (format "%s/%s" uri-base (:uri-path post)))
+  (format "%s/%s" (config/base-path) (:uri-path post)))
 
 (defn data-for-logs
   [data]
@@ -170,7 +170,7 @@
        (event/publish->> system
                          tag/process-all-post
                          {:count (count processed-posts)})
-       vec)))
+       doall)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Core Grouping Multimethods   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -222,9 +222,9 @@
        (into {})))
 
 (defn get-indexed-archive-route
-  [uri-base gen-func posts [post-idx post-data]]
-  ;; XXX get uri-base from configuration; don't pass
-  (let [route (post-url uri-base post-data)
+  [gen-func posts [post-idx post-data]]
+  (let [uri-base (config/base-path)
+        route (post-url uri-base post-data)
         len (count posts)
         prev-idx (when-not (= post-idx (dec len)) (inc post-idx))
         next-idx (when-not (zero? post-idx) (dec post-idx))]
