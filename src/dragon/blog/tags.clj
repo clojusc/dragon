@@ -18,9 +18,7 @@
 (defn get-freqs
   [data]
   (->> data
-       ;; XXX use mapcat here instead
-       (map (comp vec :tags))
-       (flatten)
+       (mapcat (comp vec :tags))
        (frequencies)))
 
 (defn add-percents
