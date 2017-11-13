@@ -15,19 +15,19 @@
    :inhibit-separator (config/template-skip-marker system)))
 
 (defn selmer->html
-  [system content]
-  (selmer/render content {}))
+  [system data content]
+  (selmer/render content (assoc data :system system)))
 
 (defn md+selmer->html
-  [system content]
+  [system data content]
   (->> content
        (md->html system)
-       (selmer->html system)))
+       (selmer->html system data)))
 
 (defn selmer+md->html
-  [system content]
+  [system data content]
   (->> content
-       (selmer->html system)
+       (selmer->html system data)
        (md->html system)))
 
 (defn convert-body!
@@ -36,11 +36,11 @@
     :md
       (update-in data [:body] (partial md->html system))
     :selmer
-      (update-in data [:body] (partial selmer->html system))
+      (update-in data [:body] (partial selmer->html system data))
     [:md :selmer]
-      (update-in data [:body] (partial md+selmer->html system))
+      (update-in data [:body] (partial md+selmer->html system data))
     [:selmer :md]
-      (update-in data [:body] (partial selmer+md->html system))))
+      (update-in data [:body] (partial selmer+md->html system data))))
 
 (defn join-excerpt
   [system words number]
