@@ -1,0 +1,15 @@
+  { "sizes": { "canblog": 0, "canprint": 0, "candownload": 1,
+    "size": [
+      { "label": "Square", "width": 75, "height": 75, "source": "https:\/\/farm5.staticflickr.com\/4495\/37561807920_c941345527_s.jpg", "url": "https:\/\/www.flickr.com\/photos\/forgottenroadsmx\/37561807920\/sizes\/sq\/", "media": "photo" },
+      { "label": "Large Square", "width": "150", "height": "150", "source": "https:\/\/farm5.staticflickr.com\/4495\/37561807920_c941345527_q.jpg", "url": "https:\/\/www.flickr.com\/photos\/forgottenroadsmx\/37561807920\/sizes\/q\/", "media": "photo" },
+      { "label": "Thumbnail", "width": 100, "height": 75, "source": "https:\/\/farm5.staticflickr.com\/4495\/37561807920_c941345527_t.jpg", "url": "https:\/\/www.flickr.com\/photos\/forgottenroadsmx\/37561807920\/sizes\/t\/", "media": "photo" },
+      { "label": "Small", "width": "240", "height": "180", "source": "https:\/\/farm5.staticflickr.com\/4495\/37561807920_c941345527_m.jpg", "url": "https:\/\/www.flickr.com\/photos\/forgottenroadsmx\/37561807920\/sizes\/s\/", "media": "photo" },
+      { "label": "Small 320", "width": "320", "height": "240", "source": "https:\/\/farm5.staticflickr.com\/4495\/37561807920_c941345527_n.jpg", "url": "https:\/\/www.flickr.com\/photos\/forgottenroadsmx\/37561807920\/sizes\/n\/", "media": "photo" },
+      { "label": "Medium", "width": "500", "height": "375", "source": "https:\/\/farm5.staticflickr.com\/4495\/37561807920_c941345527.jpg", "url": "https:\/\/www.flickr.com\/photos\/forgottenroadsmx\/37561807920\/sizes\/m\/", "media": "photo" },
+      { "label": "Medium 640", "width": "640", "height": "480", "source": "https:\/\/farm5.staticflickr.com\/4495\/37561807920_c941345527_z.jpg", "url": "https:\/\/www.flickr.com\/photos\/forgottenroadsmx\/37561807920\/sizes\/z\/", "media": "photo" },
+      { "label": "Medium 800", "width": "800", "height": "600", "source": "https:\/\/farm5.staticflickr.com\/4495\/37561807920_c941345527_c.jpg", "url": "https:\/\/www.flickr.com\/photos\/forgottenroadsmx\/37561807920\/sizes\/c\/", "media": "photo" },
+      { "label": "Large", "width": "1024", "height": "768", "source": "https:\/\/farm5.staticflickr.com\/4495\/37561807920_c941345527_b.jpg", "url": "https:\/\/www.flickr.com\/photos\/forgottenroadsmx\/37561807920\/sizes\/l\/", "media": "photo" },
+      { "label": "Large 1600", "width": "1600", "height": "1200", "source": "https:\/\/farm5.staticflickr.com\/4495\/37561807920_cee34c5ed8_h.jpg", "url": "https:\/\/www.flickr.com\/photos\/forgottenroadsmx\/37561807920\/sizes\/h\/", "media": "photo" },
+      { "label": "Large 2048", "width": "2048", "height": "1536", "source": "https:\/\/farm5.staticflickr.com\/4495\/37561807920_ddcea41979_k.jpg", "url": "https:\/\/www.flickr.com\/photos\/forgottenroadsmx\/37561807920\/sizes\/k\/", "media": "photo" },
+      { "label": "Original", "width": "3264", "height": "2448", "source": "https:\/\/farm5.staticflickr.com\/4495\/37561807920_71ebafa154_o.jpg", "url": "https:\/\/www.flickr.com\/photos\/forgottenroadsmx\/37561807920\/sizes\/o\/", "media": "photo" }
+    ] }, "stat": "ok" })
