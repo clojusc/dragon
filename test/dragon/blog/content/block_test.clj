@@ -1,7 +1,8 @@
 (ns ^:select dragon.blog.content.block-test
-  (:require [clojure.java.io :as io]
-            [clojure.test :refer :all]
-            [dragon.blog.content.block :as block]))
+  (:require
+    [clojure.java.io :as io]
+    [clojure.test :refer :all]
+    [dragon.blog.content.block :as block]))
 
 (deftest legal-block-extension?
   (testing "allowed extensions"

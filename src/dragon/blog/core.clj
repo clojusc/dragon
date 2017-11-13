@@ -133,12 +133,12 @@
   (let [raw-posts (get-posts system)
         wf (workflow/new-workflow system)
         processed-posts (workflow/files->data wf raw-posts)]
-  (->> processed-posts
-       (sort compare-timestamp-desc)
-       (event/publish->> system
-                         tag/process-all-post
-                         {:count (count processed-posts)})
-       vec)))
+    (->> processed-posts
+         (sort compare-timestamp-desc)
+         (event/publish->> system
+                           tag/process-all-post
+                           {:count (count processed-posts)})
+         vec)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Core Grouping Multimethods   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
