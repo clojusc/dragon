@@ -24,6 +24,8 @@
     :name "Apache License, Version 2.0"
     :url "http://www.apache.org/licenses/LICENSE-2.0"}
   :dependencies [
+    [cheshire "5.8.0"]
+    [clj-http "3.7.0"]
     [clojusc/env-ini "0.4.1"]
     [clojusc/rfc5322 "0.4.0"]
     [clojusc/trifl "0.2.0"]
