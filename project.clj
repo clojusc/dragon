@@ -38,7 +38,6 @@
     [http-kit "2.2.0"]
     [leiningen-core "2.7.1" :exclusions [
       commons-logging
-      org.apache.maven.wagon/wagon-provider-api
       org.apache.httpcomponents/httpclient
       org.apache.httpcomponents/httpcore
       org.codehaus.plexus/plexus-utils]]
@@ -84,8 +83,7 @@
           :select :select}}
     :docs {
       :dependencies [
-        [codox-theme-rdash "0.1.2"]
-        [org.apache.maven.wagon/wagon-provider-api "3.0.0"]]
+        [codox-theme-rdash "0.1.2"]]
       :plugins [
         [lein-codox "0.10.3"]
         [lein-marginalia "0.9.0"]
