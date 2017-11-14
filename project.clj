@@ -45,18 +45,6 @@
     [markdown-clj "1.0.1"]
     [org.clojure/clojure "1.8.0"]
     [org.clojure/core.async "0.3.443"]
-    ;; The following two are need for onyx, to prevent version collision
-    ;; errors
-    [org.apache.maven.wagon/wagon-provider-api "3.0.0"]
-    [commons-logging "1.2"]
-    ;; end override
-    [org.onyxplatform/onyx "0.11.1" :exclusions [
-      com.google.guava/guava
-      commons-logging]]
-    [org.onyxplatform/onyx-redis "0.11.1.0" :exclusions [
-      com.google.guava/guava
-      commons-logging
-      log4j]]
     [pandect "0.6.1"]
     [potemkin "0.4.4"]
     [ring/ring-core "1.6.2"]
