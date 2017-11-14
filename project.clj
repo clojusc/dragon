@@ -84,7 +84,8 @@
           :select :select}}
     :docs {
       :dependencies [
-        [codox-theme-rdash "0.1.2"]]
+        [codox-theme-rdash "0.1.2"]
+        [org.apache.maven.wagon/wagon-provider-api "3.0.0"]]
       :plugins [
         [lein-codox "0.10.3"]
         [lein-marginalia "0.9.0"]
@@ -111,7 +112,7 @@
     "check-deps" ["with-profile" "+test" "ancient" "check" ":all"]
     "lint" ["with-profile" "+test" "kibit"]
     "ltest" ["with-profile" "+test" "ltest"]
-    "docs" ["with-profile" "+docs" "do"
+    "docs" ["with-profile" "+docs,+test" "do"
       ["codox"]
       ["marg" "--dir" "docs/current"
               "--file" "marginalia.html"
