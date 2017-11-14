@@ -1,13 +1,15 @@
 (ns dragon.blog.post.impl.default
-  (:require [clojure.string :as string]
-            [dragon.blog.content.core :as content]
-            [dragon.blog.content.core :as content]
-            [dragon.blog.post.util :as post-util]
-            [dragon.config.core :as config]
-            [dragon.event.system.core :as event]
-            [dragon.event.tag :as tag]
-            [dragon.util :as util]
-            [taoensso.timbre :as log]))
+  (:require
+    [clojure.edn :as edn]
+    [clojure.string :as string]
+    [dragon.blog.content.core :as content]
+    [dragon.blog.content.core :as content]
+    [dragon.blog.post.util :as post-util]
+    [dragon.config.core :as config]
+    [dragon.event.system.core :as event]
+    [dragon.event.tag :as tag]
+    [dragon.util :as util]
+    [taoensso.timbre :as log]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Data Transforms   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -30,8 +32,10 @@
         file-src (.getPath file-obj)
         filename-old (.getName file-obj)
         filename (format (config/output-file-tmpl (:system this))
-                         (util/sanitize-str (:title data)))]
+                         (util/sanitize-str (:title data)))
+        data (dissoc data :file)]
     (assoc data
+           :checksum (util/check-sum (pr-str data))
            :filename filename
            :src-file file-src
            :src-dir (.getParent file-obj)

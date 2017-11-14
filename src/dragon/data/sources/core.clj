@@ -43,10 +43,16 @@
   (get-post-tags [this post-key])
   (get-post-stats [this post-key])
   (get-all-categories [this])
+  (get-all-data [this post-key])
   (get-all-tags [this])
   (get-all-stats [this])
   (post-changed? [this post-key])
-  (save-post [this data]))
+  (save-post [this data])
+  (set-all-data [this post-key data])
+  (set-content [this post-key data])
+  (set-file-data [this post-key data])
+  (set-metadata [this post-key data])
+  (set-post-checksum [this post-key checksum]))
 
 (extend DatomicQuerier
         DBQuerier

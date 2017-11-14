@@ -10,7 +10,7 @@
 ;;;   Iterators   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
-;;; An iterative approace to data transformation.
+;;; An iterative approach to data transformation.
 
 (defn do-file-data-step
   [this data]
