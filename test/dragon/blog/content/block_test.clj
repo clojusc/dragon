@@ -1,4 +1,4 @@
-(ns ^:select dragon.blog.content.block-test
+(ns dragon.blog.content.block-test
   (:require
     [clojure.java.io :as io]
     [clojure.test :refer :all]
