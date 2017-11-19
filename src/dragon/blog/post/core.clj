@@ -1,4 +1,18 @@
 (ns dragon.blog.post.core
+  "This namespace defines the API for the actions required to process blog
+  content sources at a low level.
+
+  One of any number of processor implementations (see the namespaces
+  `dragon.blog.post.impl.*`) are configured for use in a blog's `project.clj`
+  file via `:dragon` -> `:processor` -> `:constructor`. The configured instance
+  is then used by the high-level API to execute configured content-processing
+  workflows.
+
+  For high-level processing, i.e., 'workflow', see the following namespaces:
+  ```
+  * dragon.blog.workflow.core
+  * dragon.blog.workflow.impl.*
+  ```"
   (:require [clojure.java.io :as io]
             [clojure.string :as string]
             [dragon.blog.post.impl.default :as default]

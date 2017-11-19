@@ -86,19 +86,21 @@
                        (do-file-data-step this))
         post-key (:src-file file-data)]
     (if (db/post-changed? querier file-data)
-      (let [metadata (->> file-data
-                          (do-save-checksum this querier)
-                          (do-save-file-data this querier)
-                          (do-metadata-step this))]
-        (->> metadata
-             (do-save-metadata this querier file-data)
-             (do-content-step this)
-             (do-save-content this querier)
-             (do-save-all-data this querier)
-             (msg/send-post-notification system)
-             (into {})))
       (do
-        (log/infof "File %s has already been processed; retrieving ..."
+        (log/infof "Changed detected; processing %s ..." post-key)
+        (let [metadata (->> file-data
+                            (do-save-checksum this querier)
+                            (do-save-file-data this querier)
+                            (do-metadata-step this))]
+          (->> metadata
+               (do-save-metadata this querier file-data)
+               (do-content-step this)
+               (do-save-content this querier)
+               (do-save-all-data this querier)
+               (msg/send-post-notification system)
+               (into {}))))
+      (do
+        (log/debugf "File %s has already been processed; retrieving ..."
                    post-key)
         (db/get-all-data querier post-key)))))
 

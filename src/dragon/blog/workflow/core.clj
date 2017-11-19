@@ -1,4 +1,9 @@
 (ns dragon.blog.workflow.core
+  "This namespace defines the API for the actions required to run
+  blog-generating workflows.
+
+  This is in contrast to the low-level processing of blog content at the data
+  source level (see `dragon.blog.post.core`)."
   (:require [clojure.java.io :as io]
             [clojure.string :as string]
             [dragon.blog.post.core :as steps]

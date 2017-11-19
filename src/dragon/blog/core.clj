@@ -128,7 +128,7 @@
 
 (defn process
   [system]
-  (log/debug "Processing posts ...")
+  (log/info "Processing posts ...")
   (event/publish system tag/process-all-pre)
   (let [raw-posts (get-posts system)
         wf (workflow/new-workflow system)
@@ -196,8 +196,8 @@
         len (count posts)
         prev-idx (when-not (= post-idx (dec len)) (inc post-idx))
         next-idx (when-not (zero? post-idx) (dec post-idx))]
-    (log/infof "Generating route for %s ..." route)
-    (log/debugf "This index: %s (prev: %s; next: %s)"
+    (log/debugf "Indexing route for %s ..." route)
+    (log/tracef "This index: %s (prev: %s; next: %s)"
                 post-idx prev-idx next-idx)
     [route
      (gen-func
@@ -210,6 +210,7 @@
 
 (defn get-indexed-archive-routes
   [data & {:keys [uri-base gen-func]}]
+  (log/info "Indexing routes ...")
   (log/trace "Got data:" data)
   (->> data
        (map (partial get-indexed-archive-route uri-base gen-func data))

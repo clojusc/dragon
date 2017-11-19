@@ -19,7 +19,7 @@
   ""
   [this data]
   (let [file (:file data)]
-    (log/infof "Adding post data for '%s' ..." file)
+    (log/debugf "Adding post data for '%s' ..." file)
     (->> file
          (content/parse (:system this))
          (merge data)

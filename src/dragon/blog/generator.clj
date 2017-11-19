@@ -10,6 +10,6 @@
    (let [out-dir (config/output-dir system)]
      (when-not (seq routes)
        (log/warn "Routes are manually set to be empty! Please fix."))
-     (log/infof "Generating static content to '%s' ..." out-dir)
+     (log/infof "Writing generated content to '%s' ..." out-dir)
      (stasis/export-pages routes out-dir)
      (log/info "Static generation complete."))))
