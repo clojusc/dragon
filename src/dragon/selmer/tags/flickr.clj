@@ -20,6 +20,7 @@
    ":album-id" :album-id
    ":height" :height
    ":width" :width})
+(def url-template "https://www.flickr.com/photos/%s/%s/in/album-%s")
 
 (defn ->int
   [arg]
@@ -88,7 +89,9 @@
     (log/debug "best available width:" (get-best-width (:width args) sizes-data))
     (log/debug "best-size:" best-size)
     (format (str escaped-skip-marker
-                 "<a href=\"https://www.flickr.com/photos/%s/%s/in/%s\">"
+                 "<a href=\""
+                 url-template
+                 "\">"
                  "<img src=\"%s\" style=\"width:%spx;height:auto;\">"
                  "</a>"
                  escaped-skip-marker)
