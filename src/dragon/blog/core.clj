@@ -140,6 +140,12 @@
                            {:count (count processed-posts)})
          vec)))
 
+(defn reset-content-checksums
+  [system]
+  (let [wf (workflow/new-workflow system)]
+    (log/info "Resetting content checksums ...")
+    (workflow/bust-cache wf)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Core Grouping Multimethods   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

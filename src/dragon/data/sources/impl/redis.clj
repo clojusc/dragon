@@ -1,6 +1,7 @@
 (ns dragon.data.sources.impl.redis
   (:require
     [clojure.java.io :as io]
+    [clojure.string :as string]
     [dragon.config.core :as config]
     [dragon.data.sources.impl.common :as common]
     [dragon.util :as util]
@@ -25,6 +26,10 @@
    :tags (str path-segment ":tags")
    :stats (str path-segment ":stats")
    :all-data (str path-segment ":all-data")})
+
+(defn key->path-segment
+  [schema-key]
+  (first (string/split schema-key #":")))
 
 (defn cmd
   "With this function we can do things like the following in the REPL (for
@@ -161,6 +166,12 @@
   [this post-key checksum]
   (cmd (:component this) 'set (:checksum (schemas post-key)) checksum))
 
+(defn set-posts-checksums
+  [this checksum]
+  (log/infof "Setting posts checksums to \"%s\" ..." checksum)
+  (for [checksum-key (cmd (:component this) 'keys "*:checksum")]
+    (cmd (:component this) 'set checksum-key checksum)))
+
 (def query-behaviour
   {:get-post-checksum get-post-checksum
    :get-post-content get-post-content
@@ -177,7 +188,8 @@
    :set-content set-content
    :set-file-data set-file-data
    :set-metadata set-metadata
-   :set-post-checksum set-post-checksum})
+   :set-post-checksum set-post-checksum
+   :set-posts-checksums set-posts-checksums})
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Dragon Connection Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -14,11 +14,25 @@
 ;;;   Support Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defn- get-querier
+  [this]
+  (get-in this [:system :db :querier]))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Iterators   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;; An iterative approach to data transformation.
+
+(defn bust-cache
+  "Set the checksum for a given post to the empty string. If no `src-file`
+  is passed, bust the cache for all posts."
+  ([this]
+    (log/info "Busting cache for all ...")
+    (db/set-posts-checksums (get-querier this) ""))
+  ([this src-file]
+    (log/debugf "Busting cache for just %s ..." src-file)
+    (db/set-post-checksum (get-querier this) src-file "")))
 
 (defn do-file-data-step
   [this init-data]
@@ -80,7 +94,7 @@
 (defn do-all-steps
   [this file-obj]
   (let [system (:system this)
-        querier (get-in system [:db :querier])
+        querier (get-querier this)
         file-data (->> file-obj
                        (msg/send-pre-notification system)
                        (do-file-data-step this))
@@ -115,7 +129,8 @@
 (defrecord IteratorDBWorkflow [system])
 
 (def behaviour
-  {:do-file-data-step do-file-data-step
+  {:bust-cache bust-cache
+   :do-file-data-step do-file-data-step
    :do-metadata-step do-metadata-step
    :do-content-step do-content-step
    :do-all-steps do-all-steps

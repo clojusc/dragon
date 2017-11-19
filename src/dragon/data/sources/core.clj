@@ -52,7 +52,8 @@
   (set-content [this post-key data])
   (set-file-data [this post-key data])
   (set-metadata [this post-key data])
-  (set-post-checksum [this post-key checksum]))
+  (set-post-checksum [this post-key checksum])
+  (set-posts-checksums [this checksum]))
 
 (extend DatomicQuerier
         DBQuerier

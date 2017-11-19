@@ -28,6 +28,7 @@
 ;;; to provide easily-overridable implementations of the processing steps.
 
 (defprotocol BlogPostWorkflowAPI
+  (bust-cache [this])
   (do-file-data-step [this processor] [this processor data])
   (do-metadata-step [this processor] [this processor data])
   (do-content-step [this processor] [this processor data])
