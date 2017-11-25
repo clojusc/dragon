@@ -6,6 +6,7 @@
             [dragon.event.subscription :as subscription]
             [dragon.event.tag :as tag]
             [dragon.event.topic :as topic]
+            [dragon.util :as util]
             [taoensso.timbre :as log]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -47,12 +48,14 @@
     (log/info "Stopping db component ...")
     (log/trace "component keys:" (keys component))
     (log/trace "config:" (:config component))
-    (let [connector @(:connector component)]
+    (let [raw-connector (:connector component)
+          connector (if (util/atom? raw-connector)
+                      @raw-connector
+                      raw-connector)]
       (data-source/stop-db! connector)
-      (reset! (:connector component) nil)
-      (reset! (:querier component) nil)
       (log/info "Stopped db component.")
-      component)))
+      (assoc component :connector nil
+                       :querier nil))))
 
 (defn create-db-component
   ""

@@ -1,15 +1,24 @@
 (ns dragon.components.core
-  "System component access functions.")
+  "System component access functions."
+  (:require
+    [dragon.util :as util]))
 
 (def dataflow-keys [:pubsub :dataflow])
 
-(defn get-config
+(defn extract-config
   ""
-  [system & args]
+  [system args]
   (let [base-keys [:config :dragon]]
     (if-not (seq args)
       (get-in system base-keys)
       (get-in system (concat base-keys args)))))
+
+(defn get-config
+  [system & args]
+  (let [cfg (extract-config system args)]
+    (if (util/atom? cfg)
+      @cfg
+      cfg)))
 
 (defn get-pubsub
   ""

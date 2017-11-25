@@ -197,3 +197,8 @@
 (defn check-sum
   [data]
   (crc32 (str data)))
+
+(defn atom?
+  [obj]
+  (when (= clojure.lang.Atom (type obj))
+    true))
