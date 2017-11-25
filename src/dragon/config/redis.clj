@@ -7,8 +7,7 @@
 (def ^:private base-config
   {:host "localhost"
    :port "6379"
-   :host-data-dir "data"
-   :guest-data-dir "/data"})
+   :data-dir "data"})
 
 (def ^:private start
   {:home (System/getProperty "user.dir")})
@@ -33,7 +32,9 @@
 (def ^:private base-config-docker
   (assoc base-config
          :container-id-file "/tmp/redis-dragon-docker-id"
-         :image-name (format "redis:%s-alpine" redis-docker-version)))
+         :image-name (format "redis:%s-alpine" redis-docker-version)
+         :host-data-dir (:data-dir base-config)
+         :guest-data-dir "/data"))
 
 (def ^:private start-docker
   (assoc start
@@ -73,4 +74,6 @@
 
 (def config-native
   (assoc config
-         :start (assoc start-native :args start-args-native)))
+         :start (assoc start-native
+                :args start-args-native
+                :data-dir (:data-dir base-config))))

@@ -21,10 +21,10 @@
 (defn start-db!
   [this]
   (let [start-cfg (config/db-start-config (:component this))
-        home (:home start-cfg)
+        data-dir (:data-dir start-cfg)
         args (:args start-cfg)]
-    (shell/with-sh-dir home
-      (log/debugf "Running command in %s ..." home)
+    (shell/with-sh-dir data-dir
+      (log/debugf "Running command in %s ..." data-dir)
       (log/debug "Using shell/sh args:" (vec args))
       (apply util/spawn! args))))
 
