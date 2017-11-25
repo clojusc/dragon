@@ -56,6 +56,26 @@ the [Clojang Blog](http://clojang.lfe.io/) e.g.:
       :log-ns [clojang.blog dragon]}}
 ```
 
+Note that by default, Dragon uses a Redis-backed content cache running in a
+Docker container. If for any reason you can't or won't run Docker on one of
+your machines, you can run Redis natively (if it's installed) on that machine
+only by overriding the default with the following `profiles.clj` file in your
+blog app's top-level directory (sibling to the `project.clj` file):
+
+```clj
+{:dragon {
+  :db {:type :redis-native}}}
+```
+
+You may also want to override the default logging, too, while you're checking
+the setup:
+
+```clj
+{:dragon {
+  :cli {:log-level :debug}
+  :db {:type :redis-native}}}
+```
+
 
 ## Documentation [&#x219F;](#contents)
 
