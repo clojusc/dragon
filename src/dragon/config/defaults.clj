@@ -52,5 +52,5 @@
      :storage :memory}
    :db {
      :type :redis
-     :redis redis/config
+     :redis redis/config-docker
      :datomic datomic/config}})
