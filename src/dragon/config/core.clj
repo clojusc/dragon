@@ -18,10 +18,12 @@
 (defn build
   ""
   []
-  (util/deep-merge
-   default/config
-   (get-in (project/read-profiles (project/read))
-           [:dragon])))
+  (let [proj (project/read)]
+    (util/deep-merge
+     default/config
+     (util/deep-merge
+      (get-in proj [:profiles :dragon])
+      (:dragon (project/read-profiles proj))))))
 
 (defn domain
   [system]
