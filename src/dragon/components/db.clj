@@ -24,29 +24,39 @@
 ;;;   Components   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defrecord DataBase []
+(defrecord DataBase [
+  connector
+  querier]
   component/Lifecycle
 
   (start [component]
     (log/info "Starting db component ...")
+    (log/trace "component keys:" (keys component))
     (log/debug "Database component backend is" (config/db-type component))
     (let [connector (data-source/new-connector component)
           _ (data-source/start-db! connector)
-          component (data-source/add-connection connector)]
+          component (data-source/add-connection connector)
+          querier (data-source/new-querier component)]
       (run-setup-tasks connector)
+      (reset! (:connector component) connector)
+      (reset! (:querier component) querier)
       (assoc component :connector connector
-                       :querier (data-source/new-querier component))))
+                       :querier querier)))
 
   (stop [component]
     (log/info "Stopping db component ...")
-    (let [connector (:connector component)]
-      (log/debug "Stopped db component.")
+    (log/trace "component keys:" (keys component))
+    (log/trace "config:" (:config component))
+    (let [connector @(:connector component)]
       (data-source/stop-db! connector)
-      (-> connector
-          (data-source/remove-connection)
-          (assoc :querier nil)))))
+      (reset! (:connector component) nil)
+      (reset! (:querier component) nil)
+      (log/info "Stopped db component.")
+      component)))
 
 (defn create-db-component
   ""
   []
-  (->DataBase))
+  (->DataBase
+    (atom {})
+    (atom {})))

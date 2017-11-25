@@ -4,7 +4,8 @@
             [taoensso.timbre :as log]))
 
 (defrecord Config [
-  builder]
+  builder
+  dragon]
   component/Lifecycle
 
   (start [component]
@@ -12,6 +13,7 @@
     (log/debug "Started config component.")
     (let [cfg (builder)]
       (log/trace "Built configuration:" cfg)
+      (reset! (:dragon component) cfg)
       (assoc component :dragon cfg)))
 
   (stop [component]
@@ -23,4 +25,5 @@
   ""
   [config-builder-fn]
   (map->Config
-    {:builder config-builder-fn}))
+    {:builder config-builder-fn
+     :dragon (atom {})}))
