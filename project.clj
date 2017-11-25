@@ -49,10 +49,10 @@
     [ring/ring-core "1.6.3"]
     [selmer "1.11.3" :exclusions [joda-time]]
     [stasis "2.3.0"]]
-  :dragon {
-    :cli {
-      :log-level :trace}}
   :profiles {
+    :dragon {
+      :cli {
+        :log-level :trace}}
     :ubercompile {
       :aot :all}
     :custom-repl {

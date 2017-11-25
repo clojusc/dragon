@@ -20,7 +20,8 @@
   []
   (util/deep-merge
    default/config
-   (:dragon (project/read))))
+   (get-in (project/read-profiles (project/read))
+           [:dragon])))
 
 (defn domain
   [system]
