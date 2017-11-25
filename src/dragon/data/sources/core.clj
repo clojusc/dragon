@@ -4,12 +4,13 @@
             [dragon.data.sources.impl.common :as common]
             [dragon.data.sources.impl.datomic :as datomic]
             [dragon.data.sources.impl.redis :as redis]
+            [dragon.data.sources.impl.redis.docker :as redis-docker]
             [dragon.util :as util]
             [taoensso.timbre :as log])
   (:import (dragon.data.sources.impl.datomic DatomicConnector
                                              DatomicQuerier)
-           (dragon.data.sources.impl.redis RedisConnector
-                                           RedisQuerier)))
+           (dragon.data.sources.impl.redis RedisQuerier)
+           (dragon.data.sources.impl.redis.docker RedisDockerConnector)))
 
 (defprotocol DBConnector
   (start-db! [this])
@@ -25,15 +26,15 @@
         (merge common/connection-behaviour
                datomic/connection-behaviour))
 
-(extend RedisConnector
+(extend RedisDockerConnector
         DBConnector
         (merge common/connection-behaviour
-               redis/connection-behaviour))
+               redis-docker/connection-behaviour))
 
 (defn new-connector
   [component]
   (case (config/db-type component)
-    :redis (redis/new-connector component)
+    :redis-docker (redis-docker/new-connector component)
     :datomic (datomic/new-connector component)))
 
 (defprotocol DBQuerier
@@ -66,5 +67,5 @@
 (defn new-querier
   [component]
   (case (config/db-type component)
-    :redis (redis/new-querier component)
+    :redis-docker (redis/new-querier component)
     :datomic (datomic/new-querier component)))
