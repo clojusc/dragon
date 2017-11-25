@@ -43,11 +43,11 @@
       org.codehaus.plexus/plexus-utils]]
     [markdown-clj "1.0.1"]
     [org.clojure/clojure "1.8.0"]
-    [org.clojure/core.async "0.3.443"]
+    [org.clojure/core.async "0.3.465"]
     [pandect "0.6.1"]
     [potemkin "0.4.4"]
-    [ring/ring-core "1.6.2"]
-    [selmer "1.11.1" :exclusions [joda-time]]
+    [ring/ring-core "1.6.3"]
+    [selmer "1.11.3" :exclusions [joda-time]]
     [stasis "2.3.0"]]
   :dragon {
     :cli {
@@ -74,9 +74,9 @@
         [clojusc/ltest "0.3.0-SNAPSHOT"]]
       :plugins [
         [jonase/eastwood "0.2.5"]
-        [lein-ancient "0.6.12"]
+        [lein-ancient "0.6.14"]
         [lein-bikeshed "0.5.0"]
-        [lein-kibit "0.1.5"]
+        [lein-kibit "0.1.6"]
         [lein-ltest "0.3.0-SNAPSHOT"]
         [venantius/yagni "0.1.4"]]
         :test-selectors {
@@ -86,7 +86,7 @@
         [codox-theme-rdash "0.1.2"]]
       :plugins [
         [lein-codox "0.10.3"]
-        [lein-marginalia "0.9.0"]
+        [lein-marginalia "0.9.1"]
         [lein-simpleton "1.3.0"]]
       :codox {
         :project {
