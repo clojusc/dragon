@@ -43,6 +43,8 @@ configuration to its `project.clj` file. Here's an example taken from
 the [Clojang Blog](http://clojang.lfe.io/) e.g.:
 
 ```clj
+:profiles {
+  ...
   :dragon {
     :domain "clojang.lfe.io"
     :name "The Clojang Blog"
@@ -54,6 +56,8 @@ the [Clojang Blog](http://clojang.lfe.io/) e.g.:
     :cli {
       :log-level :info
       :log-ns [clojang.blog dragon]}}
+  ...
+  }
 ```
 
 Note that by default, Dragon uses a Redis-backed content cache running in a
