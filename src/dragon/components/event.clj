@@ -20,7 +20,8 @@
 
   (stop [component]
     (log/info "Stopping event component ...")
-    (event/delete (get-in component component-api/dataflow-keys))
+    (if-let [pubsub-dataflow (get-in component component-api/dataflow-keys)]
+      (event/delete pubsub-dataflow))
     (let [component (assoc-in component component-api/dataflow-keys nil)]
       (log/debug "Stopped event component.")
       component)))
