@@ -53,4 +53,5 @@
    :db {
      :type :redis-docker
      :redis-docker redis/config-docker
+     :redis-native redis/config-native
      :datomic datomic/config}})

@@ -63,4 +63,14 @@
 ;;;   Native Redis   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; XXX TBD
+(def ^:private start-native
+  (assoc start :executable "redis-server"))
+
+(def ^:private start-args-native
+  (concat
+    [(:executable start-native)]
+    redis-options))
+
+(def config-native
+  (assoc config
+         :start (assoc start-native :args start-args-native)))
