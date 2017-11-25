@@ -41,17 +41,18 @@
          :command "redis-server"))
 
 (def ^:private start-args-docker
-  [(:executable start-docker)
-   "run"
-   "-d"
-   "-v" (format "%s/%s:%s" (:home start-docker)
-                           (:host-data-dir base-config-docker)
-                           (:guest-data-dir base-config-docker))
-   "--cidfile" (:container-id-file base-config-docker)
-   "-p" (format "%s:%s" (:port base-config-docker) (:port base-config-docker))
-   (:image-name base-config-docker)
-   (:command start-docker)
-   "--appendonly" "yes"])
+  (concat
+    [(:executable start-docker)
+     "run"
+     "-d"
+     "-v" (format "%s/%s:%s" (:home start-docker)
+                             (:host-data-dir base-config-docker)
+                             (:guest-data-dir base-config-docker))
+     "--cidfile" (:container-id-file base-config-docker)
+     "-p" (format "%s:%s" (:port base-config-docker) (:port base-config-docker))
+     (:image-name base-config-docker)
+     (:command start-docker)]
+     redis-options))
 
 (def config-docker
   (assoc config
