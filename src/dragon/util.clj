@@ -1,9 +1,11 @@
 (ns dragon.util
-  (:require [clojure.string :as string]
-            [clojure.java.shell :as shell]
-            [clojusc.twig :refer [pprint]]
-            [pandect.algo.crc32 :refer [crc32]]
-            [taoensso.timbre :as log])
+  (:require
+    [clojure.core.async :as async]
+    [clojure.string :as string]
+    [clojure.java.shell :as shell]
+    [clojusc.twig :refer [pprint]]
+    [pandect.algo.crc32 :refer [crc32]]
+        [taoensso.timbre :as log])
   (:refer-clojure :exclude [boolean]))
 
 (declare merge-val)
@@ -21,9 +23,16 @@
   [& args]
   (log/trace "shell! args:" args)
   (let [results (apply shell/sh args)
+        out (:out results)
         err (:err results)]
+    (when (seq out)
+      (log/debug out))
     (when (seq err)
       (log/error err))))
+
+(defn spawn!
+  [& args]
+  (async/thread (apply shell! args)))
 
 (defn post-now
   "Return the current time in two parts, ready to be used for creating
