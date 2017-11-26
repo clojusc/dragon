@@ -16,7 +16,7 @@
 
 (defn str-kwd->kwd
   [[k v]]
-  [(keyword (apply str (rest k))) (string/replace v "\"" "")])
+  [(keyword (string/join str (rest k))) (string/replace v "\"" "")])
 
 (defn args->map
   [args]
