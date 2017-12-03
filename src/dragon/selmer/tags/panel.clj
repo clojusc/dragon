@@ -80,6 +80,15 @@
         (tags-util/stripped-md->html
           (get-in content [:panel-body :content]))))))
 
+(defn body-no-pad-tag
+  [raw-args context-map content]
+  (let [args (tags-util/args->map raw-args)]
+    (str
+      (panel-title-html (:title args))
+      (panel-body-no-pad-html
+        (tags-util/stripped-md->html
+          (get-in content [:panel-body-no-pad :content]))))))
+
 (defn table-tag
   [raw-args context-map content]
   (let [args (tags-util/args->map raw-args)]
