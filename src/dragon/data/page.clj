@@ -51,18 +51,20 @@
   ([]
     (base {}))
   ([opts]
-    {:page-data {
-       :base-path "/blog"
-       :site-title (:site-title opts)
-       :site-description (:site-description opts)
-       :index "index"
-       :about "about"
-       :community "community"
-       :archives "archives"
-       :categories "categories"
-       :tags "tags"
-       :authors "authors"
-       :active (:category-key opts)}}))
+    (merge
+      {:page-data {
+         :base-path "/blog"
+         :site-title (:site-title opts)
+         :site-description (:site-description opts)
+         :index "index"
+         :about "about"
+         :community "community"
+         :archives "archives"
+         :categories "categories"
+         :tags "tags"
+         :authors "authors"
+         :active (:category-key opts)}}
+      opts)))
 
 (defn default-content-opts
   []
@@ -74,16 +76,28 @@
    :content-fn (constantly nil)})
 
 (defn default-data-content-opts
-  []
-  (assoc (default-content-opts) :content-fn identity))
+  ([]
+    (default-data-content-opts {}))
+  ([opts]
+    (merge (default-content-opts)
+           {:content-fn identity}
+           opts)))
 
 (defn default-resource-content-opts
-  []
-  (assoc (default-content-opts) :content-fn resource-content))
+  ([]
+    (default-resource-content-opts {}))
+  ([opts]
+    (merge (default-content-opts)
+           {:content-fn resource-content}
+           opts)))
 
 (defn default-markdown-content-opts
-  []
-  (assoc (default-content-opts) :content-fn markdown-content))
+  ([]
+    (default-markdown-content-opts {}))
+  ([opts]
+    (merge (default-content-opts)
+           {:content-fn markdown-content}
+           opts)))
 
 (defn common
   [posts additional-opts]
@@ -95,7 +109,7 @@
         (base-data-fn)
         (assoc-in [:page-data :active] (name (:category-key opts)))
         (dissoc :title :subtitle)
-        (assoc :posts-data posts
+        (assoc :posts-data (or (:posts-data opts) posts)
                :posts-stats (posts-stats posts)
                :content {
                  :title (:title opts)
