@@ -1,4 +1,4 @@
-(ns dragon.data.page
+(ns dragon.blog.content.data
   (:require
     [clojure.java.io :as io]
     [clojure.string :as string]
