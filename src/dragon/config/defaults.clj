@@ -26,6 +26,9 @@
      :period-ellipsis ".."}
    :blocks {
      :enabled #{}}
+   :robots {
+     :allow #{"/blog"}
+     :disallow #{}}
    :repl {
      :log-level :info
      :log-nss '[dragon]}

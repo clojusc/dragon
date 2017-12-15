@@ -156,6 +156,14 @@
   [system]
   (components/get-config system :parsing :period-ellipsis))
 
+(defn robots-allow
+  [system]
+  (components/get-config system :robots :allow))
+
+(defn robots-disallow
+  [system]
+  (components/get-config system :robots :disallow))
+
 (defn db
   [system]
   (components/get-config system :db))
