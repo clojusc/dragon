@@ -202,3 +202,10 @@
   [obj]
   (when (= clojure.lang.Atom (type obj))
     true))
+
+(defn remove-routes
+  [disallowed-set coll]
+  (remove
+    (fn [[route _route-data]]
+      (some true? (map #(string/starts-with? route %) disallowed-set)))
+    coll))
