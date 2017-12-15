@@ -120,6 +120,10 @@
   [system]
   (components/get-config system :templating :skip-marker))
 
+(defn blocks-enabled
+  [system]
+  (components/get-config system :blocks :enabled))
+
 (defn parsing
   [system]
   (components/get-config system :parsing))
