@@ -48,6 +48,7 @@
 (defprotocol DBQuerier
   (get-post-checksum [this post-key])
   (get-post-content [this post-key])
+  (get-post-keys [this] [this schema-glob])
   (get-post-metadata [this post-key])
   (get-post-tags [this post-key])
   (get-post-stats [this post-key])
@@ -55,6 +56,7 @@
   (get-all-data [this post-key])
   (get-all-tags [this])
   (get-all-stats [this])
+  (get-raw [this any-key])
   (post-changed? [this post-key])
   (save-post [this data])
   (set-all-data [this post-key data])

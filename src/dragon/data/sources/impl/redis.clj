@@ -71,6 +71,12 @@
   [this post-key]
   (cmd (:component this) 'get (:content (schemas post-key))))
 
+(defn get-post-keys
+  ([this]
+    (get-post-keys this "*:all-data"))
+  ([this schema-glob]
+    (sort (cmd (:component this) 'keys schema-glob))))
+
 (defn get-post-metadata
   [this post-key]
   (cmd (:component this) 'get (:metadata (schemas post-key))))
@@ -98,6 +104,10 @@
 (defn get-all-stats
   [this]
   (cmd (:component this) 'get (:stats (schemas "all-posts"))))
+
+(defn get-raw
+  [this redis-key]
+  (cmd (:component this) 'get redis-key))
 
 (defmulti post-changed?
   (fn [this & _]
@@ -175,6 +185,7 @@
 (def query-behaviour
   {:get-post-checksum get-post-checksum
    :get-post-content get-post-content
+   :get-post-keys get-post-keys
    :get-post-metadata get-post-metadata
    :get-post-tags get-post-tags
    :get-post-stats get-post-stats
@@ -182,6 +193,7 @@
    :get-all-data get-all-data
    :get-all-tags get-all-tags
    :get-all-stats get-all-stats
+   :get-raw get-raw
    :post-changed? post-changed?
    :save-post save-post
    :set-all-data set-all-data
