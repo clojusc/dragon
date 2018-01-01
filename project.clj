@@ -39,8 +39,7 @@
     [leiningen-core "2.7.1" :exclusions [
       commons-logging
       org.apache.httpcomponents/httpclient
-      org.apache.httpcomponents/httpcore
-      org.codehaus.plexus/plexus-utils]]
+      org.apache.httpcomponents/httpcore]]
     [markdown-clj "1.0.1"]
     [org.clojure/clojure "1.8.0"]
     [org.clojure/core.async "0.3.465"]

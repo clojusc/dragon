@@ -24,8 +24,10 @@
     [dragon.components.core :as component-api]
     [dragon.components.system :as components]
     [dragon.config.core :as config]
+    [dragon.core]
     [dragon.data.sources.core :as data-source]
     [dragon.data.sources.impl.redis :as redis-db]
+    [dragon.dev.system :as dev-system]
     [dragon.main :as main]
     [dragon.selmer.tags.flickr :as flickr]
     [dragon.util :as util]
@@ -39,118 +41,44 @@
     [trifl.java :refer [show-methods]]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;   State & Transition Vars   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(def state :stopped)
-(def system nil)
-(def valid-stop-transitions #{:started :running})
-(def invalid-init-transitions #{:initialized :started :running})
-(def invalid-deinit-transitions #{:started :running})
-(def invalid-start-transitions #{:started :running})
-(def invalid-stop-transitions #{:stopped})
-(def invalid-run-transitions #{:running})
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Initial Setup & Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(logger/set-level! '[dragon clojang] :debug)
+(logger/set-level! ['mx.roads.forgotten.blog 'dragon] :info)
 
-(defn redis
-  [& args]
-  (apply redis-db/cmd (concat [system] args)))
+(dev-system/set-generator-ns "dragon.core")
+(dev-system/set-system-ns "dragon.components.system")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   State Management   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn init
-  ([]
-    (init :default))
-  ([mode]
-    (if (contains? invalid-init-transitions state)
-      (log/error "System has aready been initialized.")
-      (do
-        (alter-var-root #'system
-          (constantly ((components/init mode))))
-        (alter-var-root #'state (fn [_] :initialized))))
-    state))
-
-(defn deinit
-  []
-  (if (contains? invalid-deinit-transitions state)
-    (log/error "System is not stopped; please stop before deinitializing.")
-    (do
-      (alter-var-root #'system (fn [_] nil))
-      (alter-var-root #'state (fn [_] :uninitialized))))
-  state)
-
-(defn start
-  ([]
-    (start :default))
-  ([mode]
-    (when (nil? system)
-      (init mode))
-    (if (contains? invalid-start-transitions state)
-      (log/error "System has already been started.")
-      (do
-        (alter-var-root #'system component/start)
-        (alter-var-root #'state (fn [_] :started))))
-    state))
-
-(defn stop
-  []
-  (if (contains? invalid-stop-transitions state)
-    (log/error "System already stopped.")
-    (do
-      (alter-var-root #'system
-        (fn [s] (when s (component/stop s))))
-      (alter-var-root #'state (fn [_] :stopped))))
-  state)
-
-(defn restart
-  []
-  (stop)
-  (start))
-
-(defn run
-  []
-  (if (contains? invalid-run-transitions state)
-    (log/error "System is already running.")
-    (do
-      (if (not (contains? invalid-init-transitions state))
-        (init))
-      (if (not (contains? invalid-start-transitions state))
-        (start))
-      (alter-var-root #'state (fn [_] :running))))
-  state)
+(def startup #'dev-system/startup)
+(def shutdown #'dev-system/shutdown)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Reloading Management   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn -refresh
-  ([]
-    (repl/refresh))
-  ([& args]
-    (apply #'repl/refresh args)))
-
-(defn refresh
-  "This is essentially an alias for clojure.tools.namespace.repl/refresh."
-  [& args]
-  (if (contains? valid-stop-transitions state)
-    (stop))
-  (apply -refresh args))
-
 (defn reset
   []
-  (stop)
-  (deinit)
-  (refresh :after 'dragon.dev/run))
+  (dev-system/shutdown)
+  (repl/refresh :after 'dragon.dev.system/startup))
+
+(def refresh #'repl/refresh)
+(def refresh #'reset)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;   Aliases   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Data   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(def reload #'reset)
+(def redis #'dev-system/redis)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def show-lines-with-error #'dev-system/show-lines-with-error)
+(def show-posts #'dev-system/show-posts)
+(def generate #'dev-system/generate)
+(def force-regenerate #'dev-system/force-regenerate)
