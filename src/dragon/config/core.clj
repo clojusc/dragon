@@ -1,11 +1,12 @@
 (ns dragon.config.core
-  (:require [clojure.string :as string]
-            [dragon.components.core :as components]
-            [dragon.config.defaults :as default]
-            [dragon.util :as util]
-            [leiningen.core.project :as project]
-            [taoensso.timbre :as log]
-            [trifl.fs :as fs])
+  (:require
+    [clojure.string :as string]
+    [dragon.components.core :as components]
+    [dragon.config.defaults :as default]
+    [dragon.util :as util]
+    [leiningen.core.project :as project]
+    [taoensso.timbre :as log]
+    [trifl.fs :as fs])
   (:refer-clojure :exclude [name read]))
 
 (defn read-home-file
