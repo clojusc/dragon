@@ -81,10 +81,12 @@
              evt
              http))))
 
-(def init
+(def init-lookup
   {:default initialize-default
    :basic initialize-bare-bones
    :web initialize-with-web})
+
+(def init #'initialize-default)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Managment Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
