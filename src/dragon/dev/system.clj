@@ -131,9 +131,9 @@
   (if (contains? invalid-startup-transitions state)
     (log/warn "System is already running.")
     (do
-      (when (not (contains? invalid-init-transitions state))
+      (when-not (contains? invalid-init-transitions state)
         (init))
-      (when (not (contains? invalid-start-transitions state))
+      (when-not (contains? invalid-start-transitions state)
         (start))
       (set-state :running)
       state)))
@@ -146,9 +146,9 @@
   (if (contains? invalid-shutdown-transitions state)
     (log/warn "System is already shutdown.")
     (do
-      (when (not (contains? invalid-stop-transitions state))
+      (when-not (contains? invalid-stop-transitions state)
         (stop))
-      (when (not (contains? invalid-deinit-transitions state))
+      (when-not (contains? invalid-deinit-transitions state)
         (deinit))
       (set-state :shutdown)
       state)))
