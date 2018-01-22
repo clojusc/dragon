@@ -82,11 +82,17 @@
              http))))
 
 (def init-lookup
-  {:default initialize-default
-   :basic initialize-bare-bones
-   :web initialize-with-web})
+  {:default #'initialize-default
+   :basic #'initialize-bare-bones
+   :web #'initialize-with-web})
 
-(def init #'initialize-default)
+(defn init
+  ([]
+    (init :default))
+  ([mode]
+    (init mode build-config))
+  ([mode config-builder]
+    ((mode init-lookup config-builder))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Managment Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -98,10 +104,7 @@
   ([config-builder]
    (start (initialize-default config-builder)))
   ([config-builder system-type]
-   (case system-type
-     :web (component/start (initialize-with-web config-builder))
-     :basic (component/start (initialize-bare-bones config-builder))
-     :cli (component/start (initialize-default config-builder)))))
+    (component/start (init system-type config-builder))))
 
 (defn restart
   ([system]

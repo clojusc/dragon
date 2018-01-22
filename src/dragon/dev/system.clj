@@ -119,24 +119,28 @@
   state)
 
 (defn restart
-  []
-  (stop)
-  (start))
+  ([]
+    (restart :default))
+  ([mode]
+    (stop)
+    (start mode)))
 
 (defn startup
-  []
   "Initialize a system and start all of its components.
 
   This is essentially a convenience wrapper for `init` + `start`."
-  (if (contains? invalid-startup-transitions state)
-    (log/warn "System is already running.")
-    (do
-      (when-not (contains? invalid-init-transitions state)
-        (init))
-      (when-not (contains? invalid-start-transitions state)
-        (start))
-      (set-state :running)
-      state)))
+  ([]
+    (startup :default))
+  ([mode]
+    (if (contains? invalid-startup-transitions state)
+      (log/warn "System is already running.")
+      (do
+        (when-not (contains? invalid-init-transitions state)
+          (init mode))
+        (when-not (contains? invalid-start-transitions state)
+          (start mode))
+        (set-state :running)
+        state))))
 
 (defn shutdown
   []
