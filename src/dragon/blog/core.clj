@@ -25,10 +25,12 @@
 
 (defn legal-content-file?
   [^java.io.File post]
+  (log/trace "Checking legality of file:" post)
   (->> legal-post-file-extensions
        (map #(string/ends-with? (.getCanonicalPath post) %))
        (remove false?)
-       (not-empty)))
+       (not-empty)
+       ((fn [x] (log/tracef "Found file: %s" x) x))))
 
 (defn post-url
   [uri-base post]
