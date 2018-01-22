@@ -53,6 +53,9 @@
   ([opts]
     (merge
       {:page-data {
+         ;; XXX the following line breaks sites that don't have a /blog prefix
+         ;;     and expect the  Selmer page data to
+         ;;     be "/"
          :base-path "/blog"
          :site-title (:site-title opts)
          :site-description (:site-description opts)
@@ -108,6 +111,7 @@
     (-> opts
         (base-data-fn)
         (assoc-in [:page-data :active] (name (:category-key opts)))
+        (assoc :category-title (:title opts))
         (dissoc :title :subtitle)
         (assoc :posts-data (or (:posts-data opts) posts)
                :posts-stats (posts-stats posts)
