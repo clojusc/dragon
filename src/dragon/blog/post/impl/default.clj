@@ -76,6 +76,7 @@
       :date date
       :month (util/month->name (:month date))
       :month-short (util/month->short-name (:month date))
+      :time (util/format-time date)
       :timestamp timestamp
       :timestamp-long (Long/parseLong timestamp-clean)
       :datestamp datestamp

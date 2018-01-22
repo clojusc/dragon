@@ -12,6 +12,7 @@
 
 (def char-regex #"^a*")
 (def post-regex #"(\./)?posts/(\d{4})-(\d{2})/(\d{2})-(\d{2})(\d{2})(\d{2})/.*")
+(def time-format ":hour::minute::second")
 (def timestamp-format ":year-:month-:day :hour::minute::second")
 (def datestamp-format ":year-:month-:day")
 
@@ -72,6 +73,10 @@
       (string/replace acc (str k) v))
     formater
     date-map))
+
+(defn format-time
+  [date-map]
+  (format-date date-map time-format))
 
 (defn format-timestamp
   [date-map]
