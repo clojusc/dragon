@@ -15,10 +15,10 @@
 
 (defn run-setup-tasks
   [connector]
-  (log/debug "Starting setup tasks ...")
+  (log/debug "Starting db setup tasks ...")
   (data-source/setup-schemas connector)
   (data-source/setup-subscribers connector)
-  (log/debug "Finished setup tasks."))
+  (log/debug "Finished db setup tasks."))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
