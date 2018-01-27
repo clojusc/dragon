@@ -183,8 +183,8 @@
 (defn boolean
   "A filter that returns `true` if the post should be published on the front
   page."
-  [post key]
-  (if (= (string/lower-case (or (key post) "")) "false")
+  [post bool-key]
+  (if (= (string/lower-case (or (bool-key post) "")) "false")
     false
     true))
 
