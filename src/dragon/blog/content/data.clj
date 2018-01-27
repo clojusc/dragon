@@ -52,21 +52,21 @@
     (base {}))
   ([opts]
     (merge
-      {:page-data {
-         ;; XXX the following line breaks sites that don't have a /blog prefix
-         ;;     and expect the  Selmer page data to
-         ;;     be "/"
-         :base-path "/blog"
-         :site-title (:site-title opts)
-         :site-description (:site-description opts)
-         :index "index"
-         :about "about"
-         :community "community"
-         :archives "archives"
-         :categories "categories"
-         :tags "tags"
-         :authors "authors"
-         :active (:category-key opts)}}
+      {:page-data 
+        (merge 
+          opts
+          {;; XXX the following line breaks sites that don't have a /blog prefix
+           ;;     and expect the  Selmer page data to
+           ;;     be "/"
+           :base-path "/blog"
+           :index "index"
+           :about "about"
+           :community "community"
+           :archives "archives"
+           :categories "categories"
+           :tags "tags"
+           :authors "authors"
+           :active (name (:category-key opts))})}
       opts)))
 
 (defn default-content-opts
