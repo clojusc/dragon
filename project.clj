@@ -76,7 +76,7 @@
     :lint {
       :plugins [
         [jonase/eastwood "0.2.5"]
-        [lein-bikeshed "0.5.01"]
+        [lein-bikeshed "0.5.1"]
         [lein-kibit "0.1.6"]
         [venantius/yagni "0.1.4"]]}
     :test {
@@ -122,10 +122,11 @@
       ["check-jars"]
       ["check-vers"]]
     "kibit" ["with-profile" "+lint" "kibit"]
-    "eastwood" ["with-profile" "+lint" "kibit"]
+    "eastwood" ["with-profile" "+lint" "eastwood" "{:namespaces [:source-paths]}"]
     "lint" ["do"
       ["kibit"]
-      ["eastwood"]]
+      ;["eastwood"]
+      ]
     "ltest" ["with-profile" "+test" "ltest"]
     "docs" ["with-profile" "+docs,+test" "do"
       ["codox"]
