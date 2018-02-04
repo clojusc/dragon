@@ -3,7 +3,7 @@
             [clojusc.twig :as logger]
             [dragon.blog.generator :as gen]
             [dragon.cli.new.core :as new]
-            [dragon.cli.show :as show]
+            [dragon.cli.show.core :as show]
             [dragon.event.system.core :as event]
             [dragon.event.tag :as tag]
             [dragon.util :as util]

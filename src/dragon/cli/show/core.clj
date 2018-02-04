@@ -1,4 +1,4 @@
-(ns dragon.cli.show
+(ns dragon.cli.show.core
   (:require
     [clojure.pprint :refer [pprint]]
     [clojusc.twig :as logger]
