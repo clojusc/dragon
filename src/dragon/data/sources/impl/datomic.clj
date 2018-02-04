@@ -1,11 +1,12 @@
 (ns dragon.data.sources.impl.datomic
-  (:require [clojure.core.async :as async]
-            [clojure.java.shell :as shell]
-            [clojure.string :as string]
-            [datomic.client :as datomic]
-            [dragon.components.config :as config]
-            [dragon.data.sources.impl.common :as common]
-            [taoensso.timbre :as log]))
+  (:require
+    [clojure.core.async :as async]
+    [clojure.java.shell :as shell]
+    [clojure.string :as string]
+    [datomic.client :as datomic]
+    [dragon.components.config :as config]
+    [dragon.data.sources.impl.common :as common]
+    [taoensso.timbre :as log]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Schemas & Support Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

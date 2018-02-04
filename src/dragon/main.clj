@@ -1,11 +1,12 @@
 (ns dragon.main
-  (:require [clojusc.twig :as logger]
-            [dragon.cli.core :as cli]
-            [dragon.components.system :as components]
-            [dragon.config.core :refer [build]
-                                :rename {build build-config}]
-            [taoensso.timbre :as log]
-            [trifl.java :as trifl])
+  (:require
+    [clojusc.twig :as logger]
+    [dragon.cli.core :as cli]
+    [dragon.components.system :as components]
+    [dragon.config.core :refer [build]
+                        :rename {build build-config}]
+    [taoensso.timbre :as log]
+    [trifl.java :as trifl])
   (:gen-class))
 
 (defn get-default-args

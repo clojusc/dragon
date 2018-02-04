@@ -1,5 +1,6 @@
 (ns dragon.blog.tags
-  (:require [clojure.set :refer [union]]))
+  (:require
+    [clojure.set :refer [union]]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

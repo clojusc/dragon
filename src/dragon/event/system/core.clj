@@ -1,13 +1,15 @@
 (ns dragon.event.system.core
-  (:require [clojure.core.async :as async]
-            [dragon.components.core :as components]
-            [dragon.event.message :as message]
-            [dragon.event.system.impl :as impl]
-            [dragon.event.topic :as topic]
-            [dragon.util :as util]
-            [potemkin :refer [import-vars]]
-            [taoensso.timbre :as log])
-  (:import [dragon.event.system.impl PubSub]))
+  (:require
+    [clojure.core.async :as async]
+    [dragon.components.core :as components]
+    [dragon.event.message :as message]
+    [dragon.event.system.impl :as impl]
+    [dragon.event.topic :as topic]
+    [dragon.util :as util]
+    [potemkin :refer [import-vars]]
+    [taoensso.timbre :as log])
+  (:import
+    [dragon.event.system.impl PubSub]))
 
 (import-vars
  [impl create-pubsub

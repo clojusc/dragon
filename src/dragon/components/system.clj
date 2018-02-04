@@ -1,12 +1,13 @@
 (ns dragon.components.system
-  (:require [com.stuartsierra.component :as component]
-            [dragon.components.config :as config]
-            [dragon.components.db :as db]
-            [dragon.components.event :as event]
-            [dragon.components.httpd :as httpd]
-            [dragon.components.logging :as logging]
-            [dragon.config.core :refer [build]
-                                :rename {build build-config}]))
+  (:require
+    [com.stuartsierra.component :as component]
+    [dragon.components.config :as config]
+    [dragon.components.db :as db]
+    [dragon.components.event :as event]
+    [dragon.components.httpd :as httpd]
+    [dragon.components.logging :as logging]
+    [dragon.config.core :refer [build]
+                        :rename {build build-config}]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Common Configuration Components   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -1,8 +1,9 @@
 (ns dragon.components.logging
-  (:require [clojusc.twig :as logger]
-            [com.stuartsierra.component :as component]
-            [dragon.components.config :as config]
-            [taoensso.timbre :as log]))
+  (:require
+    [clojusc.twig :as logger]
+    [com.stuartsierra.component :as component]
+    [dragon.components.config :as config]
+    [taoensso.timbre :as log]))
 
 (defrecord Logging []
   component/Lifecycle

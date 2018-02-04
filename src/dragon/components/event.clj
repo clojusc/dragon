@@ -1,11 +1,12 @@
 (ns dragon.components.event
-  (:require [com.stuartsierra.component :as component]
-            [dragon.components.core :as component-api]
-            [dragon.event.subscription :as subscription]
-            [dragon.event.system.core :as event]
-            [dragon.event.tag :as tag]
-            [dragon.event.topic :as topic]
-            [taoensso.timbre :as log]))
+  (:require
+    [com.stuartsierra.component :as component]
+    [dragon.components.core :as component-api]
+    [dragon.event.subscription :as subscription]
+    [dragon.event.system.core :as event]
+    [dragon.event.tag :as tag]
+    [dragon.event.topic :as topic]
+    [taoensso.timbre :as log]))
 
 (defrecord Event [pubsub]
   component/Lifecycle

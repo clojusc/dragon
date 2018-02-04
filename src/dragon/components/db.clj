@@ -1,13 +1,14 @@
 (ns dragon.components.db
-  (:require [com.stuartsierra.component :as component]
-            [dragon.components.config :as config]
-            [dragon.data.core :as data]
-            [dragon.data.sources.core :as data-source]
-            [dragon.event.subscription :as subscription]
-            [dragon.event.tag :as tag]
-            [dragon.event.topic :as topic]
-            [dragon.util :as util]
-            [taoensso.timbre :as log]))
+  (:require
+    [com.stuartsierra.component :as component]
+    [dragon.components.config :as config]
+    [dragon.data.core :as data]
+    [dragon.data.sources.core :as data-source]
+    [dragon.event.subscription :as subscription]
+    [dragon.event.tag :as tag]
+    [dragon.event.topic :as topic]
+    [dragon.util :as util]
+    [taoensso.timbre :as log]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   General DB Component Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

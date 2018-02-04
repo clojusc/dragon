@@ -1,7 +1,8 @@
 (ns dragon.event.system.impl
-  (:require [clojure.core.async :as async]
-            [dragon.event.topic :as topic]
-            [taoensso.timbre :as log]))
+  (:require
+    [clojure.core.async :as async]
+    [dragon.event.topic :as topic]
+    [taoensso.timbre :as log]))
 
 (defrecord PubSub
   [topic chan pub])

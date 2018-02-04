@@ -5,7 +5,7 @@
     [clojure.java.shell :as shell]
     [clojusc.twig :refer [pprint]]
     [pandect.algo.crc32 :refer [crc32]]
-        [taoensso.timbre :as log])
+    [taoensso.timbre :as log])
   (:refer-clojure :exclude [boolean]))
 
 (declare merge-val)

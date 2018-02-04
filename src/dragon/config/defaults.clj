@@ -1,6 +1,7 @@
 (ns dragon.config.defaults
-  (:require [dragon.config.datomic :as datomic]
-            [dragon.config.redis :as redis]))
+  (:require
+    [dragon.config.datomic :as datomic]
+    [dragon.config.redis :as redis]))
 
 (def config
   {:name "Dragon Blog Generator"

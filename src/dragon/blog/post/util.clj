@@ -1,12 +1,13 @@
 (ns dragon.blog.post.util
-  (:require [clojure.string :as string]
-            [dragon.components.config :as config]
-            [dragon.event.system.core :as event]
-            [dragon.event.tag :as tag]
-            [dragon.util :as util]
-            [markdown.core :as markdown]
-            [selmer.parser :as selmer]
-            [taoensso.timbre :as log]))
+  (:require
+    [clojure.string :as string]
+    [dragon.components.config :as config]
+    [dragon.event.system.core :as event]
+    [dragon.event.tag :as tag]
+    [dragon.util :as util]
+    [markdown.core :as markdown]
+    [selmer.parser :as selmer]
+    [taoensso.timbre :as log]))
 
 (defn md->html
   [system md]

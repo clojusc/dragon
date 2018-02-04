@@ -1,9 +1,10 @@
 (ns dragon.selmer.tags.core
-  (:require [dragon.selmer.tags.demo :as demo]
-            [dragon.selmer.tags.flickr :as flickr]
-            [dragon.selmer.tags.panel :as panel]
-            [selmer.parser :as parser]
-            [taoensso.timbre :as log]))
+  (:require
+    [dragon.selmer.tags.demo :as demo]
+    [dragon.selmer.tags.flickr :as flickr]
+    [dragon.selmer.tags.panel :as panel]
+    [selmer.parser :as parser]
+    [taoensso.timbre :as log]))
 
 (defn register!
   []

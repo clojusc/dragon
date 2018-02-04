@@ -1,9 +1,10 @@
 (ns dragon.blog.workflow.impl.iter
-  (:require [clojure.java.io :as io]
-            [clojure.string :as string]
-            [dragon.blog.post.core :as post]
-            [dragon.blog.workflow.impl.msgs :as msg]
-            [dragon.util :as util]))
+  (:require
+    [clojure.java.io :as io]
+    [clojure.string :as string]
+    [dragon.blog.post.core :as post]
+    [dragon.blog.workflow.impl.msgs :as msg]
+    [dragon.util :as util]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Iterators   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

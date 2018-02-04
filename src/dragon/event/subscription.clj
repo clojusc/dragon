@@ -1,11 +1,12 @@
 (ns dragon.event.subscription
-  (:require [com.stuartsierra.component :as component]
-            [dragon.event.message :as message]
-            [dragon.event.system.core :as event]
-            [dragon.event.tag :as tag]
-            [dragon.event.topic :as topic]
-            [dragon.util :as util]
-            [taoensso.timbre :as log]))
+  (:require
+    [com.stuartsierra.component :as component]
+    [dragon.event.message :as message]
+    [dragon.event.system.core :as event]
+    [dragon.event.tag :as tag]
+    [dragon.event.topic :as topic]
+    [dragon.util :as util]
+    [taoensso.timbre :as log]))
 
 (defn debug-subscriber
   [system msg]

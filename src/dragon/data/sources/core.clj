@@ -1,18 +1,20 @@
 (ns dragon.data.sources.core
-  (:require [clojure.java.shell :as shell]
-            [dragon.components.config :as config]
-            [dragon.data.sources.impl.common :as common]
-            [dragon.data.sources.impl.datomic :as datomic]
-            [dragon.data.sources.impl.redis :as redis]
-            [dragon.data.sources.impl.redis.docker :as redis-docker]
-            [dragon.data.sources.impl.redis.native :as redis-native]
-            [dragon.util :as util]
-            [taoensso.timbre :as log])
-  (:import (dragon.data.sources.impl.datomic DatomicConnector
-                                             DatomicQuerier)
-           (dragon.data.sources.impl.redis RedisQuerier)
-           (dragon.data.sources.impl.redis.docker RedisDockerConnector)
-           (dragon.data.sources.impl.redis.native RedisNativeConnector)))
+  (:require
+    [clojure.java.shell :as shell]
+    [dragon.components.config :as config]
+    [dragon.data.sources.impl.common :as common]
+    [dragon.data.sources.impl.datomic :as datomic]
+    [dragon.data.sources.impl.redis :as redis]
+    [dragon.data.sources.impl.redis.docker :as redis-docker]
+    [dragon.data.sources.impl.redis.native :as redis-native]
+    [dragon.util :as util]
+    [taoensso.timbre :as log])
+  (:import
+    (dragon.data.sources.impl.datomic DatomicConnector
+                                      DatomicQuerier)
+    (dragon.data.sources.impl.redis RedisQuerier)
+    (dragon.data.sources.impl.redis.docker RedisDockerConnector)
+    (dragon.data.sources.impl.redis.native RedisNativeConnector)))
 
 (defprotocol DBConnector
   (start-db! [this])
