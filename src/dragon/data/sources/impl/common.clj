@@ -1,7 +1,7 @@
 (ns dragon.data.sources.impl.common
   (:require
     [clojure.java.shell :as shell]
-    [dragon.config.core :as config]
+    [dragon.components.config :as config]
     [dragon.util :as util]
     [taoensso.timbre :as log]))
 

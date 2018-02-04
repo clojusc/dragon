@@ -3,7 +3,6 @@
             [clojure.string :as string]
             [dragon.blog.post.core :as post]
             [dragon.components.core :as component-api]
-            [dragon.config.core :as config]
             [dragon.event.system.core :as event]
             [dragon.event.tag :as tag]
             [dragon.util :as util]))

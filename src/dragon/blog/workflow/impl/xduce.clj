@@ -3,7 +3,6 @@
             [clojure.string :as string]
             [dragon.blog.post.core :as post]
             [dragon.blog.workflow.impl.msgs :as msg]
-            [dragon.config.core :as config]
             [dragon.util :as util]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

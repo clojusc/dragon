@@ -2,7 +2,7 @@
   (:require
     [clojure.java.io :as io]
     [clojure.string :as string]
-    [dragon.config.core :as config]
+    [dragon.components.config :as config]
     [dragon.data.sources.impl.common :as common]
     [dragon.util :as util]
     [taoensso.carmine :as car :refer [wcar]]

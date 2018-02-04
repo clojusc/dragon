@@ -1,7 +1,7 @@
 (ns dragon.data.sources.impl.redis.docker
   (:require
     [clojure.java.io :as io]
-    [dragon.config.core :as config]
+    [dragon.components.config :as config]
     [dragon.data.sources.impl.common :as common]
     [dragon.util :as util]
     [taoensso.timbre :as log]

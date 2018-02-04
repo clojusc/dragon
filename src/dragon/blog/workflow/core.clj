@@ -11,7 +11,7 @@
             [dragon.blog.workflow.impl.iter-db :as iterator-db]
             [dragon.blog.workflow.impl.xduce :as transducer]
             [dragon.blog.workflow.impl.xduce-db :as transducer-db]
-            [dragon.config.core :as config]
+            [dragon.components.config :as config]
             [dragon.event.system.core :as event]
             [dragon.event.tag :as tag]
             [dragon.util :as util])

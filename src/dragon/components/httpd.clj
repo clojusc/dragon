@@ -1,7 +1,7 @@
 (ns dragon.components.httpd
   (:require [com.stuartsierra.component :as component]
             [dragon.components.core :as component-api]
-            [dragon.config.core :as config]
+            [dragon.components.config :as config]
             [dragon.event.subscription :as subscription]
             [dragon.event.system.core :as event]
             [dragon.event.tag :as tag]

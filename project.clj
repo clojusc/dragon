@@ -27,6 +27,7 @@
     [commons-codec]
     [joda-time]
     [org.apache.maven.wagon/wagon-provider-api]
+    [org.clojure/clojure]
     [org.clojure/tools.reader]
     [org.codehaus.plexus/plexus-utils]]
   :dependencies [
@@ -40,6 +41,7 @@
     [com.stuartsierra/component "0.3.2"]
     [com.taoensso/carmine "2.17.0"]
     [commons-codec "1.11"]
+    [enlive "1.1.6"]
     [http-kit "2.2.0"]
     [joda-time "2.9.9"]
     [leiningen-core "2.8.1"]
@@ -70,9 +72,7 @@
       :source-paths ["dev-resources/src"]
       :main dragon.main
       :dependencies [
-        [org.clojure/tools.namespace "0.2.11"]]
-      :plugins [
-        [lein-simpleton "1.3.0"]]}
+        [org.clojure/tools.namespace "0.2.11"]]}
     :lint {
       :plugins [
         [jonase/eastwood "0.2.5"]
@@ -80,7 +80,6 @@
         [lein-kibit "0.1.6"]
         [venantius/yagni "0.1.4"]]}
     :test {
-      :exclusions [org.clojure/clojure]
       :dependencies [
         [clojusc/ltest "0.3.0"]]
       :plugins [

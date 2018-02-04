@@ -2,7 +2,8 @@
   (:require [clojusc.twig :as logger]
             [dragon.cli.core :as cli]
             [dragon.components.system :as components]
-            [dragon.config.core :as config]
+            [dragon.config.core :refer [build]
+                                :rename {build build-config}]
             [taoensso.timbre :as log]
             [trifl.java :as trifl])
   (:gen-class))
@@ -23,17 +24,17 @@
     (contains? (set args) :help) (do
                                    ;; Only log errors in help mode
                                    (logger/set-level! '[dragon] :error)
-                                   (components/start config/build :basic))
+                                   (components/start build-config :basic))
     (= :run (first args)) (do
                             ;; Run logging quietly until the logging component
                             ;; starts up
                             (logger/set-level! '[dragon] :debug)
-                            (components/start config/build :web))
+                            (components/start build-config :web))
     :else (do
             ;; Run logging quietly until the logging component
             ;; starts up
             (logger/set-level! '[dragon] :debug)
-            (components/start config/build :cli))))
+            (components/start build-config :cli))))
 
 (defn -main
   "This is the entry point for Dragon.

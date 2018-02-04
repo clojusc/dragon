@@ -1,6 +1,6 @@
 (ns dragon.blog.post.util
   (:require [clojure.string :as string]
-            [dragon.config.core :as config]
+            [dragon.components.config :as config]
             [dragon.event.system.core :as event]
             [dragon.event.tag :as tag]
             [dragon.util :as util]
@@ -43,12 +43,20 @@
       (update-in data [:body] (partial selmer+md->html system data))))
 
 (defn join-excerpt
-  [system words number]
-  (let [excerpt (string/join (config/word-joiner system)
-                             (take number words))]
-    (if (string/ends-with? excerpt (config/sentence-end system))
-      (str excerpt (config/period-ellipsis system))
-      (str excerpt (config/ellipsis system)))))
+  ([system words number]
+    (let [excerpt (string/join (config/word-joiner system)
+                               (take number words))]
+      (if (string/ends-with? excerpt (config/sentence-end system))
+        (str excerpt (config/period-ellipsis system))
+        (str excerpt (config/ellipsis system)))))
+  ([system words number flag]
+    (case flag
+      :as-html (md->html system (join-excerpt system words number))
+      (join-excerpt system words number))))
+
+(defn scrub-html
+  [html-content]
+  )
 
 (defn copy-original-body
   [data]

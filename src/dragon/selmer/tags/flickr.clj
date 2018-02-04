@@ -3,7 +3,7 @@
     [cheshire.core :as json]
     [clj-http.client :as client]
     [clojure.string :as string]
-    [dragon.config.core :as config]
+    [dragon.components.config :as config]
     [dragon.selmer.tags.util :as tags-util]
     [taoensso.timbre :as log]
     [trifl.core :as util]))

@@ -3,7 +3,6 @@
     [clojusc.twig :as logger]
     [dragon.blog.core :as blog]
     [dragon.blog.generator :as gen]
-    [dragon.config.core :as config]
     [dragon.util :as util]
     [trifl.core :refer [sys-prop]]
     [trifl.docs :as docs]))

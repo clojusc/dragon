@@ -3,7 +3,7 @@
     [clojure.pprint :refer [pprint]]
     [clojusc.twig :as logger]
     [dragon.cli.show.posts :as show-posts]
-    [dragon.config.core :as config]
+    [dragon.components.config :as config]
     [dragon.util :as util]
     [taoensso.timbre :as log]
     [trifl.docs :as docs])

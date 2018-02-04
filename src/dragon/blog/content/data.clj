@@ -5,7 +5,6 @@
     [dragon.blog.content.block :as block]
     [dragon.blog.core :as blog]
     [dragon.blog.tags :as blog-tags]
-    [dragon.config.core :as config]
     [markdown.core :as markdown]
     [taoensso.timbre :as log]))
 
@@ -52,8 +51,8 @@
     (base {}))
   ([opts]
     (merge
-      {:page-data 
-        (merge 
+      {:page-data
+        (merge
           opts
           {;; XXX the following line breaks sites that don't have a /blog prefix
            ;;     and expect the  Selmer page data to
