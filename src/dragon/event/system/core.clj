@@ -1,7 +1,6 @@
 (ns dragon.event.system.core
   (:require
     [clojure.core.async :as async]
-    [dragon.components.core :as components]
     [dragon.event.message :as message]
     [dragon.event.system.impl :as impl]
     [dragon.event.topic :as topic]
@@ -32,6 +31,18 @@
         PubSubAPI
         impl/pubsub-behaviour)
 
+(def dataflow-keys [:pubsub :dataflow])
+
+(defn get-pubsub
+  ""
+  [system-or-component]
+  (get-in system-or-component [:event :pubsub]))
+
+(defn get-dataflow-pubsub
+  ""
+  [system-or-component]
+  (get-in system-or-component (concat [:event] dataflow-keys)))
+
 (defn publish
   ""
   ([system-or-component event-type]
@@ -39,7 +50,7 @@
   ([system-or-component event-type data]
    (when-not (nil? system-or-component)
      (let [system (util/component->system system-or-component)
-           dataflow (components/get-dataflow-pubsub system)
+           dataflow (get-dataflow-pubsub system)
            topic (get-topic dataflow)
            msg (message/new-dataflow-event event-type data)]
        (log/debug "Publishing message to" (message/get-route msg))
@@ -72,7 +83,7 @@
                                    (message/get-route m)))))
   ([system event-type func]
    (when-not (nil? system)
-     (let [dataflow (components/get-dataflow-pubsub system)]
+     (let [dataflow (get-dataflow-pubsub system)]
        (async/go-loop []
          (when-let [msg (async/<! (get-sub dataflow event-type))]
            (log/debug "Received subscribed message for" (message/get-route msg))

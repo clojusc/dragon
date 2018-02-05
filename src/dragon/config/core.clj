@@ -1,7 +1,6 @@
 (ns dragon.config.core
   (:require
     [clojure.string :as string]
-    [dragon.components.core :as components]
     [dragon.config.defaults :as default]
     [dragon.util :as util]
     [leiningen.core.project :as project]

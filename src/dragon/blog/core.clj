@@ -6,7 +6,6 @@
     [dragon.blog.post.impl.default :as default]
     [dragon.blog.tags :as tags]
     [dragon.blog.workflow.core :as workflow]
-    [dragon.components.core :as component-api]
     [dragon.components.config :as config]
     [dragon.data.sources.core :as data-source]
     [dragon.event.system.core :as event]
