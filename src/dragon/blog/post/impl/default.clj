@@ -5,7 +5,7 @@
     [dragon.blog.content.core :as content]
     [dragon.blog.content.core :as content]
     [dragon.blog.post.util :as post-util]
-    [dragon.config.core :as config]
+    [dragon.components.config :as config]
     [dragon.event.system.core :as event]
     [dragon.event.tag :as tag]
     [dragon.util :as util]
@@ -76,6 +76,7 @@
       :date date
       :month (util/month->name (:month date))
       :month-short (util/month->short-name (:month date))
+      :time (util/format-time date)
       :timestamp timestamp
       :timestamp-long (Long/parseLong timestamp-clean)
       :datestamp datestamp
@@ -100,13 +101,16 @@
                   first
                   (string/split (config/word-separator system)))
         words-100 (take 100 words)
-        excerpt-100 (post-util/join-excerpt system words-100 100)
-        excerpt-50 (post-util/join-excerpt system words-100 50)
-        excerpt-25 (post-util/join-excerpt system words-100 25)]
+        excerpt-100 (post-util/join-excerpt system words-100 100 :as-html)
+        excerpt-50 (post-util/join-excerpt system words-100 50 :as-html)
+        excerpt-25 (post-util/join-excerpt system words-100 25 :as-html)]
     (assoc data
-           :excerpt-100 (post-util/md->html system excerpt-100)
-           :excerpt-50 (post-util/md->html system excerpt-50)
-           :excerpt-25 (post-util/md->html system excerpt-25))))
+           :excerpt-100 excerpt-100
+           :excerpt-50 excerpt-50
+           :excerpt-25 excerpt-25
+           :excerpt-100-clean (post-util/scrub-html excerpt-100)
+           :excerpt-50-clean (post-util/scrub-html excerpt-50)
+           :excerpt-25-clean (post-util/scrub-html excerpt-25))))
 
 (defn get-body
   [this data]

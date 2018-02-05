@@ -1,13 +1,14 @@
 (ns dragon.blog.content.rfc5322
-  (:require [clojure.set :refer [rename-keys]]
-            [clojure.string :as string]
-            [clojure.walk :as walk]
-            [dragon.event.system.core :as event]
-            [dragon.event.tag :as tag]
-            [instaparse.core :as instaparse]
-            [rfc5322.core :as rfc]
-            [rfc5322.dev :as rfc-dev]
-            [taoensso.timbre :as log]))
+  (:require
+    [clojure.set :refer [rename-keys]]
+    [clojure.string :as string]
+    [clojure.walk :as walk]
+    [dragon.event.system.core :as event]
+    [dragon.event.tag :as tag]
+    [instaparse.core :as instaparse]
+    [rfc5322.core :as rfc]
+    [rfc5322.dev :as rfc-dev]
+    [taoensso.timbre :as log]))
 
 (def rfc5322-names->metadata-names
   "Used to convert to internet message header fields to internally-used

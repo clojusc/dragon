@@ -5,7 +5,6 @@
     [clojure.string :as string]
     [dragon.blog.post.core :as post]
     [dragon.blog.workflow.impl.msgs :as msg]
-    [dragon.config.core :as config]
     [dragon.data.sources.core :as db]
     [dragon.util :as util]
     [taoensso.timbre :as log]))

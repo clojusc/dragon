@@ -1,9 +1,10 @@
 (ns dragon.blog.content.block
-  (:require [clojure.java.io :as io]
-            [clojure.set :as sets]
-            [clojure.string :as string]
-            [dragon.event.system.core :as event]
-            [dragon.event.tag :as tag])
+  (:require
+    [clojure.java.io :as io]
+    [clojure.set :as sets]
+    [clojure.string :as string]
+    [dragon.event.system.core :as event]
+    [dragon.event.tag :as tag])
   (:import (java.io File)))
 
 (defn legal-block-names

@@ -1,10 +1,11 @@
 (ns dragon.cli.new.core
-  (:require [clojure.pprint :refer [pprint]]
-            [clojusc.twig :as logger]
-            [dragon.cli.new.post :as post]
-            [dragon.util :as util]
-            [taoensso.timbre :as log]
-            [trifl.docs :as docs]))
+  (:require
+    [clojure.pprint :refer [pprint]]
+    [clojusc.twig :as logger]
+    [dragon.cli.new.post :as post]
+    [dragon.util :as util]
+    [taoensso.timbre :as log]
+    [trifl.docs :as docs]))
 
 (defn run
   "

@@ -1,12 +1,13 @@
 (ns dragon.config.defaults
-  (:require [dragon.config.datomic :as datomic]
-            [dragon.config.redis :as redis]))
+  (:require
+    [dragon.config.datomic :as datomic]
+    [dragon.config.redis :as redis]))
 
 (def config
-  {:port 5097
-   :domain "dragon.github.io"
-   :name "Dragon Blog Generator"
+  {:name "Dragon Blog Generator"
    :description "A fire-breathing blog generator"
+   :domain "dragon.github.io"
+   :port 5097
    :output-dir "docs"
    :output-file-tmpl "%s.html"
    :base-path "/blog"
@@ -24,6 +25,11 @@
      :sentence-end "."
      :ellipsis " ..."
      :period-ellipsis ".."}
+   :blocks {
+     :enabled #{}}
+   :robots {
+     :allow #{"/blog"}
+     :disallow #{}}
    :repl {
      :log-level :info
      :log-nss '[dragon]}

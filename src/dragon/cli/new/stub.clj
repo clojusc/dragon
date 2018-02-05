@@ -1,10 +1,10 @@
 (ns dragon.cli.new.stub
-  (:require [clojure.pprint :refer [pprint]]
-            [clojure.java.io :as io]
-            [clojusc.twig :as logger]
-            [dragon.config.core :as config]
-            [dragon.util :as util]
-            [taoensso.timbre :as log]))
+  (:require
+    [clojure.pprint :refer [pprint]]
+    [clojure.java.io :as io]
+    [clojusc.twig :as logger]
+    [dragon.util :as util]
+    [taoensso.timbre :as log]))
 
 (def stub-metadata
 "{:title \"REQUIRED\"

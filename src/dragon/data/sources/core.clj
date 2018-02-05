@@ -1,18 +1,20 @@
 (ns dragon.data.sources.core
-  (:require [clojure.java.shell :as shell]
-            [dragon.config.core :as config]
-            [dragon.data.sources.impl.common :as common]
-            [dragon.data.sources.impl.datomic :as datomic]
-            [dragon.data.sources.impl.redis :as redis]
-            [dragon.data.sources.impl.redis.docker :as redis-docker]
-            [dragon.data.sources.impl.redis.native :as redis-native]
-            [dragon.util :as util]
-            [taoensso.timbre :as log])
-  (:import (dragon.data.sources.impl.datomic DatomicConnector
-                                             DatomicQuerier)
-           (dragon.data.sources.impl.redis RedisQuerier)
-           (dragon.data.sources.impl.redis.docker RedisDockerConnector)
-           (dragon.data.sources.impl.redis.native RedisNativeConnector)))
+  (:require
+    [clojure.java.shell :as shell]
+    [dragon.components.config :as config]
+    [dragon.data.sources.impl.common :as common]
+    [dragon.data.sources.impl.datomic :as datomic]
+    [dragon.data.sources.impl.redis :as redis]
+    [dragon.data.sources.impl.redis.docker :as redis-docker]
+    [dragon.data.sources.impl.redis.native :as redis-native]
+    [dragon.util :as util]
+    [taoensso.timbre :as log])
+  (:import
+    (dragon.data.sources.impl.datomic DatomicConnector
+                                      DatomicQuerier)
+    (dragon.data.sources.impl.redis RedisQuerier)
+    (dragon.data.sources.impl.redis.docker RedisDockerConnector)
+    (dragon.data.sources.impl.redis.native RedisNativeConnector)))
 
 (defprotocol DBConnector
   (start-db! [this])
@@ -48,6 +50,7 @@
 (defprotocol DBQuerier
   (get-post-checksum [this post-key])
   (get-post-content [this post-key])
+  (get-post-keys [this] [this schema-glob])
   (get-post-metadata [this post-key])
   (get-post-tags [this post-key])
   (get-post-stats [this post-key])
@@ -55,6 +58,7 @@
   (get-all-data [this post-key])
   (get-all-tags [this])
   (get-all-stats [this])
+  (get-raw [this any-key])
   (post-changed? [this post-key])
   (save-post [this data])
   (set-all-data [this post-key data])

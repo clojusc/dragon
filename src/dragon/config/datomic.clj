@@ -1,5 +1,6 @@
 (ns dragon.config.datomic
-  (:require [datomic.client :as datomic]))
+  (:require
+    [datomic.client :as datomic]))
 
 (def ^:private base-config
   {:version "0.9.5561.62"

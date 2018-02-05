@@ -14,7 +14,7 @@
        ns
        "\u001B[35m]\u001B[33m λ\u001B[m=> "))
 
-(defproject dragon "0.4.2"
+(defproject dragon "0.5.0"
   :description "Customised, Stasis-based Static Site Generator"
   :url "https://github.com/clojusc/dragon"
   :scm {
@@ -23,6 +23,13 @@
   :license {
     :name "Apache License, Version 2.0"
     :url "http://www.apache.org/licenses/LICENSE-2.0"}
+  :exclusions [
+    [commons-codec]
+    [joda-time]
+    [org.apache.maven.wagon/wagon-provider-api]
+    [org.clojure/clojure]
+    [org.clojure/tools.reader]
+    [org.codehaus.plexus/plexus-utils]]
   :dependencies [
     [cheshire "5.8.0"]
     [clj-http "3.7.0"]
@@ -32,22 +39,22 @@
     [clojusc/twig "0.3.2"]
     [com.datomic/clj-client "0.8.606"]
     [com.stuartsierra/component "0.3.2"]
-    [com.taoensso/carmine "2.16.0" :exclusions [
-      com.taoensso/encore
-      com.taoensso/truss]]
+    [com.taoensso/carmine "2.17.0"]
+    [commons-codec "1.11"]
+    [enlive "1.1.6"]
     [http-kit "2.2.0"]
-    [leiningen-core "2.7.1" :exclusions [
-      commons-logging
-      org.apache.httpcomponents/httpclient
-      org.apache.httpcomponents/httpcore
-      org.codehaus.plexus/plexus-utils]]
-    [markdown-clj "1.0.1"]
-    [org.clojure/clojure "1.8.0"]
-    [org.clojure/core.async "0.3.465"]
+    [joda-time "2.9.9"]
+    [leiningen-core "2.7.1"]
+    [markdown-clj "1.0.2"]
+    [org.apache.maven.wagon/wagon-provider-api "3.0.0"]
+    [org.clojure/clojure "1.9.0"]
+    [org.clojure/core.async "0.4.474"]
+    [org.clojure/tools.reader "1.2.1"]
+    [org.codehaus.plexus/plexus-utils "3.1.0"]
     [pandect "0.6.1"]
     [potemkin "0.4.4"]
     [ring/ring-core "1.6.3"]
-    [selmer "1.11.3" :exclusions [joda-time]]
+    [selmer "1.11.6"]
     [stasis "2.3.0"]]
   :profiles {
     :dragon {
@@ -65,22 +72,21 @@
       :source-paths ["dev-resources/src"]
       :main dragon.main
       :dependencies [
-        [org.clojure/tools.namespace "0.2.11"]]
-      :plugins [
-        [lein-simpleton "1.3.0"]]}
-    :test {
-      :exclusions [org.clojure/clojure]
-      :dependencies [
-        [clojusc/ltest "0.3.0-SNAPSHOT"]]
+        [org.clojure/tools.namespace "0.2.11"]]}
+    :lint {
       :plugins [
         [jonase/eastwood "0.2.5"]
-        [lein-ancient "0.6.14"]
-        [lein-bikeshed "0.5.0"]
+        [lein-bikeshed "0.5.1"]
         [lein-kibit "0.1.6"]
-        [lein-ltest "0.3.0-SNAPSHOT"]
-        [venantius/yagni "0.1.4"]]
-        :test-selectors {
-          :select :select}}
+        [venantius/yagni "0.1.4"]]}
+    :test {
+      :dependencies [
+        [clojusc/ltest "0.3.0"]]
+      :plugins [
+        [lein-ancient "0.6.15"]
+        [lein-ltest "0.3.0"]]
+      :test-selectors {
+        :select :select}}
     :docs {
       :dependencies [
         [codox-theme-rdash "0.1.2"]]
@@ -107,8 +113,19 @@
        "run" "-m" "dragon.main" "cli"]
     "repl" ["with-profile" "+custom-repl,+test" "repl"]
     "ubercompile" ["with-profile" "+ubercompile" "compile"]
-    "check-deps" ["with-profile" "+test" "ancient" "check" ":all"]
-    "lint" ["with-profile" "+test" "kibit"]
+    "check-vers" ["with-profile" "+test" "ancient" "check" ":all"]
+    "check-jars" ["with-profile" "+test" "do"
+      ["deps" ":tree"]
+      ["deps" ":plugin-tree"]]
+    "check-deps" ["do"
+      ["check-jars"]
+      ["check-vers"]]
+    "kibit" ["with-profile" "+lint" "kibit"]
+    "eastwood" ["with-profile" "+lint" "eastwood" "{:namespaces [:source-paths]}"]
+    "lint" ["do"
+      ["kibit"]
+      ;["eastwood"]
+      ]
     "ltest" ["with-profile" "+test" "ltest"]
     "docs" ["with-profile" "+docs,+test" "do"
       ["codox"]
@@ -123,4 +140,4 @@
       ["clean"]
       ["uberjar"]
       ["clean"]
-      ["test"]]})
+      ["ltest"]]})

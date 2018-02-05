@@ -13,13 +13,14 @@
   * dragon.blog.workflow.core
   * dragon.blog.workflow.impl.*
   ```"
-  (:require [clojure.java.io :as io]
-            [clojure.string :as string]
-            [dragon.blog.post.impl.default :as default]
-            [dragon.config.core :as config]
-            [dragon.event.system.core :as event]
-            [dragon.event.tag :as tag]
-            [dragon.util :as util])
+  (:require
+    [clojure.java.io :as io]
+    [clojure.string :as string]
+    [dragon.blog.post.impl.default :as default]
+    [dragon.components.config :as config]
+    [dragon.event.system.core :as event]
+    [dragon.event.tag :as tag]
+    [dragon.util :as util])
   (:import (dragon.blog.post.impl.default DefaultBlogPostProcessor)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

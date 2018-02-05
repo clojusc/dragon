@@ -4,21 +4,23 @@
 
   This is in contrast to the low-level processing of blog content at the data
   source level (see `dragon.blog.post.core`)."
-  (:require [clojure.java.io :as io]
-            [clojure.string :as string]
-            [dragon.blog.post.core :as steps]
-            [dragon.blog.workflow.impl.iter :as iterator]
-            [dragon.blog.workflow.impl.iter-db :as iterator-db]
-            [dragon.blog.workflow.impl.xduce :as transducer]
-            [dragon.blog.workflow.impl.xduce-db :as transducer-db]
-            [dragon.config.core :as config]
-            [dragon.event.system.core :as event]
-            [dragon.event.tag :as tag]
-            [dragon.util :as util])
-  (:import (dragon.blog.workflow.impl.iter IteratorWorkflow)
-           (dragon.blog.workflow.impl.iter_db IteratorDBWorkflow)
-           (dragon.blog.workflow.impl.xduce TransducerWorkflow)
-           (dragon.blog.workflow.impl.xduce_db TransducerDBWorkflow)))
+  (:require
+    [clojure.java.io :as io]
+    [clojure.string :as string]
+    [dragon.blog.post.core :as steps]
+    [dragon.blog.workflow.impl.iter :as iterator]
+    [dragon.blog.workflow.impl.iter-db :as iterator-db]
+    [dragon.blog.workflow.impl.xduce :as transducer]
+    [dragon.blog.workflow.impl.xduce-db :as transducer-db]
+    [dragon.components.config :as config]
+    [dragon.event.system.core :as event]
+    [dragon.event.tag :as tag]
+    [dragon.util :as util])
+  (:import
+    (dragon.blog.workflow.impl.iter IteratorWorkflow)
+    (dragon.blog.workflow.impl.iter_db IteratorDBWorkflow)
+    (dragon.blog.workflow.impl.xduce TransducerWorkflow)
+    (dragon.blog.workflow.impl.xduce_db TransducerDBWorkflow)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Protocols   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

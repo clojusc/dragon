@@ -1,10 +1,11 @@
 (ns dragon.blog.content.core
-  (:require [clojure.string :as string]
-            [dragon.blog.content.rfc5322 :as rfc5322]
-            [dragon.event.system.core :as event]
-            [dragon.event.tag :as tag]
-            [taoensso.timbre :as log]
-            [trifl.fs :as fs]))
+  (:require
+    [clojure.string :as string]
+    [dragon.blog.content.rfc5322 :as rfc5322]
+    [dragon.event.system.core :as event]
+    [dragon.event.tag :as tag]
+    [taoensso.timbre :as log]
+    [trifl.fs :as fs]))
 
 (defn parse-content-type
   [content-type]

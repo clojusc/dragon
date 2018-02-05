@@ -1,7 +1,8 @@
 (ns dragon.blog.generator
-  (:require [dragon.config.core :as config]
-            [stasis.core :as stasis]
-            [taoensso.timbre :as log]))
+  (:require
+    [dragon.components.config :as config]
+    [stasis.core :as stasis]
+    [taoensso.timbre :as log]))
 
 (defn run
   ([system]

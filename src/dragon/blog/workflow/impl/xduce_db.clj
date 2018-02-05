@@ -1,12 +1,12 @@
 (ns dragon.blog.workflow.impl.xduce-db
-  (:require [clojure.java.io :as io]
-            [clojure.string :as string]
-            [dragon.blog.post.core :as post]
-            [dragon.components.core :as component-api]
-            [dragon.config.core :as config]
-            [dragon.event.system.core :as event]
-            [dragon.event.tag :as tag]
-            [dragon.util :as util]))
+  (:require
+    [clojure.java.io :as io]
+    [clojure.string :as string]
+    [dragon.blog.post.core :as post]
+    [dragon.components.db :as db-component]
+    [dragon.event.system.core :as event]
+    [dragon.event.tag :as tag]
+    [dragon.util :as util]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Transducers   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -30,7 +30,7 @@
 
 ; (defn ingest-posts
 ;   [system processor data]
-;   (let [querier (component-api/get-db-querier system)]
+;   (let [querier (db-component/get-db-querier system)]
 ;     (into [] (ingest-transducer system querier (processor)) data)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

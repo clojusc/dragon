@@ -5,13 +5,14 @@
     [clojure.java.shell :as shell]
     [clojusc.twig :refer [pprint]]
     [pandect.algo.crc32 :refer [crc32]]
-        [taoensso.timbre :as log])
+    [taoensso.timbre :as log])
   (:refer-clojure :exclude [boolean]))
 
 (declare merge-val)
 
 (def char-regex #"^a*")
 (def post-regex #"(\./)?posts/(\d{4})-(\d{2})/(\d{2})-(\d{2})(\d{2})(\d{2})/.*")
+(def time-format ":hour::minute::second")
 (def timestamp-format ":year-:month-:day :hour::minute::second")
 (def datestamp-format ":year-:month-:day")
 
@@ -72,6 +73,10 @@
       (string/replace acc (str k) v))
     formater
     date-map))
+
+(defn format-time
+  [date-map]
+  (format-date date-map time-format))
 
 (defn format-timestamp
   [date-map]
@@ -178,8 +183,8 @@
 (defn boolean
   "A filter that returns `true` if the post should be published on the front
   page."
-  [post key]
-  (if (= (string/lower-case (or (key post) "")) "false")
+  [post bool-key]
+  (if (= (string/lower-case (or (bool-key post) "")) "false")
     false
     true))
 
@@ -202,3 +207,10 @@
   [obj]
   (when (= clojure.lang.Atom (type obj))
     true))
+
+(defn remove-routes
+  [disallowed-set coll]
+  (remove
+    (fn [[route _route-data]]
+      (some true? (map #(string/starts-with? route %) disallowed-set)))
+    coll))

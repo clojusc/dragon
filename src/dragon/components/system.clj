@@ -1,12 +1,13 @@
 (ns dragon.components.system
-  (:require [com.stuartsierra.component :as component]
-            [dragon.components.config :as config]
-            [dragon.components.db :as db]
-            [dragon.components.event :as event]
-            [dragon.components.httpd :as httpd]
-            [dragon.components.logging :as logging]
-            [dragon.config.core :refer [build]
-                                :rename {build build-config}]))
+  (:require
+    [com.stuartsierra.component :as component]
+    [dragon.components.config :as config]
+    [dragon.components.db :as db]
+    [dragon.components.event :as event]
+    [dragon.components.httpd :as httpd]
+    [dragon.components.logging :as logging]
+    [dragon.config.core :refer [build]
+                        :rename {build build-config}]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Common Configuration Components   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -14,36 +15,36 @@
 
 (defn cfg
   [builder]
-  {:config (config/create-config-component builder)})
+  {:config (config/create-component builder)})
 
 (def log
   {:logging (component/using
-             (logging/create-logging-component)
+             (logging/create-component)
              [:config])})
 
 (def evt-no-log
   {:event (component/using
-           (event/create-event-component)
+           (event/create-component)
            [:config])})
 
 (def data-no-log
   {:db (component/using
-        (db/create-db-component)
+        (db/create-component)
         [:config :event])})
 
 (def evt
   {:event (component/using
-           (event/create-event-component)
+           (event/create-component)
            [:config :logging])})
 
 (def data
   {:db (component/using
-        (db/create-db-component)
+        (db/create-component)
         [:config :logging :event])})
 
 (def http
   {:httpd (component/using
-           (httpd/create-httpd-component)
+           (httpd/create-component)
            [:config :logging :db :event])})
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -81,10 +82,18 @@
              evt
              http))))
 
-(def init
-  {:default initialize-default
-   :basic initialize-bare-bones
-   :web initialize-with-web})
+(def init-lookup
+  {:default #'initialize-default
+   :basic #'initialize-bare-bones
+   :web #'initialize-with-web})
+
+(defn init
+  ([]
+    (init :default))
+  ([mode]
+    (init mode build-config))
+  ([mode config-builder]
+    ((mode init-lookup config-builder))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Managment Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -96,10 +105,7 @@
   ([config-builder]
    (start (initialize-default config-builder)))
   ([config-builder system-type]
-   (case system-type
-     :web (component/start (initialize-with-web config-builder))
-     :basic (component/start (initialize-bare-bones config-builder))
-     :cli (component/start (initialize-default config-builder)))))
+    (component/start (init system-type config-builder))))
 
 (defn restart
   ([system]

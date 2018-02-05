@@ -1,20 +1,21 @@
 (ns dragon.blog.core
-  (:require [clojure.java.io :as io]
-            [clojure.string :as string]
-            [dragon.blog.post.core :as post]
-            [dragon.blog.post.impl.default :as default]
-            [dragon.blog.tags :as tags]
-            [dragon.blog.workflow.core :as workflow]
-            [dragon.components.core :as component-api]
-            [dragon.config.core :as config]
-            [dragon.data.sources.core :as data-source]
-            [dragon.event.system.core :as event]
-            [dragon.event.tag :as tag]
-            [dragon.util :as util]
-            [taoensso.timbre :as log]
-            [trifl.core :refer [->int]]
-            [trifl.fs :as fs])
-  (:import (java.io.File)))
+  (:require
+    [clojure.java.io :as io]
+    [clojure.string :as string]
+    [dragon.blog.post.core :as post]
+    [dragon.blog.post.impl.default :as default]
+    [dragon.blog.tags :as tags]
+    [dragon.blog.workflow.core :as workflow]
+    [dragon.components.config :as config]
+    [dragon.data.sources.core :as data-source]
+    [dragon.event.system.core :as event]
+    [dragon.event.tag :as tag]
+    [dragon.util :as util]
+    [taoensso.timbre :as log]
+    [trifl.core :refer [->int]]
+    [trifl.fs :as fs])
+  (:import
+    (java.io.File)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -25,10 +26,12 @@
 
 (defn legal-content-file?
   [^java.io.File post]
+  (log/trace "Checking legality of file:" post)
   (->> legal-post-file-extensions
        (map #(string/ends-with? (.getCanonicalPath post) %))
        (remove false?)
-       (not-empty)))
+       (not-empty)
+       ((fn [x] (log/tracef "Found file: %s" x) x))))
 
 (defn post-url
   [uri-base post]

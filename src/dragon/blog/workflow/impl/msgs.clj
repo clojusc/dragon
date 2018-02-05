@@ -1,6 +1,7 @@
 (ns dragon.blog.workflow.impl.msgs
-  (:require [dragon.event.system.core :as event]
-            [dragon.event.tag :as tag]))
+  (:require
+  	[dragon.event.system.core :as event]
+    [dragon.event.tag :as tag]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

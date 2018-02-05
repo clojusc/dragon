@@ -1,5 +1,6 @@
 (ns dragon.event.message
-  (:require [dragon.event.topic :as topic]))
+  (:require
+  	[dragon.event.topic :as topic]))
 
 (defn new-dataflow-event
   [tag data]

@@ -1,6 +1,7 @@
 (ns dragon.data.core
-  (:require [dragon.event.tag :as tag]
-            [taoensso.timbre :as log]))
+  (:require
+    [dragon.event.tag :as tag]
+    [taoensso.timbre :as log]))
 
 (def default-subscribed-tags
   [tag/subscribers-added
