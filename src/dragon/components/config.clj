@@ -259,29 +259,36 @@
 ;;;   Component Lifecycle Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defrecord Config [
-  builder
-  dragon]
+(defrecord Config [builder dragon])
+
+(defn start
+  [this]
+  (log/info "Starting config component ...")
+  (log/debug "Started config component.")
+  (let [cfg (:builder this)]
+    (log/trace "Built configuration:" cfg)
+    (reset! (:dragon this) cfg)
+    (assoc this :dragon cfg)))
+
+(defn stop
+  [this]
+  (log/info "Stopping config component ...")
+  (log/debug "Stopped config component.")
+  (assoc this :dragon nil))
+
+(def lifecycle-behaviour
+  {:start start
+   :stop stop})
+
+(extend Config
   component/Lifecycle
-
-  (start [component]
-    (log/info "Starting config component ...")
-    (log/debug "Started config component.")
-    (let [cfg (builder)]
-      (log/trace "Built configuration:" cfg)
-      (reset! (:dragon component) cfg)
-      (assoc component :dragon cfg)))
-
-  (stop [component]
-    (log/info "Stopping config component ...")
-    (log/debug "Stopped config component.")
-    (assoc component :dragon nil)))
+  lifecycle-behaviour)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Component Constructor   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn create-config-component
+(defn create-component
   ""
   [config-builder-fn]
   (map->Config

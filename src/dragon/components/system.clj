@@ -15,36 +15,36 @@
 
 (defn cfg
   [builder]
-  {:config (config/create-config-component builder)})
+  {:config (config/create-component builder)})
 
 (def log
   {:logging (component/using
-             (logging/create-logging-component)
+             (logging/create-component)
              [:config])})
 
 (def evt-no-log
   {:event (component/using
-           (event/create-event-component)
+           (event/create-component)
            [:config])})
 
 (def data-no-log
   {:db (component/using
-        (db/create-db-component)
+        (db/create-component)
         [:config :event])})
 
 (def evt
   {:event (component/using
-           (event/create-event-component)
+           (event/create-component)
            [:config :logging])})
 
 (def data
   {:db (component/using
-        (db/create-db-component)
+        (db/create-component)
         [:config :logging :event])})
 
 (def http
   {:httpd (component/using
-           (httpd/create-httpd-component)
+           (httpd/create-component)
            [:config :logging :db :event])})
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

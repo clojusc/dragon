@@ -22,7 +22,6 @@
     [dragon.blog.generator :as generator]
     [dragon.blog.post.util :as post-util]
     [dragon.cli.core :as cli]
-    [dragon.components.core :as component-api]
     [dragon.components.system :as components]
     [dragon.config.core :as config]
     [dragon.core]

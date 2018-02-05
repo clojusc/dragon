@@ -15,29 +15,38 @@
 ;;;   Component Lifecycle Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defrecord Logging []
+(defrecord Logging [])
+
+(defn start
+  [this]
+  (log/info "Starting logging component ...")
+  (let [log-level (config/log-level this)
+        log-nss (vec (config/log-nss this))]
+    (log/debug "Setting up logging with level" log-level)
+    (log/debug "Logging namespaces:" log-nss)
+    (logger/set-level! log-nss log-level)
+    (log/debug "Started logging component.")
+    this))
+
+(defn stop
+  [this]
+  (log/info "Stopping logging component ...")
+  (log/debug "Stopped logging component.")
+  this)
+
+(def lifecycle-behaviour
+  {:start start
+   :stop stop})
+
+(extend Logging
   component/Lifecycle
-
-  (start [component]
-    (log/info "Starting logging component ...")
-    (let [log-level (config/log-level component)
-          log-nss (vec (config/log-nss component))]
-      (log/debug "Setting up logging with level" log-level)
-      (log/debug "Logging namespaces:" log-nss)
-      (logger/set-level! log-nss log-level)
-      (log/debug "Started logging component.")
-      component))
-
-  (stop [component]
-    (log/info "Stopping logging component ...")
-    (log/debug "Stopped logging component.")
-    component))
+  lifecycle-behaviour)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Component Constructor   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn create-logging-component
+(defn create-component
   ""
   []
   (->Logging))

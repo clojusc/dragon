@@ -17,30 +17,39 @@
 ;;;   Component Lifecycle Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defrecord Event [pubsub]
+(defrecord Event [pubsub])
+
+(defn start
+  [this]
+  (log/info "Starting event component ...")
+  (log/debug "Started event component.")
+  (let [dataflow (event/create-dataflow-pubsub)
+        component (assoc-in this event/dataflow-keys dataflow)]
+    (log/info "Adding subscribers ...")
+    component))
+
+(defn stop
+  [this]
+  (log/info "Stopping event component ...")
+  (if-let [pubsub-dataflow (get-in this event/dataflow-keys)]
+    (event/delete pubsub-dataflow))
+  (let [component (assoc-in this event/dataflow-keys nil)]
+    (log/debug "Stopped event component.")
+    component))
+
+(def lifecycle-behaviour
+  {:start start
+   :stop stop})
+
+(extend Event
   component/Lifecycle
-
-  (start [component]
-    (log/info "Starting event component ...")
-    (log/debug "Started event component.")
-    (let [dataflow (event/create-dataflow-pubsub)
-          component (assoc-in component component-api/dataflow-keys dataflow)]
-      (log/info "Adding subscribers ...")
-      component))
-
-  (stop [component]
-    (log/info "Stopping event component ...")
-    (if-let [pubsub-dataflow (get-in component component-api/dataflow-keys)]
-      (event/delete pubsub-dataflow))
-    (let [component (assoc-in component component-api/dataflow-keys nil)]
-      (log/debug "Stopped event component.")
-      component)))
+  lifecycle-behaviour)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Component Constructor   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn create-event-component
+(defn create-component
   ""
   []
   (map->Event

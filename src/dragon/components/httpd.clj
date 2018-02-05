@@ -20,32 +20,41 @@
 ;;;   Component Lifecycle Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defrecord HTTPD []
+(defrecord HTTPD [])
+
+(defn start
+  [this]
+  (log/info "Starting httpd component ...")
+  (let [port (config/port this)
+        docroot (config/output-dir this)
+        main-handler {}
+        site (ring-file/wrap-file main-handler docroot)
+        server (server/run-server site {:port port})]
+    (log/debugf "Serving files from %s and listening on port %s"
+                docroot port)
+    (log/debug "Started httpd component.")
+    (assoc this :server server)))
+
+(defn stop
+  [this]
+  (log/info "Stopping httpd component ...")
+  (if-let [server (:server this)]
+    (server))
+  (assoc this :server nil))
+
+(def lifecycle-behaviour
+  {:start start
+   :stop stop})
+
+(extend HTTPD
   component/Lifecycle
-
-  (start [component]
-    (log/info "Starting httpd component ...")
-    (let [port (config/port component)
-          docroot (config/output-dir component)
-          main-handler {}
-          site (ring-file/wrap-file main-handler docroot)
-          server (server/run-server site {:port port})]
-      (log/debugf "Serving files from %s and listening on port %s"
-                  docroot port)
-      (log/debug "Started httpd component.")
-      (assoc component :server server)))
-
-  (stop [component]
-    (log/info "Stopping httpd component ...")
-    (if-let [server (:server component)]
-      (server))
-    (assoc component :server nil)))
+  lifecycle-behaviour)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Component Constructor   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn create-httpd-component
+(defn create-component
   ""
   []
   (->HTTPD))
