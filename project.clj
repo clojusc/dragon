@@ -44,7 +44,7 @@
     [enlive "1.1.6"]
     [http-kit "2.2.0"]
     [joda-time "2.9.9"]
-    [leiningen-core "2.8.1"]
+    [leiningen-core "2.7.1"]
     [markdown-clj "1.0.2"]
     [org.apache.maven.wagon/wagon-provider-api "3.0.0"]
     [org.clojure/clojure "1.9.0"]

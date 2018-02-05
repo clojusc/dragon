@@ -6,6 +6,7 @@
     [dragon.event.tag :as tag]
     [dragon.util :as util]
     [markdown.core :as markdown]
+    [net.cgrand.enlive-html :as en]
     [selmer.parser :as selmer]
     [taoensso.timbre :as log]))
 
@@ -55,9 +56,41 @@
       :as-html (md->html system (join-excerpt system words number))
       (join-excerpt system words number))))
 
+(defmulti get-content-element
+  type)
+
+(defmethod get-content-element java.lang.String
+  [element]
+  element)
+
+(defmethod get-content-element clojure.lang.PersistentStructMap
+  [element]
+  (get-content-element (:content element)))
+
+(defmethod get-content-element :default
+  [element]
+  (mapcat get-content-element element))
+
+(defn- parse-html-str
+  [html-str]
+  (->> html-str
+       (new java.io.StringReader)
+       (en/html-resource)))
+
+(defn normalize-whitespace
+  [a-str]
+  (-> a-str
+      (string/replace #"\\" "")
+      (string/replace #"\s{2,}" " ")
+      string/trim))
+
 (defn scrub-html
   [html-content]
-  )
+  (->> html-content
+       parse-html-str
+       get-content-element
+       (apply str)
+       normalize-whitespace))
 
 (defn copy-original-body
   [data]
