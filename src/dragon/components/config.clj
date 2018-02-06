@@ -223,15 +223,15 @@
 
 (defn watcher-content-dirs
   [system]
-  (get-config system :watcher :content))
+  (get-config system :watcher :content :dirs))
 
 (defn watcher-docs-dirs
   [system]
-  (get-config system :watcher :docs))
+  (get-config system :watcher :docs :dirs))
 
 (defn watcher-sass-dirs
   [system]
-  (get-config system :watcher :sass))
+  (get-config system :watcher :sass :dirs))
 
 (defn apis
   [system]

@@ -53,9 +53,16 @@
      :storage :memory}
    :watcher {
      :type :hawk
-     :content ["./posts"]
-     :docs []
-     :sass []}
+     :content {
+       :dirs ["./posts"]
+       :action #'ns/fn
+       :restart? false}
+     :docs {
+       :dirs []
+       :restart? false}
+     :sass {
+       :dirs []
+       :restart? false}}
    :apis {
      :flickr {
        :access "~/.flickr/access.key"}
