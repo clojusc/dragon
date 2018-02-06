@@ -217,6 +217,22 @@
   [(get-config system :workflow :type)
    (get-config system :workflow :storage)])
 
+(defn watcher-type
+  [system]
+  (get-config system :watcher :type))
+
+(defn watcher-content-dirs
+  [system]
+  (get-config system :watcher :content))
+
+(defn watcher-docs-dirs
+  [system]
+  (get-config system :watcher :docs))
+
+(defn watcher-sass-dirs
+  [system]
+  (get-config system :watcher :sass))
+
 (defn apis
   [system]
   (get-config system :apis))
