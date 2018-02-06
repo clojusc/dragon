@@ -43,3 +43,8 @@
 (def shutdown-cli-pre ::shutdown-cli-pre)
 (def shutdown-cli ::shutdown-cli)
 (def shutdown-cli-post ::shutdown-cli-post)
+
+(def file-change ::file-change)
+(def file-create ::file-create)
+(def file-modify ::file-modify)
+(def file-delete ::file-delete)

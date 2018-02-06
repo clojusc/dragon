@@ -55,7 +55,7 @@
      :type :hawk
      :content {
        :dirs ["./posts"]
-       :action #'ns/fn
+       :action #'clojure.core/constantly
        :restart? false}
      :docs {
        :dirs []

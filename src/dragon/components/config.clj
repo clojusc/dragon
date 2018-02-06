@@ -281,7 +281,7 @@
   [this]
   (log/info "Starting config component ...")
   (log/debug "Started config component.")
-  (let [cfg (:builder this)]
+  (let [cfg ((:builder this))]
     (log/trace "Built configuration:" cfg)
     (reset! (:dragon this) cfg)
     (assoc this :dragon cfg)))
