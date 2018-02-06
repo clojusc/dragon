@@ -24,39 +24,48 @@
     :name "Apache License, Version 2.0"
     :url "http://www.apache.org/licenses/LICENSE-2.0"}
   :exclusions [
+    [clojusc/cljs-tools]
+    [com.cognitect/transit-clj]
+    [com.cognitect/transit-java]
     [commons-codec]
     [joda-time]
+    [org.apache.maven.wagon/wagon-http]
     [org.apache.maven.wagon/wagon-provider-api]
     [org.clojure/clojure]
     [org.clojure/tools.reader]
     [org.codehaus.plexus/plexus-utils]]
   :dependencies [
-    [cheshire "5.8.0"]
-    [clj-http "3.7.0"]
+    [ch.qos.logback/logback-classic "1.2.3"]
+    [cheshire "5.8.1"]
+    [clj-http "3.9.1"]
+    [clojusc/cljs-tools "0.2.1"]
     [clojusc/env-ini "0.4.1"]
     [clojusc/rfc5322 "0.4.0"]
-    [clojusc/trifl "0.3.0-SNAPSHOT"]
-    [clojusc/twig "0.3.2"]
+    [clojusc/trifl "0.4.2"]
+    [clojusc/twig "0.4.0"]
+    [com.cognitect/transit-clj "0.8.313"]
+    [com.cognitect/transit-java "0.8.337"]
     [com.datomic/clj-client "0.8.606"]
-    [com.stuartsierra/component "0.3.2"]
-    [com.taoensso/carmine "2.17.0"]
+    [com.stuartsierra/component "0.4.0"]
+    [com.taoensso/carmine "2.19.1"]
     [commons-codec "1.11"]
     [enlive "1.1.6"]
     [hawk "0.2.11"]
-    [http-kit "2.2.0"]
-    [joda-time "2.9.9"]
-    [leiningen-core "2.7.1"]
-    [markdown-clj "1.0.2"]
-    [org.apache.maven.wagon/wagon-provider-api "3.0.0"]
-    [org.clojure/clojure "1.9.0"]
-    [org.clojure/core.async "0.4.474"]
-    [org.clojure/tools.reader "1.2.1"]
-    [org.codehaus.plexus/plexus-utils "3.1.0"]
+    [http-kit "2.3.0"]
+    [joda-time "2.10.1"]
+    [leiningen-core "2.8.3"]
+    [markdown-clj "1.0.7"]
+    [org.apache.maven.wagon/wagon-http "3.3.1"]
+    [org.apache.maven.wagon/wagon-provider-api "3.3.1"]
+    [org.clojure/clojure "1.10.0"]
+    [org.clojure/core.async "0.4.490"]
+    [org.clojure/tools.reader "1.3.2"]
+    [org.codehaus.plexus/plexus-utils "3.1.1"]
     [pandect "0.6.1"]
-    [potemkin "0.4.4"]
-    [ring/ring-core "1.6.3"]
-    [selmer "1.11.6"]
-    [stasis "2.3.0"]]
+    [potemkin "0.4.5"]
+    [ring/ring-core "1.7.1"]
+    [selmer "1.12.5"]
+    [stasis "2.4.0"]]
   :profiles {
     :dragon {
       :cli {
@@ -76,13 +85,11 @@
         [org.clojure/tools.namespace "0.2.11"]]}
     :lint {
       :plugins [
-        [jonase/eastwood "0.2.5"]
-        [lein-bikeshed "0.5.1"]
-        [lein-kibit "0.1.6"]
-        [venantius/yagni "0.1.4"]]}
+        [jonase/eastwood "0.3.4"]
+        [lein-kibit "0.1.6"]]}
     :test {
       :dependencies [
-        [clojusc/ltest "0.3.0"]]
+        [clojusc/ltest "0.4.0-SNAPSHOT"]]
       :plugins [
         [lein-ancient "0.6.15"]
         [lein-ltest "0.3.0"]]
@@ -92,7 +99,7 @@
       :dependencies [
         [codox-theme-rdash "0.1.2"]]
       :plugins [
-        [lein-codox "0.10.3"]
+        [lein-codox "0.10.5"]
         [lein-marginalia "0.9.1"]
         [lein-simpleton "1.3.0"]]
       :codox {
