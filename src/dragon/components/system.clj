@@ -6,6 +6,7 @@
     [dragon.components.event :as event]
     [dragon.components.httpd :as httpd]
     [dragon.components.logging :as logging]
+    [dragon.components.responder :as responder]
     [dragon.components.watcher :as watcher]
     [dragon.config.core :refer [build]
                         :rename {build build-config}]))
@@ -51,7 +52,12 @@
 (def wtchr
   {:watcher (component/using
              (watcher/create-component)
-             [:config :event :httpd])})
+             [:config :event])})
+
+(def rspndr
+  {:responder (component/using
+               (responder/create-component)
+               [:config :event :httpd :watcher])})
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Component Intilizations   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -87,7 +93,8 @@
              data
              evt
              http
-             wtchr))))
+             wtchr
+             rspndr))))
 
 (def init-lookup
   {:default #'initialize-default
