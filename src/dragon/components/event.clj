@@ -26,6 +26,7 @@
   (let [dataflow (event/create-dataflow-pubsub)
         component (assoc-in this event/dataflow-keys dataflow)]
     (log/info "Adding subscribers ...")
+    (subscription/subscribe-all component)
     component))
 
 (defn stop
