@@ -23,13 +23,14 @@
 
 (defn handle-event
   [this event]
-	(event/publish this tag/file-change event)
-  (case (:kind event)
-    :modify (event/publish this tag/file-modify event)
-    :create (event/publish this tag/file-create event)
-    :delete (event/publish this tag/file-delete event)
-    (log/warn "Unhandled file system event type:" (:kind event)))
-  this)
+	(let [component (:component this)]
+		(event/publish component tag/file-change event)
+	  (case (:kind event)
+	    :modify (event/publish component tag/file-modify event)
+	    :create (event/publish component tag/file-create event)
+	    :delete (event/publish component tag/file-delete event)
+	    (log/warn "Unhandled file system event type:" (:kind event))))
+	  this)
 
 (defn add-paths
   [this paths]
