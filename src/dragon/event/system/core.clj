@@ -48,15 +48,17 @@
   ([system-or-component event-type]
    (publish system-or-component event-type {}))
   ([system-or-component event-type data]
-   (when-not (nil? system-or-component)
+   (log/debug "Publishing ...")
+   (if (nil? system-or-component)
+     (log/error "System cannot be nil!")
      (let [system (util/component->system system-or-component)
            dataflow (get-dataflow-pubsub system)
            topic (get-topic dataflow)
            msg (message/new-dataflow-event event-type data)]
-       (log/debug "Publishing message to" (message/get-route msg))
+       (log/debug "\tPublishing message to" (message/get-route msg))
        (log/trace "Sending message data:" (message/get-payload msg))
-       (async/>!! (get-chan dataflow) msg))
-     data)))
+       (async/>!! (get-chan dataflow) msg)))
+   data))
 
 (defn publish->
   ""
@@ -79,7 +81,7 @@
   ([system event-type]
    (subscribe system event-type (fn [s m]
                                   (log/warn
-                                   "Using default subscriber callback for route"
+                                   "Using default subscriber callback for"
                                    (message/get-route m)))))
   ([system event-type func]
    (when-not (nil? system)

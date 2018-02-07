@@ -12,7 +12,7 @@
         args (:args start-cfg)]
     (shell/with-sh-dir home
       (log/debugf "Running command in %s ..." home)
-      (log/debug "Using shell/sh args:" args)
+      (log/debug "Using shell/sh args:" (vec args))
       (apply util/shell! args))))
 
 (defn remove-connection
