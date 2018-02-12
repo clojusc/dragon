@@ -54,10 +54,13 @@
              (watcher/create-component)
              [:config :event])})
 
-(def rspndr
-  {:responder (component/using
-               (responder/create-component)
-               [:config :event :httpd :watcher])})
+(defn rspndr
+  ([]
+    (rspndr {}))
+  ([handlers]
+    {:responder (component/using
+                 (responder/create-component handlers)
+                 [:config :event :httpd :watcher])}))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Component Intilizations   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -94,7 +97,7 @@
              evt
              http
              wtchr
-             rspndr))))
+             (rspndr))))
 
 (def init-lookup
   {:default #'initialize-default
