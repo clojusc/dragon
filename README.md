@@ -125,6 +125,16 @@ $ dragon help
 ```
 
 
+## Examples [&#x219F;](#contents)
+
+The following blogs were generated with Dragon:
+
+* [Forgotten Roads](http://forgotten.roads.mx/blog/)
+* [Starship Tools](http://starship.tools/)
+* [Clojang](http://clojang.lfe.io/)
+* [Clozhang](https://clozhang.github.io/blog/)
+
+
 ## License [&#x219F;](#contents)
 
 Copyright © 2017, Clojure-Aided Enrichment Center
