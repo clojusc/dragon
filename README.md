@@ -17,6 +17,7 @@
 * [Configuration](#configuration-)
 * [Documentation](#documentation-)
 * [CLI](#cli-)
+* [Examples](#examples-)
 * [License](#license-)
 
 
