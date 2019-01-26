@@ -6,10 +6,7 @@
     [dragon.components.event :as event]
     [dragon.components.httpd :as httpd]
     [dragon.components.logging :as logging]
-<<<<<<< HEAD
     [dragon.components.responder :as responder]
-=======
->>>>>>> Added watcher.
     [dragon.components.watcher :as watcher]
     [dragon.config.core :refer [build]
                         :rename {build build-config}]))
