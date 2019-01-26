@@ -39,6 +39,10 @@
    tag/write-output-post [:default]
    tag/generate-routes-pre [:default]
    tag/generate-routes-post [:default]
+   tag/file-change [:default]
+   tag/file-create [:default]
+   tag/file-modify [:default]
+   tag/file-delete [:default]
    tag/shutdown-cli [shutdown-subscriber]})
 
 (defn subscribe-all-event
@@ -55,7 +59,6 @@
 (defn subscribe-all
   ""
   [system-or-component]
-  (log/debug "Adding subscribers ...")
   (let [system (util/component->system system-or-component)]
     (doseq [[event-type subscriber-funcs] subscribers]
       (subscribe-all-event system

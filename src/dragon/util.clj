@@ -176,6 +176,7 @@
 (defn component->system
   ""
   [system-or-component]
+  ;; XXX we need to change this to support any component
   (if (contains? system-or-component :event)
     system-or-component
     {:event system-or-component}))

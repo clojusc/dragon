@@ -2865,8 +2865,64 @@ net.brehaut.ClojureTools = (function (SH) {
     build_tree: build_tree
   };
 })(SyntaxHighlighter);
-</script><title>sockets -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name"><a href="https://github.com/clojusc/dragon">sockets</a></h1><h2 class="project-version">0.5.0</h2><br /><p>Customised, Stasis-based Static Site Generator</p>
-</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">cheshire</td><td class="dotted"><hr /></td><td class="dep-version">5.8.0</td></tr><tr><td class="dep-name">clj-http</td><td class="dotted"><hr /></td><td class="dep-version">3.7.0</td></tr><tr><td class="dep-name">clojusc/env-ini</td><td class="dotted"><hr /></td><td class="dep-version">0.4.1</td></tr><tr><td class="dep-name">clojusc/rfc5322</td><td class="dotted"><hr /></td><td class="dep-version">0.4.0</td></tr><tr><td class="dep-name">clojusc/trifl</td><td class="dotted"><hr /></td><td class="dep-version">0.2.0</td></tr><tr><td class="dep-name">clojusc/twig</td><td class="dotted"><hr /></td><td class="dep-version">0.3.2</td></tr><tr><td class="dep-name">com.datomic/clj-client</td><td class="dotted"><hr /></td><td class="dep-version">0.8.606</td></tr><tr><td class="dep-name">com.stuartsierra/component</td><td class="dotted"><hr /></td><td class="dep-version">0.3.2</td></tr><tr><td class="dep-name">com.taoensso/carmine</td><td class="dotted"><hr /></td><td class="dep-version">2.17.0</td></tr><tr><td class="dep-name">commons-codec</td><td class="dotted"><hr /></td><td class="dep-version">1.11</td></tr><tr><td class="dep-name">enlive</td><td class="dotted"><hr /></td><td class="dep-version">1.1.6</td></tr><tr><td class="dep-name">http-kit</td><td class="dotted"><hr /></td><td class="dep-version">2.2.0</td></tr><tr><td class="dep-name">joda-time</td><td class="dotted"><hr /></td><td class="dep-version">2.9.9</td></tr><tr><td class="dep-name">leiningen-core</td><td class="dotted"><hr /></td><td class="dep-version">2.7.1</td></tr><tr><td class="dep-name">markdown-clj</td><td class="dotted"><hr /></td><td class="dep-version">1.0.2</td></tr><tr><td class="dep-name">org.apache.maven.wagon/wagon-provider-api</td><td class="dotted"><hr /></td><td class="dep-version">3.0.0</td></tr><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.9.0</td></tr><tr><td class="dep-name">org.clojure/core.async</td><td class="dotted"><hr /></td><td class="dep-version">0.4.474</td></tr><tr><td class="dep-name">org.clojure/tools.reader</td><td class="dotted"><hr /></td><td class="dep-version">1.2.1</td></tr><tr><td class="dep-name">org.codehaus.plexus/plexus-utils</td><td class="dotted"><hr /></td><td class="dep-version">3.1.0</td></tr><tr><td class="dep-name">pandect</td><td class="dotted"><hr /></td><td class="dep-version">0.6.1</td></tr><tr><td class="dep-name">potemkin</td><td class="dotted"><hr /></td><td class="dep-version">0.4.4</td></tr><tr><td class="dep-name">ring/ring-core</td><td class="dotted"><hr /></td><td class="dep-version">1.6.3</td></tr><tr><td class="dep-name">selmer</td><td class="dotted"><hr /></td><td class="dep-version">1.11.6</td></tr><tr><td class="dep-name">stasis</td><td class="dotted"><hr /></td><td class="dep-version">2.3.0</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#dragon.config.redis">dragon.config.redis</a></li><li><a href="#dragon.config.defaults">dragon.config.defaults</a></li><li><a href="#dragon.config.core">dragon.config.core</a></li><li><a href="#dragon.config.datomic">dragon.config.datomic</a></li><li><a href="#dragon.util">dragon.util</a></li><li><a href="#dragon.core">dragon.core</a></li><li><a href="#dragon.cli.show.posts">dragon.cli.show.posts</a></li><li><a href="#dragon.cli.show.core">dragon.cli.show.core</a></li><li><a href="#dragon.cli.core">dragon.cli.core</a></li><li><a href="#dragon.cli.new.stub">dragon.cli.new.stub</a></li><li><a href="#dragon.cli.new.core">dragon.cli.new.core</a></li><li><a href="#dragon.cli.new.post">dragon.cli.new.post</a></li><li><a href="#dragon.blog.post.impl.default">dragon.blog.post.impl.default</a></li><li><a href="#dragon.blog.post.util">dragon.blog.post.util</a></li><li><a href="#dragon.blog.post.core">dragon.blog.post.core</a></li><li><a href="#dragon.blog.tags">dragon.blog.tags</a></li><li><a href="#dragon.blog.categories">dragon.blog.categories</a></li><li><a href="#dragon.blog.generator">dragon.blog.generator</a></li><li><a href="#dragon.blog.content.block">dragon.blog.content.block</a></li><li><a href="#dragon.blog.content.data">dragon.blog.content.data</a></li><li><a href="#dragon.blog.content.rfc5322">dragon.blog.content.rfc5322</a></li><li><a href="#dragon.blog.content.core">dragon.blog.content.core</a></li><li><a href="#dragon.blog.core">dragon.blog.core</a></li><li><a href="#dragon.blog.workflow.impl.msgs">dragon.blog.workflow.impl.msgs</a></li><li><a href="#dragon.blog.workflow.impl.iter-db">dragon.blog.workflow.impl.iter-db</a></li><li><a href="#dragon.blog.workflow.impl.xduce-db">dragon.blog.workflow.impl.xduce-db</a></li><li><a href="#dragon.blog.workflow.impl.xduce">dragon.blog.workflow.impl.xduce</a></li><li><a href="#dragon.blog.workflow.impl.iter">dragon.blog.workflow.impl.iter</a></li><li><a href="#dragon.blog.workflow.core">dragon.blog.workflow.core</a></li><li><a href="#dragon.components.db">dragon.components.db</a></li><li><a href="#dragon.components.logging">dragon.components.logging</a></li><li><a href="#dragon.components.event">dragon.components.event</a></li><li><a href="#dragon.components.system">dragon.components.system</a></li><li><a href="#dragon.components.config">dragon.components.config</a></li><li><a href="#dragon.components.httpd">dragon.components.httpd</a></li><li><a href="#dragon.main">dragon.main</a></li><li><a href="#dragon.dev.system">dragon.dev.system</a></li><li><a href="#dragon.selmer.core">dragon.selmer.core</a></li><li><a href="#dragon.selmer.tags.flickr">dragon.selmer.tags.flickr</a></li><li><a href="#dragon.selmer.tags.panel">dragon.selmer.tags.panel</a></li><li><a href="#dragon.selmer.tags.util">dragon.selmer.tags.util</a></li><li><a href="#dragon.selmer.tags.core">dragon.selmer.tags.core</a></li><li><a href="#dragon.selmer.tags.demo">dragon.selmer.tags.demo</a></li><li><a href="#dragon.data.core">dragon.data.core</a></li><li><a href="#dragon.data.sources.impl.redis">dragon.data.sources.impl.redis</a></li><li><a href="#dragon.data.sources.impl.redis.docker">dragon.data.sources.impl.redis.docker</a></li><li><a href="#dragon.data.sources.impl.redis.native">dragon.data.sources.impl.redis.native</a></li><li><a href="#dragon.data.sources.impl.common">dragon.data.sources.impl.common</a></li><li><a href="#dragon.data.sources.impl.datomic">dragon.data.sources.impl.datomic</a></li><li><a href="#dragon.data.sources.core">dragon.data.sources.core</a></li><li><a href="#dragon.event.topic">dragon.event.topic</a></li><li><a href="#dragon.event.message">dragon.event.message</a></li><li><a href="#dragon.event.subscription">dragon.event.subscription</a></li><li><a href="#dragon.event.system.impl">dragon.event.system.impl</a></li><li><a href="#dragon.event.system.core">dragon.event.system.core</a></li><li><a href="#dragon.event.tag">dragon.event.tag</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.config.redis" name="dragon.config.redis"><h1 class="project-name">dragon.config.redis</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</script><title>sockets -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name"><a href="https://github.com/clojusc/dragon">sockets</a></h1><h2 class="project-version">0.6.0-SNAPSHOT</h2><br /><p>Customised, Stasis-based Static Site Generator</p>
+</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">ch.qos.logback/logback-classic</td><td class="dotted"><hr /></td><td class="dep-version">1.2.3</td></tr><tr><td class="dep-name">cheshire</td><td class="dotted"><hr /></td><td class="dep-version">5.8.1</td></tr><tr><td class="dep-name">clj-http</td><td class="dotted"><hr /></td><td class="dep-version">3.9.1</td></tr><tr><td class="dep-name">clojusc/cljs-tools</td><td class="dotted"><hr /></td><td class="dep-version">0.2.1</td></tr><tr><td class="dep-name">clojusc/env-ini</td><td class="dotted"><hr /></td><td class="dep-version">0.4.1</td></tr><tr><td class="dep-name">clojusc/rfc5322</td><td class="dotted"><hr /></td><td class="dep-version">0.4.0</td></tr><tr><td class="dep-name">clojusc/trifl</td><td class="dotted"><hr /></td><td class="dep-version">0.4.2</td></tr><tr><td class="dep-name">clojusc/twig</td><td class="dotted"><hr /></td><td class="dep-version">0.4.0</td></tr><tr><td class="dep-name">com.cognitect/transit-clj</td><td class="dotted"><hr /></td><td class="dep-version">0.8.313</td></tr><tr><td class="dep-name">com.cognitect/transit-java</td><td class="dotted"><hr /></td><td class="dep-version">0.8.337</td></tr><tr><td class="dep-name">com.datomic/clj-client</td><td class="dotted"><hr /></td><td class="dep-version">0.8.606</td></tr><tr><td class="dep-name">com.stuartsierra/component</td><td class="dotted"><hr /></td><td class="dep-version">0.4.0</td></tr><tr><td class="dep-name">com.taoensso/carmine</td><td class="dotted"><hr /></td><td class="dep-version">2.19.1</td></tr><tr><td class="dep-name">commons-codec</td><td class="dotted"><hr /></td><td class="dep-version">1.11</td></tr><tr><td class="dep-name">enlive</td><td class="dotted"><hr /></td><td class="dep-version">1.1.6</td></tr><tr><td class="dep-name">hawk</td><td class="dotted"><hr /></td><td class="dep-version">0.2.11</td></tr><tr><td class="dep-name">http-kit</td><td class="dotted"><hr /></td><td class="dep-version">2.3.0</td></tr><tr><td class="dep-name">joda-time</td><td class="dotted"><hr /></td><td class="dep-version">2.10.1</td></tr><tr><td class="dep-name">leiningen-core</td><td class="dotted"><hr /></td><td class="dep-version">2.8.3</td></tr><tr><td class="dep-name">markdown-clj</td><td class="dotted"><hr /></td><td class="dep-version">1.0.7</td></tr><tr><td class="dep-name">org.apache.maven.wagon/wagon-http</td><td class="dotted"><hr /></td><td class="dep-version">3.3.1</td></tr><tr><td class="dep-name">org.apache.maven.wagon/wagon-provider-api</td><td class="dotted"><hr /></td><td class="dep-version">3.3.1</td></tr><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.10.0</td></tr><tr><td class="dep-name">org.clojure/core.async</td><td class="dotted"><hr /></td><td class="dep-version">0.4.490</td></tr><tr><td class="dep-name">org.clojure/tools.reader</td><td class="dotted"><hr /></td><td class="dep-version">1.3.2</td></tr><tr><td class="dep-name">org.codehaus.plexus/plexus-utils</td><td class="dotted"><hr /></td><td class="dep-version">3.1.1</td></tr><tr><td class="dep-name">pandect</td><td class="dotted"><hr /></td><td class="dep-version">0.6.1</td></tr><tr><td class="dep-name">potemkin</td><td class="dotted"><hr /></td><td class="dep-version">0.4.5</td></tr><tr><td class="dep-name">ring/ring-core</td><td class="dotted"><hr /></td><td class="dep-version">1.7.1</td></tr><tr><td class="dep-name">selmer</td><td class="dotted"><hr /></td><td class="dep-version">1.12.5</td></tr><tr><td class="dep-name">stasis</td><td class="dotted"><hr /></td><td class="dep-version">2.4.0</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#dragon.watcher.impl.hawk">dragon.watcher.impl.hawk</a></li><li><a href="#dragon.watcher.core">dragon.watcher.core</a></li><li><a href="#dragon.config.redis">dragon.config.redis</a></li><li><a href="#dragon.config.defaults">dragon.config.defaults</a></li><li><a href="#dragon.config.core">dragon.config.core</a></li><li><a href="#dragon.config.datomic">dragon.config.datomic</a></li><li><a href="#dragon.util">dragon.util</a></li><li><a href="#dragon.core">dragon.core</a></li><li><a href="#dragon.cli.show.posts">dragon.cli.show.posts</a></li><li><a href="#dragon.cli.show.core">dragon.cli.show.core</a></li><li><a href="#dragon.cli.core">dragon.cli.core</a></li><li><a href="#dragon.cli.new.stub">dragon.cli.new.stub</a></li><li><a href="#dragon.cli.new.core">dragon.cli.new.core</a></li><li><a href="#dragon.cli.new.post">dragon.cli.new.post</a></li><li><a href="#dragon.blog.post.impl.default">dragon.blog.post.impl.default</a></li><li><a href="#dragon.blog.post.util">dragon.blog.post.util</a></li><li><a href="#dragon.blog.post.core">dragon.blog.post.core</a></li><li><a href="#dragon.blog.tags">dragon.blog.tags</a></li><li><a href="#dragon.blog.categories">dragon.blog.categories</a></li><li><a href="#dragon.blog.generator">dragon.blog.generator</a></li><li><a href="#dragon.blog.content.block">dragon.blog.content.block</a></li><li><a href="#dragon.blog.content.data">dragon.blog.content.data</a></li><li><a href="#dragon.blog.content.rfc5322">dragon.blog.content.rfc5322</a></li><li><a href="#dragon.blog.content.core">dragon.blog.content.core</a></li><li><a href="#dragon.blog.core">dragon.blog.core</a></li><li><a href="#dragon.blog.workflow.impl.msgs">dragon.blog.workflow.impl.msgs</a></li><li><a href="#dragon.blog.workflow.impl.iter-db">dragon.blog.workflow.impl.iter-db</a></li><li><a href="#dragon.blog.workflow.impl.xduce-db">dragon.blog.workflow.impl.xduce-db</a></li><li><a href="#dragon.blog.workflow.impl.xduce">dragon.blog.workflow.impl.xduce</a></li><li><a href="#dragon.blog.workflow.impl.iter">dragon.blog.workflow.impl.iter</a></li><li><a href="#dragon.blog.workflow.core">dragon.blog.workflow.core</a></li><li><a href="#dragon.components.db">dragon.components.db</a></li><li><a href="#dragon.components.logging">dragon.components.logging</a></li><li><a href="#dragon.components.watcher">dragon.components.watcher</a></li><li><a href="#dragon.components.event">dragon.components.event</a></li><li><a href="#dragon.components.responder">dragon.components.responder</a></li><li><a href="#dragon.components.system">dragon.components.system</a></li><li><a href="#dragon.components.config">dragon.components.config</a></li><li><a href="#dragon.components.httpd">dragon.components.httpd</a></li><li><a href="#dragon.main">dragon.main</a></li><li><a href="#dragon.dev.system">dragon.dev.system</a></li><li><a href="#dragon.selmer.core">dragon.selmer.core</a></li><li><a href="#dragon.selmer.tags.flickr">dragon.selmer.tags.flickr</a></li><li><a href="#dragon.selmer.tags.panel">dragon.selmer.tags.panel</a></li><li><a href="#dragon.selmer.tags.util">dragon.selmer.tags.util</a></li><li><a href="#dragon.selmer.tags.core">dragon.selmer.tags.core</a></li><li><a href="#dragon.selmer.tags.demo">dragon.selmer.tags.demo</a></li><li><a href="#dragon.data.core">dragon.data.core</a></li><li><a href="#dragon.data.sources.impl.redis">dragon.data.sources.impl.redis</a></li><li><a href="#dragon.data.sources.impl.redis.docker">dragon.data.sources.impl.redis.docker</a></li><li><a href="#dragon.data.sources.impl.redis.native">dragon.data.sources.impl.redis.native</a></li><li><a href="#dragon.data.sources.impl.common">dragon.data.sources.impl.common</a></li><li><a href="#dragon.data.sources.impl.datomic">dragon.data.sources.impl.datomic</a></li><li><a href="#dragon.data.sources.core">dragon.data.sources.core</a></li><li><a href="#dragon.event.topic">dragon.event.topic</a></li><li><a href="#dragon.event.message">dragon.event.message</a></li><li><a href="#dragon.event.subscription">dragon.event.subscription</a></li><li><a href="#dragon.event.system.impl">dragon.event.system.impl</a></li><li><a href="#dragon.event.system.core">dragon.event.system.core</a></li><li><a href="#dragon.event.tag">dragon.event.tag</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.watcher.impl.hawk" name="dragon.watcher.impl.hawk"><h1 class="project-name">dragon.watcher.impl.hawk</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.watcher.impl.hawk
+  (:require
+    [dragon.event.system.core :as event]
+    [dragon.event.tag :as tag]
+    [hawk.core :as hawk]
+    [taoensso.timbre :as log]
+    [trifl.fs :as fs]))</pre></td></tr><tr><td class="docs"><p>  Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn clj?
+  [_context event]
+  (when (= :clj (fs/extension (:file event)))
+    true))</pre></td></tr><tr><td class="docs"><p>  Watcher Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord HawkWatcher [component])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn handle-event
+  [this event]
+	(let [component (:component this)]
+		(event/publish component tag/file-change event)
+	  (case (:kind event)
+	    :modify (event/publish component tag/file-modify event)
+	    :create (event/publish component tag/file-create event)
+	    :delete (event/publish component tag/file-delete event)
+	    (log/warn &quot;Unhandled file system event type:&quot; (:kind event))))
+	  this)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn add-paths
+  [this paths]
+  (hawk/watch! [{:context (constantly this)
+                 :paths paths
+                 ;:filter clj?
+                 :handler handle-event}]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn add-path
+  [this path]
+  (add-paths this [path]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def behaviour
+  {:handle-event handle-event
+   :add-path add-path
+   :add-paths add-paths})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn create-watcher
+  [component]
+  (map-&gt;HawkWatcher {:component component}))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.watcher.core" name="dragon.watcher.core"><h1 class="project-name">dragon.watcher.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.watcher.core
+  (:require
+    [dragon.watcher.impl.hawk :as hawk])
+  (:import
+    (dragon.watcher.impl.hawk HawkWatcher)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defprotocol Watcher
+  (add-path [this path])
+  (add-paths [this paths])
+  (handle-event [this event]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(extend HawkWatcher
+        Watcher
+        hawk/behaviour)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn create-watcher
+  [watcher-type component]
+  (case watcher-type
+    :hawk (hawk/create-watcher component)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.config.redis" name="dragon.config.redis"><h1 class="project-name">dragon.config.redis</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.config.redis)</pre></td></tr><tr><td class="docs"><p>  Common Configuration   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def ^:private base-config
@@ -2965,6 +3021,30 @@ net.brehaut.ClojureTools = (function (SH) {
    :cli {
      :log-level :error
      :log-nss '[dragon]}
+   :processor {
+     :constructor :default}
+   :db {
+     :type :redis-docker
+     :redis-docker redis/config-docker
+     :redis-native redis/config-native
+     :datomic datomic/config}
+   :workflow {
+     ;:type :transducer
+     :type :iterator
+     ;:storage :db
+     :storage :memory}
+   :watcher {
+     :type :hawk
+     :content {
+       :dirs [&quot;./posts&quot;]
+       :action #'clojure.core/constantly
+       :restart? false}
+     :docs {
+       :dirs []
+       :restart? false}
+     :sass {
+       :dirs []
+       :restart? false}}
    :apis {
      :flickr {
        :access &quot;~/.flickr/access.key&quot;}
@@ -2974,19 +3054,7 @@ net.brehaut.ClojureTools = (function (SH) {
          :secret &quot;~/.twitter/app-consumer.secret&quot;}
        :user-access {
          :token &quot;~/.twitter/user-access.token&quot;
-         :secret &quot;~/.twitter/user-access.secret&quot;}}}
-   :processor {
-     :constructor :default}
-   :workflow {
-     ;:type :transducer
-     :type :iterator
-     ;:storage :db
-     :storage :memory}
-   :db {
-     :type :redis-docker
-     :redis-docker redis/config-docker
-     :redis-native redis/config-native
-     :datomic datomic/config}})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.config.core" name="dragon.config.core"><h1 class="project-name">dragon.config.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+         :secret &quot;~/.twitter/user-access.secret&quot;}}}})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.config.core" name="dragon.config.core"><h1 class="project-name">dragon.config.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.config.core
   (:require
     [clojure.string :as string]
@@ -3200,6 +3268,7 @@ net.brehaut.ClojureTools = (function (SH) {
   b)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn component-&gt;system
   [system-or-component]
+  ;; XXX we need to change this to support any component
   (if (contains? system-or-component :event)
     system-or-component
     {:event system-or-component}))</pre></td></tr><tr><td class="docs"><p>A filter that returns <code>true</code> if the post should be published on the front
@@ -4195,12 +4264,12 @@ to provide easily-overridable implementations of the processing steps.</p>
     [trifl.core :refer [-&gt;int]]
     [trifl.fs :as fs])
   (:import
-    (java.io.File)))</pre></td></tr><tr><td class="docs"><p>  Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+    (java.io File)))</pre></td></tr><tr><td class="docs"><p>  Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def legal-post-file-extensions
   #{&quot;.rfc5322&quot;})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn legal-content-file?
-  [^java.io.File post]
+  [^File post]
   (log/trace &quot;Checking legality of file:&quot; post)
   (-&gt;&gt; legal-post-file-extensions
        (map #(string/ends-with? (.getCanonicalPath post) %))
@@ -4783,7 +4852,43 @@ to provide easily-overridable implementations of the processing steps.</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn create-component
   []
-  (-&gt;Logging))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.event" name="dragon.components.event"><h1 class="project-name">dragon.components.event</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+  (-&gt;Logging))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.watcher" name="dragon.components.watcher"><h1 class="project-name">dragon.components.watcher</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.components.watcher
+  (:require
+    [dragon.components.config :as config]
+    [dragon.components.event :as event]
+    [dragon.watcher.core :as watcher]
+    [com.stuartsierra.component :as component]
+    [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs"><p>  Watcher Component API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>XXX TBD</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>  Component Lifecycle Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord Watcher [])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn start
+  [this]
+  (log/info &quot;Starting watcher component ...&quot;)
+  (let [watch (watcher/create-watcher (config/watcher-type this) this)
+        content-paths (config/watcher-content-dirs this)]
+    ;; XXX track watches and save in component
+    (log/debug &quot;Adding content paths to watch:&quot; content-paths)
+    (watcher/add-paths watch content-paths)
+    (log/debug &quot;Started watcher component.&quot;))
+  this)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn stop
+  [this]
+  (log/info &quot;Stopping watcher component ...&quot;)
+  (log/debug &quot;Stopped watcher component.&quot;)
+  this)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def lifecycle-behaviour
+  {:start start
+   :stop stop})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(extend Watcher
+  component/Lifecycle
+  lifecycle-behaviour)</pre></td></tr><tr><td class="docs"><p>  Component Constructor   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn create-component
+  []
+  (-&gt;Watcher))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.event" name="dragon.components.event"><h1 class="project-name">dragon.components.event</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.components.event
   (:require
     [com.stuartsierra.component :as component]
@@ -4803,6 +4908,7 @@ to provide easily-overridable implementations of the processing steps.</p>
   (let [dataflow (event/create-dataflow-pubsub)
         component (assoc-in this event/dataflow-keys dataflow)]
     (log/info &quot;Adding subscribers ...&quot;)
+    (subscription/subscribe-all component)
     component))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn stop
   [this]
@@ -4822,7 +4928,102 @@ to provide easily-overridable implementations of the processing steps.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn create-component
   []
   (map-&gt;Event
-   {:pubsub {}}))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.system" name="dragon.components.system"><h1 class="project-name">dragon.components.system</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+   {:pubsub {}}))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.responder" name="dragon.components.responder"><h1 class="project-name">dragon.components.responder</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns dragon.components.responder
+  (:require
+    [clojure.core.async :as async]
+    [clojusc.twig :as logger]
+    [dragon.event.tag :as tag]
+    [com.stuartsierra.component :as component]
+    [dragon.components.config :as config]
+    [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs"><p>  Constants &amp; Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def initial-data {
+  :content {
+    :request-count 0
+    :timeout 15}
+  :css {
+    :request-count 0
+    :timeout 10}
+  :restart-system {
+    :request-count 0
+    :timeout 20}})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def default-handlers {
+  tag/content-regen (constantly true)
+  tag/css-regen (constantly true)
+  tag/system-restart (constantly true)})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-channel-pair
+  [key]
+  [key (async/timeout (get-in initial-data key :timeout))])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn make-channels
+  []
+  (-&gt;&gt; (keys initial-data)
+       (map get-channel-pair)
+       (into {})))</pre></td></tr><tr><td class="docs"><p>  Responder Component API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-responder
+  [system]
+  (:responder system))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-responder-data
+  [system]
+  (or (get-in system [:responder :data])
+      (:data system)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-channels
+  [system]
+  (or (get-in system [:responder :channels])
+      (:channels system)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn initialize-data
+  []
+  (atom initial-data))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn inc-request-count
+  [system key]
+  (swap! (get-responder-data system)
+         (fn [d k] (update-in d [k :request-count] inc)) key))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-request-count
+  [system key]
+  (get-in (get-responder-data system) [key :request-count]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn close-channels
+  [system]
+  (for [ch (get-channels system)]
+    (async/close! ch)))</pre></td></tr><tr><td class="docs"><p>  Component Lifecycle Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord Responder [data channels])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn start
+  [this]
+  (log/info &quot;Starting responder component ...&quot;)
+  (log/debug &quot;Started responder component.&quot;)
+  this)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn stop
+  [this]
+  (log/info &quot;Stopping responder component ...&quot;)
+  (close-channels this)
+  (log/debug &quot;Stopped responder component.&quot;)
+  this)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def lifecycle-behaviour
+  {:start start
+   :stop stop})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(extend Responder
+  component/Lifecycle
+  lifecycle-behaviour)</pre></td></tr><tr><td class="docs"><p>  Component Constructor   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Handlers should be a map whose keys are dragon event namespace keys and
+  whose values are functions to be called to handle the events represented by
+  the keys.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn create-component
+  [handlers]
+  (map-&gt;Responder {
+    :data (initialize-data)
+    :channels (make-channels)
+    :handlers (merge default-handlers handlers)}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn doit
+  []
+  (let [limit 10]
+    (log/info &quot;Start!&quot;)
+    (doseq [n (range limit)]
+      (let [wait-seconds (+ (rand-int limit))]
+        (async/go
+          (async/&lt;! (async/timeout (* wait-seconds 1000)))
+          (log/infof &quot;Waiting %s seconds ...&quot; wait-seconds))
+        (log/info &quot;Done.&quot;)))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.system" name="dragon.components.system"><h1 class="project-name">dragon.components.system</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.components.system
   (:require
     [com.stuartsierra.component :as component]
@@ -4831,6 +5032,8 @@ to provide easily-overridable implementations of the processing steps.</p>
     [dragon.components.event :as event]
     [dragon.components.httpd :as httpd]
     [dragon.components.logging :as logging]
+    [dragon.components.responder :as responder]
+    [dragon.components.watcher :as watcher]
     [dragon.config.core :refer [build]
                         :rename {build build-config}]))</pre></td></tr><tr><td class="docs"><p>  Common Configuration Components   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
@@ -4860,7 +5063,18 @@ to provide easily-overridable implementations of the processing steps.</p>
 </td><td class="codes"><pre class="brush: clojure">(def http
   {:httpd (component/using
            (httpd/create-component)
-           [:config :logging :db :event])})</pre></td></tr><tr><td class="docs"><p>  Component Intilizations   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+           [:config :logging :db :event])})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def wtchr
+  {:watcher (component/using
+             (watcher/create-component)
+             [:config :event])})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn rspndr
+  ([]
+    (rspndr {}))
+  ([handlers]
+    {:responder (component/using
+                 (responder/create-component handlers)
+                 [:config :event :httpd :watcher])}))</pre></td></tr><tr><td class="docs"><p>  Component Intilizations   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn initialize-default
   ([]
@@ -4888,7 +5102,9 @@ to provide easily-overridable implementations of the processing steps.</p>
              log
              data
              evt
-             http))))</pre></td></tr><tr><td class="docs">
+             http
+             wtchr
+             (rspndr)))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def init-lookup
   {:default #'initialize-default
    :basic #'initialize-bare-bones
@@ -5077,6 +5293,18 @@ to provide easily-overridable implementations of the processing steps.</p>
   [system]
   [(get-config system :workflow :type)
    (get-config system :workflow :storage)])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn watcher-type
+  [system]
+  (get-config system :watcher :type))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn watcher-content-dirs
+  [system]
+  (get-config system :watcher :content :dirs))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn watcher-docs-dirs
+  [system]
+  (get-config system :watcher :docs :dirs))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn watcher-sass-dirs
+  [system]
+  (get-config system :watcher :sass :dirs))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn apis
   [system]
   (get-config system :apis))</pre></td></tr><tr><td class="docs">
@@ -5114,7 +5342,7 @@ to provide easily-overridable implementations of the processing steps.</p>
   [this]
   (log/info &quot;Starting config component ...&quot;)
   (log/debug &quot;Started config component.&quot;)
-  (let [cfg (:builder this)]
+  (let [cfg ((:builder this))]
     (log/trace &quot;Built configuration:&quot; cfg)
     (reset! (:dragon this) cfg)
     (assoc this :dragon cfg)))</pre></td></tr><tr><td class="docs">
@@ -5907,7 +6135,7 @@ any future/additional passes, we need to escape it.</p>
         args (:args start-cfg)]
     (shell/with-sh-dir home
       (log/debugf &quot;Running command in %s ...&quot; home)
-      (log/debug &quot;Using shell/sh args:&quot; args)
+      (log/debug &quot;Using shell/sh args:&quot; (vec args))
       (apply util/shell! args))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn remove-connection
   [this]
@@ -6150,6 +6378,10 @@ any future/additional passes, we need to escape it.</p>
    tag/write-output-post [:default]
    tag/generate-routes-pre [:default]
    tag/generate-routes-post [:default]
+   tag/file-change [:default]
+   tag/file-create [:default]
+   tag/file-modify [:default]
+   tag/file-delete [:default]
    tag/shutdown-cli [shutdown-subscriber]})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn subscribe-all-event
   [system event-type subscriber-funcs]
@@ -6162,7 +6394,6 @@ any future/additional passes, we need to escape it.</p>
       (event/subscribe system event-type func))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn subscribe-all
   [system-or-component]
-  (log/debug &quot;Adding subscribers ...&quot;)
   (let [system (util/component-&gt;system system-or-component)]
     (doseq [[event-type subscriber-funcs] subscribers]
       (subscribe-all-event system
@@ -6256,15 +6487,17 @@ any future/additional passes, we need to escape it.</p>
   ([system-or-component event-type]
    (publish system-or-component event-type {}))
   ([system-or-component event-type data]
-   (when-not (nil? system-or-component)
+   (log/debug &quot;Publishing ...&quot;)
+   (if (nil? system-or-component)
+     (log/error &quot;System cannot be nil!&quot;)
      (let [system (util/component-&gt;system system-or-component)
            dataflow (get-dataflow-pubsub system)
            topic (get-topic dataflow)
            msg (message/new-dataflow-event event-type data)]
-       (log/debug &quot;Publishing message to&quot; (message/get-route msg))
+       (log/debug &quot;\tPublishing message to&quot; (message/get-route msg))
        (log/trace &quot;Sending message data:&quot; (message/get-payload msg))
-       (async/&gt;!! (get-chan dataflow) msg))
-     data)))</pre></td></tr><tr><td class="docs">
+       (async/&gt;!! (get-chan dataflow) msg)))
+   data))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn publish-&gt;
   ([other-data system-or-component event-type]
    (publish-&gt; other-data system-or-component event-type {}))
@@ -6281,7 +6514,7 @@ any future/additional passes, we need to escape it.</p>
   ([system event-type]
    (subscribe system event-type (fn [s m]
                                   (log/warn
-                                   &quot;Using default subscriber callback for route&quot;
+                                   &quot;Using default subscriber callback for&quot;
                                    (message/get-route m)))))
   ([system event-type func]
    (when-not (nil? system)
@@ -6326,7 +6559,14 @@ any future/additional passes, we need to escape it.</p>
 (def generate-routes-post ::generate-routes-post)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def shutdown-cli-pre ::shutdown-cli-pre)
 (def shutdown-cli ::shutdown-cli)
-(def shutdown-cli-post ::shutdown-cli-post)</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/gdeer81/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a><div id="floating-toc"><ul><li class="floating-toc-li" id="floating-toc_dragon.config.redis">dragon.config.redis</li><li class="floating-toc-li" id="floating-toc_dragon.config.defaults">dragon.config.defaults</li><li class="floating-toc-li" id="floating-toc_dragon.config.core">dragon.config.core</li><li class="floating-toc-li" id="floating-toc_dragon.config.datomic">dragon.config.datomic</li><li class="floating-toc-li" id="floating-toc_dragon.util">dragon.util</li><li class="floating-toc-li" id="floating-toc_dragon.core">dragon.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.show.posts">dragon.cli.show.posts</li><li class="floating-toc-li" id="floating-toc_dragon.cli.show.core">dragon.cli.show.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.core">dragon.cli.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.stub">dragon.cli.new.stub</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.core">dragon.cli.new.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.post">dragon.cli.new.post</li><li class="floating-toc-li" id="floating-toc_dragon.blog.post.impl.default">dragon.blog.post.impl.default</li><li class="floating-toc-li" id="floating-toc_dragon.blog.post.util">dragon.blog.post.util</li><li class="floating-toc-li" id="floating-toc_dragon.blog.post.core">dragon.blog.post.core</li><li class="floating-toc-li" id="floating-toc_dragon.blog.tags">dragon.blog.tags</li><li class="floating-toc-li" id="floating-toc_dragon.blog.categories">dragon.blog.categories</li><li class="floating-toc-li" id="floating-toc_dragon.blog.generator">dragon.blog.generator</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.block">dragon.blog.content.block</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.data">dragon.blog.content.data</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.rfc5322">dragon.blog.content.rfc5322</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.core">dragon.blog.content.core</li><li class="floating-toc-li" id="floating-toc_dragon.blog.core">dragon.blog.core</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.impl.msgs">dragon.blog.workflow.impl.msgs</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.impl.iter-db">dragon.blog.workflow.impl.iter-db</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.impl.xduce-db">dragon.blog.workflow.impl.xduce-db</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.impl.xduce">dragon.blog.workflow.impl.xduce</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.impl.iter">dragon.blog.workflow.impl.iter</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.core">dragon.blog.workflow.core</li><li class="floating-toc-li" id="floating-toc_dragon.components.db">dragon.components.db</li><li class="floating-toc-li" id="floating-toc_dragon.components.logging">dragon.components.logging</li><li class="floating-toc-li" id="floating-toc_dragon.components.event">dragon.components.event</li><li class="floating-toc-li" id="floating-toc_dragon.components.system">dragon.components.system</li><li class="floating-toc-li" id="floating-toc_dragon.components.config">dragon.components.config</li><li class="floating-toc-li" id="floating-toc_dragon.components.httpd">dragon.components.httpd</li><li class="floating-toc-li" id="floating-toc_dragon.main">dragon.main</li><li class="floating-toc-li" id="floating-toc_dragon.dev.system">dragon.dev.system</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.core">dragon.selmer.core</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.flickr">dragon.selmer.tags.flickr</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.panel">dragon.selmer.tags.panel</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.util">dragon.selmer.tags.util</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.core">dragon.selmer.tags.core</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.demo">dragon.selmer.tags.demo</li><li class="floating-toc-li" id="floating-toc_dragon.data.core">dragon.data.core</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.impl.redis">dragon.data.sources.impl.redis</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.impl.redis.docker">dragon.data.sources.impl.redis.docker</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.impl.redis.native">dragon.data.sources.impl.redis.native</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.impl.common">dragon.data.sources.impl.common</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.impl.datomic">dragon.data.sources.impl.datomic</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.core">dragon.data.sources.core</li><li class="floating-toc-li" id="floating-toc_dragon.event.topic">dragon.event.topic</li><li class="floating-toc-li" id="floating-toc_dragon.event.message">dragon.event.message</li><li class="floating-toc-li" id="floating-toc_dragon.event.subscription">dragon.event.subscription</li><li class="floating-toc-li" id="floating-toc_dragon.event.system.impl">dragon.event.system.impl</li><li class="floating-toc-li" id="floating-toc_dragon.event.system.core">dragon.event.system.core</li><li class="floating-toc-li" id="floating-toc_dragon.event.tag">dragon.event.tag</li></ul></div></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
+(def shutdown-cli-post ::shutdown-cli-post)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def file-change ::file-change)
+(def file-create ::file-create)
+(def file-modify ::file-modify)
+(def file-delete ::file-delete)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def content-regen ::content-regen)
+(def css-regen ::css-regen)
+(def system-restart ::system-restart)</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/gdeer81/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a><div id="floating-toc"><ul><li class="floating-toc-li" id="floating-toc_dragon.watcher.impl.hawk">dragon.watcher.impl.hawk</li><li class="floating-toc-li" id="floating-toc_dragon.watcher.core">dragon.watcher.core</li><li class="floating-toc-li" id="floating-toc_dragon.config.redis">dragon.config.redis</li><li class="floating-toc-li" id="floating-toc_dragon.config.defaults">dragon.config.defaults</li><li class="floating-toc-li" id="floating-toc_dragon.config.core">dragon.config.core</li><li class="floating-toc-li" id="floating-toc_dragon.config.datomic">dragon.config.datomic</li><li class="floating-toc-li" id="floating-toc_dragon.util">dragon.util</li><li class="floating-toc-li" id="floating-toc_dragon.core">dragon.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.show.posts">dragon.cli.show.posts</li><li class="floating-toc-li" id="floating-toc_dragon.cli.show.core">dragon.cli.show.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.core">dragon.cli.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.stub">dragon.cli.new.stub</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.core">dragon.cli.new.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.post">dragon.cli.new.post</li><li class="floating-toc-li" id="floating-toc_dragon.blog.post.impl.default">dragon.blog.post.impl.default</li><li class="floating-toc-li" id="floating-toc_dragon.blog.post.util">dragon.blog.post.util</li><li class="floating-toc-li" id="floating-toc_dragon.blog.post.core">dragon.blog.post.core</li><li class="floating-toc-li" id="floating-toc_dragon.blog.tags">dragon.blog.tags</li><li class="floating-toc-li" id="floating-toc_dragon.blog.categories">dragon.blog.categories</li><li class="floating-toc-li" id="floating-toc_dragon.blog.generator">dragon.blog.generator</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.block">dragon.blog.content.block</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.data">dragon.blog.content.data</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.rfc5322">dragon.blog.content.rfc5322</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.core">dragon.blog.content.core</li><li class="floating-toc-li" id="floating-toc_dragon.blog.core">dragon.blog.core</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.impl.msgs">dragon.blog.workflow.impl.msgs</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.impl.iter-db">dragon.blog.workflow.impl.iter-db</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.impl.xduce-db">dragon.blog.workflow.impl.xduce-db</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.impl.xduce">dragon.blog.workflow.impl.xduce</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.impl.iter">dragon.blog.workflow.impl.iter</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.core">dragon.blog.workflow.core</li><li class="floating-toc-li" id="floating-toc_dragon.components.db">dragon.components.db</li><li class="floating-toc-li" id="floating-toc_dragon.components.logging">dragon.components.logging</li><li class="floating-toc-li" id="floating-toc_dragon.components.watcher">dragon.components.watcher</li><li class="floating-toc-li" id="floating-toc_dragon.components.event">dragon.components.event</li><li class="floating-toc-li" id="floating-toc_dragon.components.responder">dragon.components.responder</li><li class="floating-toc-li" id="floating-toc_dragon.components.system">dragon.components.system</li><li class="floating-toc-li" id="floating-toc_dragon.components.config">dragon.components.config</li><li class="floating-toc-li" id="floating-toc_dragon.components.httpd">dragon.components.httpd</li><li class="floating-toc-li" id="floating-toc_dragon.main">dragon.main</li><li class="floating-toc-li" id="floating-toc_dragon.dev.system">dragon.dev.system</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.core">dragon.selmer.core</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.flickr">dragon.selmer.tags.flickr</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.panel">dragon.selmer.tags.panel</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.util">dragon.selmer.tags.util</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.core">dragon.selmer.tags.core</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.demo">dragon.selmer.tags.demo</li><li class="floating-toc-li" id="floating-toc_dragon.data.core">dragon.data.core</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.impl.redis">dragon.data.sources.impl.redis</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.impl.redis.docker">dragon.data.sources.impl.redis.docker</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.impl.redis.native">dragon.data.sources.impl.redis.native</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.impl.common">dragon.data.sources.impl.common</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.impl.datomic">dragon.data.sources.impl.datomic</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.core">dragon.data.sources.core</li><li class="floating-toc-li" id="floating-toc_dragon.event.topic">dragon.event.topic</li><li class="floating-toc-li" id="floating-toc_dragon.event.message">dragon.event.message</li><li class="floating-toc-li" id="floating-toc_dragon.event.subscription">dragon.event.subscription</li><li class="floating-toc-li" id="floating-toc_dragon.event.system.impl">dragon.event.system.impl</li><li class="floating-toc-li" id="floating-toc_dragon.event.system.core">dragon.event.system.core</li><li class="floating-toc-li" id="floating-toc_dragon.event.tag">dragon.event.tag</li></ul></div></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
 SyntaxHighlighter.all();
 
 // hackity hack

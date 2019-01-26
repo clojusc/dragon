@@ -15,7 +15,7 @@
     [trifl.core :refer [->int]]
     [trifl.fs :as fs])
   (:import
-    (java.io.File)))
+    (java.io File)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -25,7 +25,7 @@
   #{".rfc5322"})
 
 (defn legal-content-file?
-  [^java.io.File post]
+  [^File post]
   (log/trace "Checking legality of file:" post)
   (->> legal-post-file-extensions
        (map #(string/ends-with? (.getCanonicalPath post) %))

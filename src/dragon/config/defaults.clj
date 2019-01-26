@@ -39,6 +39,30 @@
    :cli {
      :log-level :error
      :log-nss '[dragon]}
+   :processor {
+     :constructor :default}
+   :db {
+     :type :redis-docker
+     :redis-docker redis/config-docker
+     :redis-native redis/config-native
+     :datomic datomic/config}
+   :workflow {
+     ;:type :transducer
+     :type :iterator
+     ;:storage :db
+     :storage :memory}
+   :watcher {
+     :type :hawk
+     :content {
+       :dirs ["./posts"]
+       :action #'clojure.core/constantly
+       :restart? false}
+     :docs {
+       :dirs []
+       :restart? false}
+     :sass {
+       :dirs []
+       :restart? false}}
    :apis {
      :flickr {
        :access "~/.flickr/access.key"}
@@ -48,16 +72,4 @@
          :secret "~/.twitter/app-consumer.secret"}
        :user-access {
          :token "~/.twitter/user-access.token"
-         :secret "~/.twitter/user-access.secret"}}}
-   :processor {
-     :constructor :default}
-   :workflow {
-     ;:type :transducer
-     :type :iterator
-     ;:storage :db
-     :storage :memory}
-   :db {
-     :type :redis-docker
-     :redis-docker redis/config-docker
-     :redis-native redis/config-native
-     :datomic datomic/config}})
+         :secret "~/.twitter/user-access.secret"}}}})

@@ -217,6 +217,22 @@
   [(get-config system :workflow :type)
    (get-config system :workflow :storage)])
 
+(defn watcher-type
+  [system]
+  (get-config system :watcher :type))
+
+(defn watcher-content-dirs
+  [system]
+  (get-config system :watcher :content :dirs))
+
+(defn watcher-docs-dirs
+  [system]
+  (get-config system :watcher :docs :dirs))
+
+(defn watcher-sass-dirs
+  [system]
+  (get-config system :watcher :sass :dirs))
+
 (defn apis
   [system]
   (get-config system :apis))
@@ -265,7 +281,7 @@
   [this]
   (log/info "Starting config component ...")
   (log/debug "Started config component.")
-  (let [cfg (:builder this)]
+  (let [cfg ((:builder this))]
     (log/trace "Built configuration:" cfg)
     (reset! (:dragon this) cfg)
     (assoc this :dragon cfg)))

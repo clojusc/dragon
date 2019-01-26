@@ -1,48 +1,45 @@
-(ns dragon.components.event
+(ns dragon.components.watcher
   (:require
+    [dragon.components.config :as config]
+    [dragon.components.event :as event]
+    [dragon.watcher.core :as watcher]
     [com.stuartsierra.component :as component]
-    [dragon.event.subscription :as subscription]
-    [dragon.event.system.core :as event]
-    [dragon.event.tag :as tag]
-    [dragon.event.topic :as topic]
     [taoensso.timbre :as log]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;   Event Component API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Watcher Component API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TBD
+;; XXX TBD
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Component Lifecycle Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defrecord Event [pubsub])
+(defrecord Watcher [])
 
 (defn start
   [this]
-  (log/info "Starting event component ...")
-  (log/debug "Started event component.")
-  (let [dataflow (event/create-dataflow-pubsub)
-        component (assoc-in this event/dataflow-keys dataflow)]
-    (log/info "Adding subscribers ...")
-    (subscription/subscribe-all component)
-    component))
+  (log/info "Starting watcher component ...")
+  (let [watch (watcher/create-watcher (config/watcher-type this) this)
+        content-paths (config/watcher-content-dirs this)]
+    ;; XXX track watches and save in component
+    (log/debug "Adding content paths to watch:" content-paths)
+    (watcher/add-paths watch content-paths)
+    (log/debug "Started watcher component."))
+  this)
 
 (defn stop
   [this]
-  (log/info "Stopping event component ...")
-  (if-let [pubsub-dataflow (get-in this event/dataflow-keys)]
-    (event/delete pubsub-dataflow))
-  (let [component (assoc-in this event/dataflow-keys nil)]
-    (log/debug "Stopped event component.")
-    component))
+  (log/info "Stopping watcher component ...")
+  (log/debug "Stopped watcher component.")
+  this)
 
 (def lifecycle-behaviour
   {:start start
    :stop stop})
 
-(extend Event
+(extend Watcher
   component/Lifecycle
   lifecycle-behaviour)
 
@@ -53,5 +50,4 @@
 (defn create-component
   ""
   []
-  (map->Event
-   {:pubsub {}}))
+  (->Watcher))
