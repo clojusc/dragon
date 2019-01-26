@@ -23,9 +23,9 @@
     :timeout 20}})
 
 (def default-handlers {
-  tag/content-regen
+  tag/content-regen (constantly true)
   tag/css-regen (constantly true)
-  tag/system-restart (constantly true)}
+  tag/system-restart (constantly true)})
 
 (defn get-channel-pair
   [key]

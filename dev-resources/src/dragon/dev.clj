@@ -32,7 +32,6 @@
     [dragon.selmer.tags.flickr :as flickr]
     [dragon.util :as util]
     [leiningen.core.project :as project]
-    [ltest.core :as ltest]
     [markdown.core :as md]
     [selmer.parser :as selmer]
     [taoensso.carmine :as car :refer [wcar]]

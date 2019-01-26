@@ -49,7 +49,6 @@
 (def file-modify ::file-modify)
 (def file-delete ::file-delete)
 
-(def content-regen ::content-change)
-(def css-regen ::content-change)
-(def system-restart ::content-change)
-
+(def content-regen ::content-regen)
+(def css-regen ::css-regen)
+(def system-restart ::system-restart)
