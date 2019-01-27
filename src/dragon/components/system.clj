@@ -8,16 +8,15 @@
     [dragon.components.logging :as logging]
     [dragon.components.responder :as responder]
     [dragon.components.watcher :as watcher]
-    [dragon.config.core :refer [build]
-                        :rename {build build-config}]))
+    [dragon.config.core :as config-lib]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Common Configuration Components   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn cfg
-  [builder]
-  {:config (config/create-component builder)})
+  [cfg-builder-fn]
+  {:config (config/create-component cfg-builder-fn)})
 
 (def log
   {:logging (component/using
@@ -63,35 +62,35 @@
                  [:config :event :httpd :watcher])}))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;   Component Intilizations   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Component Initializations   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn initialize-default
   ([]
-    (initialize-default build-config))
-  ([config-builder]
+    (initialize-default #'config-lib/build))
+  ([cfg-builder-fn]
     (component/map->SystemMap
-      (merge (cfg config-builder)
+      (merge (cfg cfg-builder-fn)
              log
              data
              evt))))
 
 (defn initialize-bare-bones
   ([]
-    (initialize-bare-bones build-config))
-  ([config-builder]
+    (initialize-bare-bones #'config-lib/build))
+  ([cfg-builder-fn]
     (component/map->SystemMap
-      (merge (cfg config-builder)
+      (merge (cfg cfg-builder-fn)
              data-no-log
              evt-no-log))))
 
 
 (defn initialize-with-web
   ([]
-    (initialize-with-web build-config))
-  ([config-builder]
+    (initialize-with-web #'config-lib/build))
+  ([cfg-builder-fn]
     (component/map->SystemMap
-      (merge (cfg config-builder)
+      (merge (cfg cfg-builder-fn)
              log
              data
              evt
@@ -108,12 +107,12 @@
   ([]
     (init :default))
   ([mode]
-    (init mode build-config))
-  ([mode config-builder]
-    ((mode init-lookup config-builder))))
+    (init mode #'config-lib/build))
+  ([mode cfg-builder-fn]
+    ((mode init-lookup) cfg-builder-fn)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;   Managment Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Management Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def stop #'component/stop)
