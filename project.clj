@@ -47,7 +47,7 @@
     [clojusc/env-ini "0.4.1"]
     [clojusc/rfc5322 "0.4.0"]
     [clojusc/trifl "0.4.2"]
-    [clojusc/twig "0.4.0"]
+    [clojusc/twig "0.4.1"]
     [com.cognitect/transit-clj "0.8.313"]
     [com.cognitect/transit-java "0.8.337"]
     [com.datomic/clj-client "0.8.606"]
