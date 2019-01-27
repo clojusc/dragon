@@ -24,21 +24,26 @@
     :name "Apache License, Version 2.0"
     :url "http://www.apache.org/licenses/LICENSE-2.0"}
   :exclusions [
+    [args4j]
     [clojusc/cljs-tools]
     [com.cognitect/transit-clj]
     [com.cognitect/transit-java]
     [commons-codec]
     [joda-time]
+    [org.apache.httpcomponents/httpclient]
+    [org.apache.httpcomponents/httpcore]
     [org.apache.maven.wagon/wagon-http]
     [org.apache.maven.wagon/wagon-provider-api]
     [org.clojure/clojure]
     [org.clojure/tools.reader]
-    [org.codehaus.plexus/plexus-utils]]
+    [org.codehaus.plexus/plexus-utils]
+    [org.jsoup/jsoup]]
   :dependencies [
+    [args4j "2.33"]
     [ch.qos.logback/logback-classic "1.2.3"]
     [cheshire "5.8.1"]
     [clj-http "3.9.1"]
-    [clojusc/cljs-tools "0.2.1"]
+    [clojusc/cljs-tools "0.2.2"]
     [clojusc/env-ini "0.4.1"]
     [clojusc/rfc5322 "0.4.0"]
     [clojusc/trifl "0.4.2"]
@@ -55,12 +60,15 @@
     [joda-time "2.10.1"]
     [leiningen-core "2.8.3"]
     [markdown-clj "1.0.7"]
+    [org.apache.httpcomponents/httpclient "4.5.6"]
+    [org.apache.httpcomponents/httpcore "4.4.10"]
     [org.apache.maven.wagon/wagon-http "3.3.1"]
     [org.apache.maven.wagon/wagon-provider-api "3.3.1"]
     [org.clojure/clojure "1.10.0"]
     [org.clojure/core.async "0.4.490"]
     [org.clojure/tools.reader "1.3.2"]
     [org.codehaus.plexus/plexus-utils "3.1.1"]
+    [org.jsoup/jsoup "1.11.2"]
     [pandect "0.6.1"]
     [potemkin "0.4.5"]
     [ring/ring-core "1.7.1"]
@@ -92,7 +100,7 @@
         [clojusc/ltest "0.4.0-SNAPSHOT"]]
       :plugins [
         [lein-ancient "0.6.15"]
-        [lein-ltest "0.3.0"]]
+        [lein-ltest "0.4.0-SNAPSHOT"]]
       :test-selectors {
         :select :select}}
     :docs {
