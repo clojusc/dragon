@@ -150,10 +150,8 @@
               "--name" "sockets"]]
     "build" ["with-profile" "+test" "do"
       ;["check-deps"]
-      ["lint"]
-      ["docs"]
       ["ubercompile"]
-      ["clean"]
-      ["uberjar"]
-      ["clean"]
-      ["ltest"]]})
+      ["lint"]
+      ["ltest"]
+      ["docs"]
+      ["uberjar"]]})
