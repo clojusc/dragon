@@ -28,8 +28,9 @@
   tag/system-restart (constantly true)})
 
 (defn get-channel-pair
-  [key]
-  [key (async/timeout (get-in initial-data key :timeout))])
+  [channel-pair-key]
+  [channel-pair-key (async/timeout
+                     (get-in initial-data [channel-pair-key :timeout]))])
 
 (defn make-channels
   []
