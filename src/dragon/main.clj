@@ -1,10 +1,10 @@
 (ns dragon.main
   (:require
     [clojusc.twig :as logger]
+    [com.stuartsierra.component :as component]
     [dragon.cli.core :as cli]
-    [dragon.components.system :as components]
-    [dragon.config.core :refer [build]
-                        :rename {build build-config}]
+    [dragon.components.core :as components]
+    [dragon.config.core :as config-lib]
     [taoensso.timbre :as log]
     [trifl.java :as trifl])
   (:gen-class))
@@ -17,28 +17,33 @@
       [:run])))
 
 (defn get-context-sensitive-system
-  [mode args]
-  (log/debug "Getting context-senstive system ...")
+  [mode cfg-data args]
+  (log/debug "Getting context-sensitive system ...")
   (log/trace "Got mode:" mode)
   (log/trace "Got args:" (vec args))
   (cond
-    (contains? (set args) :help) (do
-                                   ;; Only log errors in help mode
-                                   (logger/set-level! '[dragon] :error)
-                                   (components/start build-config :basic))
-    (= :run (first args)) (do
-                            ;; Run logging quietly until the logging component
-                            ;; starts up
-                            (logger/set-level! '[dragon] :debug)
-                            (components/start build-config :web))
-    :else (do
-            ;; Run logging quietly until the logging component
-            ;; starts up
-            (logger/set-level! '[dragon] :debug)
-            (components/start build-config :cli))))
+    (contains? (set args) :help)
+    (do
+      ;; Only log errors in help mode
+      (logger/set-level! '[dragon] :error)
+      (component/start (components/init :basic cfg-data)))
+
+    (= :run (first args))
+    (do
+      ;; Run logging quietly until the logging component
+      ;; starts up
+      (logger/set-level! '[dragon] :debug)
+      (component/start (components/init :web cfg-data)))
+
+    :else
+    (do
+      ;; Run logging quietly until the logging component
+      ;; starts up
+      (logger/set-level! '[dragon] :debug)
+      (component/start (components/init :cli cfg-data)))))
 
 (defn -main
-  "This is the entry point for Dragon.
+  "This is the entry point for Dragon
 
   It manages both the running of the application and related services, as well
   as use of the application name spaces for running tasks on the comand line.
@@ -46,10 +51,11 @@
   The entry point is executed from the command line when calling `lein run`."
   [mode & raw-args]
   (let [args (get-default-args raw-args)
-        system (get-context-sensitive-system mode args)]
+        cfg-data (config-lib/data)
+        system (get-context-sensitive-system mode cfg-data args)]
    (log/infof "Running Dragon in %s mode ..." mode)
    (log/debug "Passing the following args to the application:" args)
    (case (keyword mode)
      :cli (cli/run system (map keyword args)))
    ;; Do a full shut-down upon ^c
-   (trifl/add-shutdown-handler #(components/stop system))))
+   (trifl/add-shutdown-handler #(component/stop system))))

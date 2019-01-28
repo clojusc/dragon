@@ -26,8 +26,6 @@
   :exclusions [
     [args4j]
     [clojusc/cljs-tools]
-    [com.cognitect/transit-clj]
-    [com.cognitect/transit-java]
     [commons-codec]
     [joda-time]
     [org.apache.httpcomponents/httpclient]
@@ -46,11 +44,10 @@
     [clojusc/cljs-tools "0.2.2"]
     [clojusc/env-ini "0.4.1"]
     [clojusc/rfc5322 "0.4.0"]
+    [clojusc/system-manager "0.3.0"]
     [clojusc/trifl "0.4.2"]
     [clojusc/twig "0.4.1"]
-    [com.cognitect/transit-clj "0.8.313"]
-    [com.cognitect/transit-java "0.8.337"]
-    [com.datomic/clj-client "0.8.606"]
+    [clojusc/unified-config "0.4.0"]
     [com.stuartsierra/component "0.4.0"]
     [com.taoensso/carmine "2.19.1"]
     [commons-codec "1.11"]
@@ -82,7 +79,7 @@
       :aot :all}
     :custom-repl {
       :repl-options {
-        :init-ns dragon.dev
+        :init-ns dragon.repl
         :prompt ~get-prompt
         :init ~(println (get-banner))}}
     :cli {}

@@ -1,7 +1,7 @@
-(ns dragon.components.system
+(ns dragon.components.core
   (:require
     [com.stuartsierra.component :as component]
-    [dragon.components.config :as config]
+    [clojusc.config.unified.components.config :as config]
     [dragon.components.db :as db]
     [dragon.components.event :as event]
     [dragon.components.httpd :as httpd]
@@ -15,8 +15,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn cfg
-  [cfg-builder-fn]
-  {:config (config/create-component cfg-builder-fn)})
+  [cfg-data]
+  {:config (config/create-component cfg-data)})
 
 (def log
   {:logging (component/using
@@ -66,37 +66,30 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn initialize-default
-  ([]
-    (initialize-default #'config-lib/build))
-  ([cfg-builder-fn]
-    (component/map->SystemMap
-      (merge (cfg cfg-builder-fn)
-             log
-             data
-             evt))))
+  [cfg-data]
+  (component/map->SystemMap
+    (merge (cfg cfg-data)
+           log
+           data
+           evt)))
 
 (defn initialize-bare-bones
-  ([]
-    (initialize-bare-bones #'config-lib/build))
-  ([cfg-builder-fn]
-    (component/map->SystemMap
-      (merge (cfg cfg-builder-fn)
-             data-no-log
-             evt-no-log))))
-
+  [cfg-data]
+  (component/map->SystemMap
+    (merge (cfg cfg-data)
+           data-no-log
+           evt-no-log)))
 
 (defn initialize-with-web
-  ([]
-    (initialize-with-web #'config-lib/build))
-  ([cfg-builder-fn]
-    (component/map->SystemMap
-      (merge (cfg cfg-builder-fn)
-             log
-             data
-             evt
-             http
-             wtchr
-             (rspndr)))))
+  [cfg-data]
+  (component/map->SystemMap
+    (merge (cfg cfg-data)
+           log
+           data
+           evt
+           http
+           wtchr
+           (rspndr))))
 
 (def init-lookup
   {:default #'initialize-default
@@ -105,26 +98,6 @@
 
 (defn init
   ([]
-    (init :default))
-  ([mode]
-    (init mode #'config-lib/build))
-  ([mode cfg-builder-fn]
-    ((mode init-lookup) cfg-builder-fn)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;   Management Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(def stop #'component/stop)
-
-(defn start
-  ([config-builder]
-   (start (initialize-default config-builder)))
-  ([config-builder system-type]
-    (component/start (init system-type config-builder))))
-
-(defn restart
-  ([system]
-   (-> system
-       (component/stop)
-       (component/start))))
+    (init :default (config-lib/data)))
+  ([mode cfg-data]
+    ((mode init-lookup) cfg-data)))

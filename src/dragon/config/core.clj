@@ -1,26 +1,12 @@
 (ns dragon.config.core
   (:require
-    [clojure.string :as string]
-    [dragon.config.defaults :as default]
-    [dragon.util :as util]
-    [leiningen.core.project :as project]
-    [taoensso.timbre :as log]
-    [trifl.fs :as fs])
+    [clojusc.config.unified.config :as config])
   (:refer-clojure :exclude [name read]))
 
-(defn read-home-file
-  [file-path]
-  (-> file-path
-      fs/expand-home
-      slurp
-      string/trim))
+(def config-file "config/dragon/config.edn")
 
-(defn build
-  ""
-  []
-  (let [proj (project/read)]
-    (util/deep-merge
-     default/config
-     (util/deep-merge
-      (get-in proj [:profiles :dragon])
-      (:dragon (project/read-profiles proj))))))
+(defn data
+  ([]
+    (data config-file))
+  ([filename]
+    (config/data filename)))

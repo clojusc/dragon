@@ -1,7 +1,8 @@
 (ns dragon.components.config
+  "Configuration component namespace."
   (:require
+    [clojusc.config.unified.components.config :as config :refer [get-cfg]]
     [com.stuartsierra.component :as component]
-    [dragon.config.core :as config]
     [dragon.util :as util]
     [taoensso.timbre :as log])
   (:refer-clojure :exclude [name]))
@@ -10,171 +11,122 @@
 ;;;   Config Component API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn extract-config
-  ""
-  [system args]
-  (let [base-keys [:config :dragon]]
-    (if-not (seq args)
-      (get-in system base-keys)
-      (get-in system (concat base-keys args)))))
+;; Logging
 
-(defn get-config
-  [system & args]
-  (let [cfg (extract-config system args)]
-    (if (util/atom? cfg)
-      @cfg
-      cfg)))
-
-(defn domain
-  [system]
-  (get-config system :domain))
-
-(defn domain-urn
-  [system]
-  (->> system
-       (domain)
-       (util/dots->dashes)
-       (format "urn:%s")))
+(def log-color? config/log-color?)
+(def log-level config/log-level)
+(def log-nss config/log-nss)
 
 (defn name
   [system]
-  (get-config system :name))
+  (:name (get-cfg system)))
 
 (defn description
   [system]
-  (get-config system :description))
+  (:description (get-cfg system)))
+
+(defn domain
+  [system]
+  (:domain (get-cfg system)))
+
+(defn domain-urn
+  [system]
+  (->> (domain system)
+       (util/dots->dashes)
+       (format "urn:%s")))
 
 (defn port
   [system]
-  (get-config system :port))
+  (:port  (get-cfg system)))
 
 (defn output-dir
   [system]
-  (get-config system :output-dir))
-
-(defn output-file-tmpl
-  [system]
-  (get-config system :output-file-tmpl))
+  (get-in (get-cfg system) [:paths :output]))
 
 (defn base-path
   [system]
-  (get-config system :base-path))
+  (get-in (get-cfg system) [:paths :base]))
 
 (defn posts-path
   [system]
-  (get-config system :posts-path))
+  (get-in (get-cfg system) [:paths :posts]))
 
 (defn posts-path-src
   [system]
-  (get-config system :posts-path-src))
+  (get-in (get-cfg system) [:paths :input]))
+
+(defn output-file-tmpl
+  [system]
+  (get-in (get-cfg system) [:files :output-template]))
 
 (defn feed-count
   [system]
-  (get-config system :feed-count))
+  (get-in (get-cfg system) [:feed :count]))
 
 (defn link-tmpl
   [system]
-  (get-config system :link-tmpl))
-
-(defn cli
-  [system]
-  (get-config system :cli))
+  (get-in (get-cfg system) [:links :template]))
 
 (defn log-level
   [system]
-  (get-config system :cli :log-level))
+  (get-in (get-cfg system) [:logging :level]))
 
 (defn log-nss
   [system]
-  (get-config system :cli :log-nss))
-
-(defn repl
-  [system]
-  (get-config system :repl))
-
-(defn repl-log-level
-  [system]
-  (get-config system :repl :log-level))
-
-(defn repl-log-nss
-  [system]
-  (get-config system :repl :log-nss))
-
-(defn app
-  [system]
-  (get-config system :app))
-
-(defn app-log-level
-  [system]
-  (get-config system :app :log-level))
-
-(defn app-log-nss
-  [system]
-  (get-config system :app :log-nss))
-
-(defn templating
-  [system]
-  (get-config system :templating))
+  (get-in (get-cfg system) [:logging :nss]))
 
 (defn template-skip-marker
   [system]
-  (get-config system :templating :skip-marker))
+  (get-in (get-cfg system) [:parsing :skip-marker]))
 
 (defn blocks-enabled
   [system]
-  (get-config system :blocks :enabled))
-
-(defn parsing
-  [system]
-  (get-config system :parsing))
+  (get-in (get-cfg system) [:blocks :enabled]))
 
 (defn word-separator
   [system]
-  (get-config system :parsing :word-separator))
+  (get-in (get-cfg system) [:parsing :word-separator]))
 
 (defn word-joiner
   [system]
-  (get-config system :parsing :word-joiner))
+  (get-in (get-cfg system) [:parsing :word-joiner]))
 
 (defn paragraph-separator
   [system]
-  (get-config system :parsing :paragraph-separator))
+  (get-in (get-cfg system) [:parsing :paragraph-separator]))
 
 (defn tag-separator
   [system]
-  (get-config system :parsing :tag-separator))
+  (get-in (get-cfg system) [:parsing :tag-separator]))
 
 (defn sentence-end
   [system]
-  (get-config system :parsing :sentence-end))
+  (get-in (get-cfg system) [:parsing :sentence-end]))
 
 (defn ellipsis
   [system]
-  (get-config system :parsing :ellipsis))
+  (get-in (get-cfg system) [:parsing :ellipsis]))
 
 (defn period-ellipsis
   [system]
-  (get-config system :parsing :period-ellipsis))
+  (get-in (get-cfg system) [:parsing :period-ellipsis]))
 
 (defn robots-allow
   [system]
-  (get-config system :robots :allow))
+  (get-in (get-cfg system) [:robots :allow]))
 
 (defn robots-disallow
   [system]
-  (get-config system :robots :disallow))
-
-(defn db
-  [system]
-  (get-config system :db))
+  (get-in (get-cfg system) [:robots :disallow]))
 
 (defn db-type
   [system]
-  (get-config system :db :type))
+  (get-in (get-cfg system) [:db :type]))
 
 (defn db-config
   [system]
-  ((db-type system) (db system)))
+  (requiring-resolve
+    (get-in (get-cfg system) [:db (db-type system)])))
 
 (defn db-conn
   [system]
@@ -188,125 +140,77 @@
   [system]
   (:version (db-config system)))
 
-(defn db-start-delay
-  [system]
-  (get-in (db-config system) [:start :delay]))
-
-(defn db-start-retry
-  [system]
-  (get-in (db-config system) [:start :retry-delay]))
-
-(defn db-start-retry-timeout
-  [system]
-  (get-in (db-config system) [:start :retry-timeout]))
-
 (defn processor-constructor
   [system]
-  (get-config system :processor :constructor))
+  (get-in (get-cfg system) [:processor :constructor]))
 
 (defn workflow-type
   [system]
-  (get-config system :workflow :type))
+  (get-in (get-cfg system) [:workflow :type]))
 
 (defn workflow-storage
   [system]
-  (get-config system :workflow :storage))
+  (get-in (get-cfg system) [:workflow :storage]))
 
 (defn workflow-qualifier
   [system]
-  [(get-config system :workflow :type)
-   (get-config system :workflow :storage)])
+  [(workflow-type system)
+   (workflow-storage system)])
 
 (defn watcher-type
   [system]
-  (get-config system :watcher :type))
+  (get-in (get-cfg system) [:watcher :type]))
 
 (defn watcher-content-dirs
   [system]
-  (get-config system :watcher :content :dirs))
+  (get-in (get-cfg system) [:watcher :content :dirs]))
 
 (defn watcher-docs-dirs
   [system]
-  (get-config system :watcher :docs :dirs))
+  (get-in (get-cfg system) [:watcher :docs :dirs]))
 
 (defn watcher-sass-dirs
   [system]
-  (get-config system :watcher :sass :dirs))
-
-(defn apis
-  [system]
-  (get-config system :apis))
-
-(defn flickr-api
-  [system]
-  (get-config system :apis :flickr))
+  (get-in (get-cfg system) [:watcher :sass :dirs]))
 
 (defn flickr-api-access-key
   [system]
-  (-> system
-      (get-config :apis :flickr :access)
-      config/read-home-file))
+  (-> (get-cfg system)
+      (get-in [:apis :flickr :access])
+      util/read-home-file))
 
 (defn twitter-api-app-consumer-key
   [system]
-  (-> system
-      (get-config :apis :twitter :app-consumer :key)
-      config/read-home-file))
+  (-> (get-cfg system)
+      (get-in [:apis :twitter :app-consumer :key])
+      util/read-home-file))
 
 (defn twitter-api-app-consumer-secret
   [system]
-  (-> system
-      (get-config :apis :twitter :app-consumer :secret)
-      config/read-home-file))
+  (-> (get-cfg system)
+      (get-in [:apis :twitter :app-consumer :secret])
+      util/read-home-file))
 
 (defn twitter-api-user-access-token
   [system]
-  (-> system
-      (get-config :apis :twitter :user-access :token)
-      config/read-home-file))
+  (-> (get-cfg system)
+      (get-in [:apis :twitter :user-access :token])
+      util/read-home-file))
 
 (defn twitter-api-user-access-secret
   [system]
-  (-> system
-      (get-config :apis :twitter :user-access :secret)
-      config/read-home-file))
+  (-> (get-cfg system)
+      (get-in [:apis :twitter :user-access :secret])
+      util/read-home-file))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Component Lifecycle Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defrecord Config [builder dragon])
-
-(defn start
-  [this]
-  (log/info "Starting config component ...")
-  (log/debug "Started config component.")
-  (let [cfg ((:builder this))]
-    (log/trace "Built configuration:" cfg)
-    (reset! (:dragon this) cfg)
-    (assoc this :dragon cfg)))
-
-(defn stop
-  [this]
-  (log/info "Stopping config component ...")
-  (log/debug "Stopped config component.")
-  (assoc this :dragon nil))
-
-(def lifecycle-behaviour
-  {:start start
-   :stop stop})
-
-(extend Config
-  component/Lifecycle
-  lifecycle-behaviour)
+;; Implemented in clojusc.config.unified.components.config
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Component Constructor   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn create-component
-  ""
-  [config-builder-fn]
-  (map->Config
-    {:builder config-builder-fn
-     :dragon (atom {})}))
+;; Implemented in clojusc.config.unified.components.config

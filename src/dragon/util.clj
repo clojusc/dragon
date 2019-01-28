@@ -5,7 +5,8 @@
     [clojure.java.shell :as shell]
     [clojusc.twig :refer [pprint]]
     [pandect.algo.crc32 :refer [crc32]]
-    [taoensso.timbre :as log])
+    [taoensso.timbre :as log]
+    [trifl.fs :as fs])
   (:refer-clojure :exclude [boolean]))
 
 (declare merge-val)
@@ -215,3 +216,10 @@
     (fn [[route _route-data]]
       (some true? (map #(string/starts-with? route %) disallowed-set)))
     coll))
+
+(defn read-home-file
+  [file-path]
+  (-> file-path
+      fs/expand-home
+      slurp
+      string/trim))

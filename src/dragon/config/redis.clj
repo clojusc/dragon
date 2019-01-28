@@ -75,5 +75,5 @@
 (def config-native
   (assoc config
          :start (assoc start-native
-                :args start-args-native
-                :data-dir (:data-dir base-config))))
+                       :args start-args-native
+                       :data-dir (:data-dir base-config))))

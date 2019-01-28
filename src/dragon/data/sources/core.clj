@@ -3,15 +3,12 @@
     [clojure.java.shell :as shell]
     [dragon.components.config :as config]
     [dragon.data.sources.impl.common :as common]
-    [dragon.data.sources.impl.datomic :as datomic]
     [dragon.data.sources.impl.redis :as redis]
     [dragon.data.sources.impl.redis.docker :as redis-docker]
     [dragon.data.sources.impl.redis.native :as redis-native]
     [dragon.util :as util]
     [taoensso.timbre :as log])
   (:import
-    (dragon.data.sources.impl.datomic DatomicConnector
-                                      DatomicQuerier)
     (dragon.data.sources.impl.redis RedisQuerier)
     (dragon.data.sources.impl.redis.docker RedisDockerConnector)
     (dragon.data.sources.impl.redis.native RedisNativeConnector)))
@@ -24,11 +21,6 @@
   (add-connection [this])
   (remove-connection [this])
   (stop-db! [this]))
-
-(extend DatomicConnector
-        DBConnector
-        (merge common/connection-behaviour
-               datomic/connection-behaviour))
 
 (extend RedisDockerConnector
         DBConnector
@@ -44,8 +36,7 @@
   [component]
   (case (config/db-type component)
     :redis-docker (redis-docker/new-connector component)
-    :redis-native (redis-native/new-connector component)
-    :datomic (datomic/new-connector component)))
+    :redis-native (redis-native/new-connector component)))
 
 (defprotocol DBQuerier
   (get-post-checksum [this post-key])
@@ -68,10 +59,6 @@
   (set-post-checksum [this post-key checksum])
   (set-posts-checksums [this checksum]))
 
-(extend DatomicQuerier
-        DBQuerier
-        datomic/query-behaviour)
-
 (extend RedisQuerier
         DBQuerier
         redis/query-behaviour)
@@ -80,5 +67,4 @@
   [component]
   (case (config/db-type component)
     :redis-docker (redis/new-querier component)
-    :redis-native (redis/new-querier component)
-    :datomic (datomic/new-querier component)))
+    :redis-native (redis/new-querier component)))

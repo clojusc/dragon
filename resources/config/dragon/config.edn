@@ -1,22 +1,24 @@
-(ns dragon.config.defaults
-  (:require
-    [dragon.config.redis :as redis]))
-
-(def config
   {:name "Dragon Blog Generator"
    :description "A fire-breathing blog generator"
    :domain "dragon.github.io"
    :port 5097
-   :output-dir "docs"
-   :output-file-tmpl "%s.html"
-   :base-path "/blog"
-   :posts-path "/blog/archives"
-   :posts-path-src "./posts"
-   :feed-count 20
-   :link-tmpl "<a href=\"%s\">%s</a>"
-   :templating {
-     :skip-marker "%%%"}
+   :paths {
+     :input "./posts"
+     :output "docs"
+     :base "/blog"
+     :posts "/blog/archives"}
+   :files {
+     :output-template "%s.html"}
+   :links {
+     :template "<a href=\"%s\">%s</a>"}
+   :feed {
+     :count 20}
+   :logging {
+     :level :trace
+     :nss [dragon]
+     :color true}}
    :parsing {
+     :skip-marker "%%%"
      :word-separator #"\s"
      :word-joiner " "
      :paragraph-separator #"\n\n"
@@ -29,21 +31,11 @@
    :robots {
      :allow #{"/blog"}
      :disallow #{}}
-   :repl {
-     :log-level :info
-     :log-nss '[dragon]}
-   :app {
-     :log-level :warn
-     :log-nss '[dragon]}
-   :cli {
-     :log-level :error
-     :log-nss '[dragon]}
    :processor {
      :constructor :default}
    :db {
      :type :redis-docker
-     :redis-docker redis/config-docker
-     :redis-native redis/config-native}
+     :redis-docker dragon.config.redis/config-docker}
    :workflow {
      ;:type :transducer
      :type :iterator
