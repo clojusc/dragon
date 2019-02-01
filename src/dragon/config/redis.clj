@@ -27,7 +27,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def ^:private redis-docker-version
-  "4.0.2")
+  "5.0.3")
 
 (def ^:private base-config-docker
   (assoc base-config
