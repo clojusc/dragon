@@ -40,6 +40,7 @@
     [args4j "2.33"]
     [ch.qos.logback/logback-classic "1.2.3"]
     [cheshire "5.8.1"]
+    [clj-blogger "0.2.0-SNAPSHOT"]
     [clj-http "3.9.1"]
     [clojusc/cljs-tools "0.2.2"]
     [clojusc/env-ini "0.4.1"]
@@ -72,9 +73,6 @@
     [selmer "1.12.5"]
     [stasis "2.4.0"]]
   :profiles {
-    :dragon {
-      :cli {
-        :log-level :trace}}
     :ubercompile {
       :aot :all}
     :custom-repl {
