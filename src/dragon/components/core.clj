@@ -2,13 +2,14 @@
   (:require
     [com.stuartsierra.component :as component]
     [clojusc.config.unified.components.config :as config]
+    [clojusc.process.manager.components.docker :as docker]
     [dragon.components.db :as db]
     [dragon.components.event :as event]
     [dragon.components.httpd :as httpd]
     [dragon.components.logging :as logging]
     [dragon.components.responder :as responder]
     [dragon.components.watcher :as watcher]
-    [dragon.config.core :as config-lib]))
+    [dragon.config :as config-lib]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Common Configuration Components   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -23,25 +24,26 @@
              (logging/create-component)
              [:config])})
 
-(def evt-no-log
-  {:event (component/using
-           (event/create-component)
-           [:config])})
+(def create-evt (partial component/using (event/create-component)))
 
-(def data-no-log
-  {:db (component/using
-        (db/create-component)
-        [:config :event])})
+(def create-redis
+  (partial component/using
+           (docker/create-component
+             :redis
+            {:image-id "redis:5.0.3-alpine"
+             :ports ["127.0.0.1:6379:6379"
+                     "127.0.0.1:6380:6380"]
+             :volumes [(str (System/getProperty "user.dir") "/data/redis:/data")]
+             :container-id-file "/tmp/dragon-redis-container-id"})))
 
-(def evt
-  {:event (component/using
-           (event/create-component)
-           [:config :logging])})
+(def create-db (partial component/using (db/create-component)))
 
-(def data
-  {:db (component/using
-        (db/create-component)
-        [:config :logging :event])})
+(def evt {:event (create-evt [:config :logging])})
+(def evt-no-log {:event (create-evt [:config])})
+(def redis {:redis-server (create-redis [:config :logging])})
+(def redis-no-log {:redis-server (create-redis [:config])})
+(def data {:db (create-db [:config :logging :event :redis-server])})
+(def data-no-log {:db (create-db [:config :event :redis-server])})
 
 (def http
   {:httpd (component/using
@@ -70,6 +72,7 @@
   (component/map->SystemMap
     (merge (cfg cfg-data)
            log
+           redis
            data
            evt)))
 
@@ -85,6 +88,7 @@
   (component/map->SystemMap
     (merge (cfg cfg-data)
            log
+           redis
            data
            evt
            http

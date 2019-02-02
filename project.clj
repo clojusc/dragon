@@ -44,6 +44,7 @@
     [clj-http "3.9.1"]
     [clojusc/cljs-tools "0.2.2"]
     [clojusc/env-ini "0.4.1"]
+    [clojusc/process-manager "0.2.0-SNAPSHOT"]
     [clojusc/rfc5322 "0.4.0"]
     [clojusc/system-manager "0.3.0"]
     [clojusc/trifl "0.4.2"]

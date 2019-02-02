@@ -85,7 +85,8 @@
 
 (defn word-separator
   [system]
-  (get-in (get-cfg system) [:parsing :word-separator]))
+  (re-pattern
+    (get-in (get-cfg system) [:parsing :word-separator])))
 
 (defn word-joiner
   [system]
@@ -93,11 +94,13 @@
 
 (defn paragraph-separator
   [system]
-  (get-in (get-cfg system) [:parsing :paragraph-separator]))
+  (re-pattern
+    (get-in (get-cfg system) [:parsing :paragraph-separator])))
 
 (defn tag-separator
   [system]
-  (get-in (get-cfg system) [:parsing :tag-separator]))
+  (re-pattern
+    (get-in (get-cfg system) [:parsing :tag-separator])))
 
 (defn sentence-end
   [system]
@@ -125,16 +128,11 @@
 
 (defn db-config
   [system]
-  (requiring-resolve
-    (get-in (get-cfg system) [:db (db-type system)])))
+  (get-in (get-cfg system) [:db (db-type system)]))
 
 (defn db-conn
   [system]
-  (:conn (db-config system)))
-
-(defn db-start-config
-  [system]
-  (:start (db-config system)))
+  {:conn (db-config system)})
 
 (defn db-version
   [system]

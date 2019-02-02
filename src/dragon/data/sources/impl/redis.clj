@@ -53,6 +53,32 @@
   (car/wcar (:conn (config/db-config component))
             (apply (resolve (symbol (str "taoensso.carmine/" cmd))) args)))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Connector Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defrecord RedisConnector [component])
+
+(defn new-connector
+  [component]
+  (->RedisConnector component))
+
+(defn setup-schemas
+  [this]
+  )
+
+(defn setup-subscribers
+  [this]
+  )
+
+(defn add-connection
+  [this]
+  (assoc (:component this) :conn (config/db-conn (:component this))))
+
+(def connection-behaviour
+  {:add-connection add-connection})
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Dragon Query Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

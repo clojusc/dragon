@@ -7,9 +7,11 @@
 
 (defn execute-db-command!
   [this]
-  (let [start-cfg (config/db-start-config (:component this))
-        home (:home start-cfg)
-        args (:args start-cfg)]
+  (let [;start-cfg (config/db-start-config (:component this))
+        home (System/getProperty "user.dir")
+        ; args (:args start-cfg)
+        args []
+        ]
     (shell/with-sh-dir home
       (log/debugf "Running command in %s ..." home)
       (log/debug "Using shell/sh args:" (vec args))
@@ -20,10 +22,8 @@
   (assoc (:component this) :conn nil))
 
 (def connection-behaviour
-  {:start-db! execute-db-command!
-   :execute-db-command! execute-db-command!
+  {:execute-db-command! execute-db-command!
    :setup-schemas :not-implemented
    :setup-subscribers :not-implemented
    :add-connection :not-implemented
-   :stop-db! :not-implemented
    :remove-connection remove-connection})

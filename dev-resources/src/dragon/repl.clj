@@ -25,7 +25,7 @@
     [dragon.cli.core :as cli]
     [dragon.cli.show.posts :as cli-show-posts]
     [dragon.components.core :as components]
-    [dragon.config.core :as config]
+    [dragon.config :as config]
     [dragon.core]
     [dragon.data.sources.core :as data-source]
     [dragon.data.sources.impl.redis :as redis-db]
@@ -62,7 +62,7 @@
   reloaded, the options will be lost and need to be re-applied."
   []
   (selmer/cache-off!)
-  (logger/set-level! '[dragon] :trace)
+  (logger/set-level! '[dragon] :debug)
   (setup-manager setup-options))
 
 (defn init-and-startup

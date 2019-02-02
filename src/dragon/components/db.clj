@@ -49,7 +49,6 @@
   (log/trace "component keys:" (keys this))
   (log/debug "Database component backend is" (config/db-type this))
   (let [connector (data-source/new-connector this)
-        _ (data-source/start-db! connector)
         component (data-source/add-connection connector)
         querier (data-source/new-querier component)]
     (run-setup-tasks connector)
@@ -67,7 +66,6 @@
         connector (if (util/atom? raw-connector)
                     @raw-connector
                     raw-connector)]
-    (data-source/stop-db! connector)
     (log/info "Stopped db component.")
     (assoc this :connector nil
                 :querier nil)))

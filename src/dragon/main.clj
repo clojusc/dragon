@@ -4,7 +4,7 @@
     [com.stuartsierra.component :as component]
     [dragon.cli.core :as cli]
     [dragon.components.core :as components]
-    [dragon.config.core :as config-lib]
+    [dragon.config :as config-lib]
     [taoensso.timbre :as log]
     [trifl.java :as trifl])
   (:gen-class))

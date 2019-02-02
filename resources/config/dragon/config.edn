@@ -15,14 +15,14 @@
      :count 20}
    :logging {
      :level :trace
-     :nss [dragon]
-     :color true}}
+     :nss [clojusc dragon]
+     :color true}
    :parsing {
      :skip-marker "%%%"
-     :word-separator #"\s"
+     :word-separator "\\s"
      :word-joiner " "
-     :paragraph-separator #"\n\n"
-     :tag-separator #",\s?"
+     :paragraph-separator "\n\n"
+     :tag-separator ",\\s?"
      :sentence-end "."
      :ellipsis " ..."
      :period-ellipsis ".."}
@@ -34,8 +34,11 @@
    :processor {
      :constructor :default}
    :db {
-     :type :redis-docker
-     :redis-docker dragon.config.redis/config-docker}
+     :type :redis
+     :redis {
+       :pool {}
+       :spec {
+         :host "127.0.0.1" :port 6379}}}
    :workflow {
      ;:type :transducer
      :type :iterator
@@ -45,7 +48,7 @@
      :type :hawk
      :content {
        :dirs ["./posts"]
-       :action #'clojure.core/constantly
+       :action clojure.core/constantly
        :restart? false}
      :docs {
        :dirs []
@@ -62,4 +65,4 @@
          :secret "~/.twitter/app-consumer.secret"}
        :user-access {
          :token "~/.twitter/user-access.token"
-         :secret "~/.twitter/user-access.secret"}}}})
+         :secret "~/.twitter/user-access.secret"}}}}
