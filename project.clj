@@ -59,19 +59,19 @@
     [joda-time "2.10.1"]
     [leiningen-core "2.8.3"]
     [markdown-clj "1.0.7"]
-    [org.apache.httpcomponents/httpclient "4.5.6"]
-    [org.apache.httpcomponents/httpcore "4.4.10"]
+    [org.apache.httpcomponents/httpclient "4.5.7"]
+    [org.apache.httpcomponents/httpcore "4.4.11"]
     [org.apache.maven.wagon/wagon-http "3.3.1"]
     [org.apache.maven.wagon/wagon-provider-api "3.3.1"]
     [org.clojure/clojure "1.10.0"]
     [org.clojure/core.async "0.4.490"]
     [org.clojure/tools.reader "1.3.2"]
     [org.codehaus.plexus/plexus-utils "3.1.1"]
-    [org.jsoup/jsoup "1.11.2"]
+    [org.jsoup/jsoup "1.11.3"]
     [pandect "0.6.1"]
     [potemkin "0.4.5"]
     [ring/ring-core "1.7.1"]
-    [selmer "1.12.5"]
+    [selmer "1.12.6"]
     [stasis "2.4.0"]]
   :profiles {
     :ubercompile {
@@ -86,10 +86,12 @@
       :source-paths ["dev-resources/src"]
       :main dragon.main
       :dependencies [
-        [org.clojure/tools.namespace "0.2.11"]]}
+        [org.clojure/tools.namespace "0.2.11"]]
+      :plugins [
+        [lein-shell "0.5.0"]]}
     :lint {
       :plugins [
-        [jonase/eastwood "0.3.4"]
+        [jonase/eastwood "0.3.5"]
         [lein-kibit "0.1.6"]]}
     :test {
       :dependencies [
@@ -150,4 +152,7 @@
       ["lint"]
       ["ltest"]
       ["docs"]
-      ["uberjar"]]})
+      ["uberjar"]]
+    "publish-docs" ["do"
+      ["docs"]
+      ["shell" "resources/scripts/publish-docs.sh"]]})

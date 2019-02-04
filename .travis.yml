@@ -1,5 +1,10 @@
 language: clojure
-lein: 2.7.1
+lein: 2.8.3
+git:
+  submodules: false
+  depth: 5
+before_install:
+  - resources/scripts/switch-to-https-submodules.sh
 script:
   - lein build
 jdk:
