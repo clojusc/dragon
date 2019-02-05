@@ -40,7 +40,7 @@
     [args4j "2.33"]
     [ch.qos.logback/logback-classic "1.2.3"]
     [cheshire "5.8.1"]
-    [clj-blogger "0.2.0-SNAPSHOT"]
+    [clj-blogger "0.2.0"]
     [clj-http "3.9.1"]
     [clojusc/cljs-tools "0.2.2"]
     [clojusc/env-ini "0.4.1"]
