@@ -1,6 +1,7 @@
 (ns dragon.data.sources.impl.redis
   (:require
     [clojure.java.io :as io]
+    [clojure.set :as set]
     [clojure.string :as string]
     [dragon.components.config :as config]
     [dragon.data.sources.impl.common :as common]
@@ -82,15 +83,13 @@
   actually type in the REPL.)"
   [this args]
   (let [[cmd & cmd-args] args
-        driver-fn (resolve (symbol (str "taoensso.carmine/" (name cmd))))]
-    (log/debug "cmd:" cmd)
-    (log/debug "args:" cmd-args)
-    (log/debug "conn:" (:conn this))
-    (log/debug "car/cmd:" (str "car/" (name cmd)))
-    (log/debug "symbol of car/cmd:" (symbol (str "car/" (name cmd))))
-    (log/debug "resolved car/cmd:" driver-fn)
-    (car/wcar (:conn this)
-              (apply driver-fn cmd-args))))
+        driver-fn (resolve (symbol (str "taoensso.carmine/" (name cmd))))
+        result (car/wcar (:conn this)
+                :as-pipeline
+                (apply driver-fn cmd-args))]
+    (if (= 1 (count result))
+      (first result)
+      result)))
 
 (defn get-post-category
   [this post-key]
@@ -184,21 +183,61 @@
    :tags (get-post-tags this post-key)
    :uri-path (get-post-uri-path this post-key)})
 
-(defn get-all-categories
-  [this]
-  (cmd (:conn this) :get (:categories (schema "all-posts"))))
+(defn get-all-keys
+  ([this schema-glob]
+    (get-all-keys this schema-glob {}))
+  ([this schema-glob opts]
+    (let [all-keys (cmd this [:keys schema-glob])]
+      (if (:sorted opts)
+        (sort all-keys)
+        all-keys))))
 
-(defn get-post-keys
-  [this schema-glob]
-  (sort (cmd (:conn this) 'keys schema-glob)))
+(defn get-all*
+  ([this glob]
+    (get-all* this glob {}))
+  ([this glob opts]
+    (let [results (cmd this
+                    (concat [:mget] (get-all-keys this glob opts)))]
+      (if (:unique opts)
+        (apply set/union results)
+        results))))
 
 (defn get-all-tags
   [this]
-  (cmd (:conn this) :get (:tags (schema "all-posts"))))
+  (get-all* this "*:tags" {:unique true}))
+
+(defn get-all-categories
+  [this]
+  (get-all* this "*:category" {:unique true}))
 
 (defn get-all-stats
   [this]
-  (cmd (:conn this) :get (:stats (schema "all-posts"))))
+  (get-all* this "*:stats"))
+
+(defn get-total-char-count
+  [this]
+  (reduce + (map :char-count (get-all-stats this))))
+
+(defn get-total-line-count
+  [this]
+  (reduce + (map :line-count (get-all-stats this))))
+
+(defn get-total-word-count
+  [this]
+  (reduce + (map :word-count (get-all-stats this))))
+
+(defn get-all-metadata
+  [this]
+  (get-all* this "*:metadata"))
+
+(defn get-all-authors
+  [this]
+  (set (map :author (get-all-metadata this))))
+
+(defn get-all-posts
+  [this]
+  ;; XXX probably want to do some custom pipelining for this ...
+  )
 
 (defn get-raw
   [this redis-key]
@@ -232,11 +271,16 @@
    :get-post-stats get-post-stats
    :get-post-tags get-post-tags
    :get-post-uri-path get-post-uri-path
-   :get-post-keys get-post-keys
+   :get-all-keys get-all-keys
+   :get-all-authors get-all-authors
    :get-all-categories get-all-categories
    :get-all-data get-all-data
+   :get-all-metadata get-all-metadata
    :get-all-tags get-all-tags
    :get-all-stats get-all-stats
+   :get-total-char-count get-total-char-count
+   :get-total-line-count get-total-line-count
+   :get-total-word-count get-total-word-count
    :get-raw get-raw
    :post-changed? post-changed?
    :set-post-category set-post-checksum

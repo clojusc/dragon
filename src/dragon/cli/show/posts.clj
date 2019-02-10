@@ -13,9 +13,8 @@
 (defn get-posts
   [system]
   (let [querier (get-in system [:db :querier])]
-    (->> querier
-         data/get-post-keys
-         (map #(data/get-raw querier %)))))
+    ;(data/get-all-posts querier)
+    ))
 
 (defn format-post
   [post-data]
