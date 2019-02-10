@@ -2865,8 +2865,8 @@ net.brehaut.ClojureTools = (function (SH) {
     build_tree: build_tree
   };
 })(SyntaxHighlighter);
-</script><title>sockets -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name"><a href="https://github.com/clojusc/dragon">sockets</a></h1><h2 class="project-version">0.6.0-SNAPSHOT</h2><br /><p>Customised, Stasis-based Static Site Generator</p>
-</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">args4j</td><td class="dotted"><hr /></td><td class="dep-version">2.33</td></tr><tr><td class="dep-name">ch.qos.logback/logback-classic</td><td class="dotted"><hr /></td><td class="dep-version">1.2.3</td></tr><tr><td class="dep-name">cheshire</td><td class="dotted"><hr /></td><td class="dep-version">5.8.1</td></tr><tr><td class="dep-name">clj-blogger</td><td class="dotted"><hr /></td><td class="dep-version">0.2.0-SNAPSHOT</td></tr><tr><td class="dep-name">clj-http</td><td class="dotted"><hr /></td><td class="dep-version">3.9.1</td></tr><tr><td class="dep-name">clojusc/cljs-tools</td><td class="dotted"><hr /></td><td class="dep-version">0.2.2</td></tr><tr><td class="dep-name">clojusc/env-ini</td><td class="dotted"><hr /></td><td class="dep-version">0.4.1</td></tr><tr><td class="dep-name">clojusc/process-manager</td><td class="dotted"><hr /></td><td class="dep-version">0.2.0-SNAPSHOT</td></tr><tr><td class="dep-name">clojusc/rfc5322</td><td class="dotted"><hr /></td><td class="dep-version">0.4.0</td></tr><tr><td class="dep-name">clojusc/system-manager</td><td class="dotted"><hr /></td><td class="dep-version">0.3.0</td></tr><tr><td class="dep-name">clojusc/trifl</td><td class="dotted"><hr /></td><td class="dep-version">0.4.2</td></tr><tr><td class="dep-name">clojusc/twig</td><td class="dotted"><hr /></td><td class="dep-version">0.4.1</td></tr><tr><td class="dep-name">clojusc/unified-config</td><td class="dotted"><hr /></td><td class="dep-version">0.4.0</td></tr><tr><td class="dep-name">com.stuartsierra/component</td><td class="dotted"><hr /></td><td class="dep-version">0.4.0</td></tr><tr><td class="dep-name">com.taoensso/carmine</td><td class="dotted"><hr /></td><td class="dep-version">2.19.1</td></tr><tr><td class="dep-name">commons-codec</td><td class="dotted"><hr /></td><td class="dep-version">1.11</td></tr><tr><td class="dep-name">enlive</td><td class="dotted"><hr /></td><td class="dep-version">1.1.6</td></tr><tr><td class="dep-name">hawk</td><td class="dotted"><hr /></td><td class="dep-version">0.2.11</td></tr><tr><td class="dep-name">http-kit</td><td class="dotted"><hr /></td><td class="dep-version">2.3.0</td></tr><tr><td class="dep-name">joda-time</td><td class="dotted"><hr /></td><td class="dep-version">2.10.1</td></tr><tr><td class="dep-name">leiningen-core</td><td class="dotted"><hr /></td><td class="dep-version">2.8.3</td></tr><tr><td class="dep-name">markdown-clj</td><td class="dotted"><hr /></td><td class="dep-version">1.0.7</td></tr><tr><td class="dep-name">org.apache.httpcomponents/httpclient</td><td class="dotted"><hr /></td><td class="dep-version">4.5.6</td></tr><tr><td class="dep-name">org.apache.httpcomponents/httpcore</td><td class="dotted"><hr /></td><td class="dep-version">4.4.10</td></tr><tr><td class="dep-name">org.apache.maven.wagon/wagon-http</td><td class="dotted"><hr /></td><td class="dep-version">3.3.1</td></tr><tr><td class="dep-name">org.apache.maven.wagon/wagon-provider-api</td><td class="dotted"><hr /></td><td class="dep-version">3.3.1</td></tr><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.10.0</td></tr><tr><td class="dep-name">org.clojure/core.async</td><td class="dotted"><hr /></td><td class="dep-version">0.4.490</td></tr><tr><td class="dep-name">org.clojure/tools.reader</td><td class="dotted"><hr /></td><td class="dep-version">1.3.2</td></tr><tr><td class="dep-name">org.codehaus.plexus/plexus-utils</td><td class="dotted"><hr /></td><td class="dep-version">3.1.1</td></tr><tr><td class="dep-name">org.jsoup/jsoup</td><td class="dotted"><hr /></td><td class="dep-version">1.11.2</td></tr><tr><td class="dep-name">pandect</td><td class="dotted"><hr /></td><td class="dep-version">0.6.1</td></tr><tr><td class="dep-name">potemkin</td><td class="dotted"><hr /></td><td class="dep-version">0.4.5</td></tr><tr><td class="dep-name">ring/ring-core</td><td class="dotted"><hr /></td><td class="dep-version">1.7.1</td></tr><tr><td class="dep-name">selmer</td><td class="dotted"><hr /></td><td class="dep-version">1.12.5</td></tr><tr><td class="dep-name">stasis</td><td class="dotted"><hr /></td><td class="dep-version">2.4.0</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#dragon.watcher.impl.hawk">dragon.watcher.impl.hawk</a></li><li><a href="#dragon.watcher.core">dragon.watcher.core</a></li><li><a href="#dragon.util">dragon.util</a></li><li><a href="#dragon.core">dragon.core</a></li><li><a href="#dragon.cli.show.posts">dragon.cli.show.posts</a></li><li><a href="#dragon.cli.show.core">dragon.cli.show.core</a></li><li><a href="#dragon.cli.core">dragon.cli.core</a></li><li><a href="#dragon.cli.new.stub">dragon.cli.new.stub</a></li><li><a href="#dragon.cli.new.core">dragon.cli.new.core</a></li><li><a href="#dragon.cli.new.post">dragon.cli.new.post</a></li><li><a href="#dragon.blog.post.impl.default">dragon.blog.post.impl.default</a></li><li><a href="#dragon.blog.post.util">dragon.blog.post.util</a></li><li><a href="#dragon.blog.post.core">dragon.blog.post.core</a></li><li><a href="#dragon.blog.tags">dragon.blog.tags</a></li><li><a href="#dragon.blog.categories">dragon.blog.categories</a></li><li><a href="#dragon.blog.generator">dragon.blog.generator</a></li><li><a href="#dragon.blog.content.block">dragon.blog.content.block</a></li><li><a href="#dragon.blog.content.data">dragon.blog.content.data</a></li><li><a href="#dragon.blog.content.rfc5322">dragon.blog.content.rfc5322</a></li><li><a href="#dragon.blog.content.core">dragon.blog.content.core</a></li><li><a href="#dragon.blog.core">dragon.blog.core</a></li><li><a href="#dragon.blog.workflow.impl.msgs">dragon.blog.workflow.impl.msgs</a></li><li><a href="#dragon.blog.workflow.impl.iter-db">dragon.blog.workflow.impl.iter-db</a></li><li><a href="#dragon.blog.workflow.impl.xduce-db">dragon.blog.workflow.impl.xduce-db</a></li><li><a href="#dragon.blog.workflow.impl.xduce">dragon.blog.workflow.impl.xduce</a></li><li><a href="#dragon.blog.workflow.impl.iter">dragon.blog.workflow.impl.iter</a></li><li><a href="#dragon.blog.workflow.core">dragon.blog.workflow.core</a></li><li><a href="#dragon.components.db">dragon.components.db</a></li><li><a href="#dragon.components.core">dragon.components.core</a></li><li><a href="#dragon.components.logging">dragon.components.logging</a></li><li><a href="#dragon.components.watcher">dragon.components.watcher</a></li><li><a href="#dragon.components.event">dragon.components.event</a></li><li><a href="#dragon.components.responder">dragon.components.responder</a></li><li><a href="#dragon.components.config">dragon.components.config</a></li><li><a href="#dragon.components.httpd">dragon.components.httpd</a></li><li><a href="#dragon.main">dragon.main</a></li><li><a href="#dragon.selmer.core">dragon.selmer.core</a></li><li><a href="#dragon.selmer.tags.flickr">dragon.selmer.tags.flickr</a></li><li><a href="#dragon.selmer.tags.panel">dragon.selmer.tags.panel</a></li><li><a href="#dragon.selmer.tags.util">dragon.selmer.tags.util</a></li><li><a href="#dragon.selmer.tags.core">dragon.selmer.tags.core</a></li><li><a href="#dragon.selmer.tags.demo">dragon.selmer.tags.demo</a></li><li><a href="#dragon.data.core">dragon.data.core</a></li><li><a href="#dragon.data.sources.impl.redis">dragon.data.sources.impl.redis</a></li><li><a href="#dragon.data.sources.impl.common">dragon.data.sources.impl.common</a></li><li><a href="#dragon.data.sources.core">dragon.data.sources.core</a></li><li><a href="#dragon.event.topic">dragon.event.topic</a></li><li><a href="#dragon.event.message">dragon.event.message</a></li><li><a href="#dragon.event.subscription">dragon.event.subscription</a></li><li><a href="#dragon.event.system.impl">dragon.event.system.impl</a></li><li><a href="#dragon.event.system.core">dragon.event.system.core</a></li><li><a href="#dragon.event.tag">dragon.event.tag</a></li><li><a href="#dragon.config">dragon.config</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.watcher.impl.hawk" name="dragon.watcher.impl.hawk"><h1 class="project-name">dragon.watcher.impl.hawk</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</script><title>sockets -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name"><a href="https://github.com/clojusc/dragon">sockets</a></h1><h2 class="project-version">1.0.0-SNAPSHOT</h2><br /><p>Customised, Stasis-based Static Site Generator</p>
+</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">args4j</td><td class="dotted"><hr /></td><td class="dep-version">2.33</td></tr><tr><td class="dep-name">ch.qos.logback/logback-classic</td><td class="dotted"><hr /></td><td class="dep-version">1.2.3</td></tr><tr><td class="dep-name">cheshire</td><td class="dotted"><hr /></td><td class="dep-version">5.8.1</td></tr><tr><td class="dep-name">clj-blogger</td><td class="dotted"><hr /></td><td class="dep-version">0.2.0</td></tr><tr><td class="dep-name">clj-http</td><td class="dotted"><hr /></td><td class="dep-version">3.9.1</td></tr><tr><td class="dep-name">clojusc/cljs-tools</td><td class="dotted"><hr /></td><td class="dep-version">0.2.2</td></tr><tr><td class="dep-name">clojusc/env-ini</td><td class="dotted"><hr /></td><td class="dep-version">0.4.1</td></tr><tr><td class="dep-name">clojusc/process-manager</td><td class="dotted"><hr /></td><td class="dep-version">0.2.0-SNAPSHOT</td></tr><tr><td class="dep-name">clojusc/rfc5322</td><td class="dotted"><hr /></td><td class="dep-version">0.5.0</td></tr><tr><td class="dep-name">clojusc/system-manager</td><td class="dotted"><hr /></td><td class="dep-version">0.3.0</td></tr><tr><td class="dep-name">clojusc/trifl</td><td class="dotted"><hr /></td><td class="dep-version">0.4.2</td></tr><tr><td class="dep-name">clojusc/twig</td><td class="dotted"><hr /></td><td class="dep-version">0.4.1</td></tr><tr><td class="dep-name">clojusc/unified-config</td><td class="dotted"><hr /></td><td class="dep-version">0.4.0</td></tr><tr><td class="dep-name">com.stuartsierra/component</td><td class="dotted"><hr /></td><td class="dep-version">0.4.0</td></tr><tr><td class="dep-name">com.taoensso/carmine</td><td class="dotted"><hr /></td><td class="dep-version">2.19.1</td></tr><tr><td class="dep-name">commons-codec</td><td class="dotted"><hr /></td><td class="dep-version">1.11</td></tr><tr><td class="dep-name">enlive</td><td class="dotted"><hr /></td><td class="dep-version">1.1.6</td></tr><tr><td class="dep-name">hawk</td><td class="dotted"><hr /></td><td class="dep-version">0.2.11</td></tr><tr><td class="dep-name">http-kit</td><td class="dotted"><hr /></td><td class="dep-version">2.3.0</td></tr><tr><td class="dep-name">joda-time</td><td class="dotted"><hr /></td><td class="dep-version">2.10.1</td></tr><tr><td class="dep-name">leiningen-core</td><td class="dotted"><hr /></td><td class="dep-version">2.8.3</td></tr><tr><td class="dep-name">markdown-clj</td><td class="dotted"><hr /></td><td class="dep-version">1.0.7</td></tr><tr><td class="dep-name">org.apache.httpcomponents/httpclient</td><td class="dotted"><hr /></td><td class="dep-version">4.5.7</td></tr><tr><td class="dep-name">org.apache.httpcomponents/httpcore</td><td class="dotted"><hr /></td><td class="dep-version">4.4.11</td></tr><tr><td class="dep-name">org.apache.maven.wagon/wagon-http</td><td class="dotted"><hr /></td><td class="dep-version">3.3.2</td></tr><tr><td class="dep-name">org.apache.maven.wagon/wagon-provider-api</td><td class="dotted"><hr /></td><td class="dep-version">3.3.2</td></tr><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.10.0</td></tr><tr><td class="dep-name">org.clojure/core.async</td><td class="dotted"><hr /></td><td class="dep-version">0.4.490</td></tr><tr><td class="dep-name">org.clojure/tools.reader</td><td class="dotted"><hr /></td><td class="dep-version">1.3.2</td></tr><tr><td class="dep-name">org.codehaus.plexus/plexus-utils</td><td class="dotted"><hr /></td><td class="dep-version">3.1.1</td></tr><tr><td class="dep-name">org.jsoup/jsoup</td><td class="dotted"><hr /></td><td class="dep-version">1.11.3</td></tr><tr><td class="dep-name">pandect</td><td class="dotted"><hr /></td><td class="dep-version">0.6.1</td></tr><tr><td class="dep-name">potemkin</td><td class="dotted"><hr /></td><td class="dep-version">0.4.5</td></tr><tr><td class="dep-name">ring/ring-core</td><td class="dotted"><hr /></td><td class="dep-version">1.7.1</td></tr><tr><td class="dep-name">selmer</td><td class="dotted"><hr /></td><td class="dep-version">1.12.6</td></tr><tr><td class="dep-name">stasis</td><td class="dotted"><hr /></td><td class="dep-version">2.4.0</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#dragon.watcher.impl.hawk">dragon.watcher.impl.hawk</a></li><li><a href="#dragon.watcher.core">dragon.watcher.core</a></li><li><a href="#dragon.util">dragon.util</a></li><li><a href="#dragon.core">dragon.core</a></li><li><a href="#dragon.cli.show.posts">dragon.cli.show.posts</a></li><li><a href="#dragon.cli.show.core">dragon.cli.show.core</a></li><li><a href="#dragon.cli.core">dragon.cli.core</a></li><li><a href="#dragon.cli.new.stub">dragon.cli.new.stub</a></li><li><a href="#dragon.cli.new.core">dragon.cli.new.core</a></li><li><a href="#dragon.cli.new.post">dragon.cli.new.post</a></li><li><a href="#dragon.blog.post.impl.default">dragon.blog.post.impl.default</a></li><li><a href="#dragon.blog.post.util">dragon.blog.post.util</a></li><li><a href="#dragon.blog.post.core">dragon.blog.post.core</a></li><li><a href="#dragon.blog.tags">dragon.blog.tags</a></li><li><a href="#dragon.blog.categories">dragon.blog.categories</a></li><li><a href="#dragon.blog.generator">dragon.blog.generator</a></li><li><a href="#dragon.blog.content.block">dragon.blog.content.block</a></li><li><a href="#dragon.blog.content.data">dragon.blog.content.data</a></li><li><a href="#dragon.blog.content.rfc5322">dragon.blog.content.rfc5322</a></li><li><a href="#dragon.blog.content.core">dragon.blog.content.core</a></li><li><a href="#dragon.blog.core">dragon.blog.core</a></li><li><a href="#dragon.components.db">dragon.components.db</a></li><li><a href="#dragon.components.core">dragon.components.core</a></li><li><a href="#dragon.components.logging">dragon.components.logging</a></li><li><a href="#dragon.components.watcher">dragon.components.watcher</a></li><li><a href="#dragon.components.event">dragon.components.event</a></li><li><a href="#dragon.components.responder">dragon.components.responder</a></li><li><a href="#dragon.components.config">dragon.components.config</a></li><li><a href="#dragon.components.httpd">dragon.components.httpd</a></li><li><a href="#dragon.main">dragon.main</a></li><li><a href="#dragon.selmer.core">dragon.selmer.core</a></li><li><a href="#dragon.selmer.tags.flickr">dragon.selmer.tags.flickr</a></li><li><a href="#dragon.selmer.tags.panel">dragon.selmer.tags.panel</a></li><li><a href="#dragon.selmer.tags.util">dragon.selmer.tags.util</a></li><li><a href="#dragon.selmer.tags.core">dragon.selmer.tags.core</a></li><li><a href="#dragon.selmer.tags.demo">dragon.selmer.tags.demo</a></li><li><a href="#dragon.data.core">dragon.data.core</a></li><li><a href="#dragon.data.sources.impl.redis">dragon.data.sources.impl.redis</a></li><li><a href="#dragon.data.sources.impl.common">dragon.data.sources.impl.common</a></li><li><a href="#dragon.data.sources.core">dragon.data.sources.core</a></li><li><a href="#dragon.event.topic">dragon.event.topic</a></li><li><a href="#dragon.event.message">dragon.event.message</a></li><li><a href="#dragon.event.subscription">dragon.event.subscription</a></li><li><a href="#dragon.event.system.impl">dragon.event.system.impl</a></li><li><a href="#dragon.event.system.core">dragon.event.system.core</a></li><li><a href="#dragon.event.tag">dragon.event.tag</a></li><li><a href="#dragon.config">dragon.config</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.watcher.impl.hawk" name="dragon.watcher.impl.hawk"><h1 class="project-name">dragon.watcher.impl.hawk</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.watcher.impl.hawk
   (:require
     [dragon.event.system.core :as event]
@@ -3143,9 +3143,7 @@ net.brehaut.ClojureTools = (function (SH) {
 </td><td class="codes"><pre class="brush: clojure">(defn get-posts
   [system]
   (let [querier (get-in system [:db :querier])]
-    (-&gt;&gt; querier
-         data/get-post-keys
-         (map #(data/get-raw querier %)))))</pre></td></tr><tr><td class="docs">
+    ;(data/get-all-posts querier)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn format-post
   [post-data]
   (format &quot;%s - %s%s&quot;
@@ -3244,7 +3242,7 @@ usage information about the particular command in question, e.g.:
   [system [cmd &amp; args]]
   (log/debug &quot;Got cmd:&quot; cmd)
   (log/debug &quot;Got args:&quot; args)
-  (event/publish system tag/run-cli {:cmd cmd :args args})
+  ; (event/publish system tag/run-cli {:cmd cmd :args args})
   (case cmd
     :new (new/run system args)
     :show (show/run system args)
@@ -3257,7 +3255,7 @@ usage information about the particular command in question, e.g.:
     :--version (version-cmd)
     :-h (docs/print-docstring #'run)
     :-v (version-cmd))
-  (event/publish system tag/shutdown-cli))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.cli.new.stub" name="dragon.cli.new.stub"><h1 class="project-name">dragon.cli.new.stub</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+  ; (event/publish system tag/shutdown-cli))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.cli.new.stub" name="dragon.cli.new.stub"><h1 class="project-name">dragon.cli.new.stub</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.cli.new.stub
   (:require
     [clojure.pprint :refer [pprint]]
@@ -3449,89 +3447,45 @@ Public?: true
     [clojure.edn :as edn]
     [clojure.string :as string]
     [dragon.blog.content.core :as content]
-    [dragon.blog.content.core :as content]
     [dragon.blog.post.util :as post-util]
     [dragon.components.config :as config]
+    [dragon.components.db :as db-component]
+    [dragon.data.sources.core :as db]
+    [dragon.data.sources.impl.redis :refer [schema]]
     [dragon.event.system.core :as event]
     [dragon.event.tag :as tag]
     [dragon.util :as util]
     [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs"><p>  Data Transforms   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-data
-  [this data]
-  (let [file (:file data)]
-    (log/debugf &quot;Adding post data for '%s' ...&quot; file)
-    (-&gt;&gt; file
-         (content/parse (:system this))
-         (merge data)
-         (post-util/copy-original-body))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-file-data
-  [this data]
-  (log/debug &quot;Adding file data ...&quot;)
-  (let [file-obj (:file data)
-        file-src (.getPath file-obj)
-        filename-old (.getName file-obj)
-        filename (format (config/output-file-tmpl (:system this))
-                         (util/sanitize-str (:title data)))
-        data (dissoc data :file)]
-    (assoc data
-           :checksum (util/check-sum (pr-str data))
-           :filename filename
-           :src-file file-src
-           :src-dir (.getParent file-obj)
-           :uri-path (-&gt; file-src
-                         (string/replace filename-old filename)
-                         (util/sanitize-post-path)
-                         (string/replace-first &quot;posts/&quot; )))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-counts
-  [this data]
-  (log/debug &quot;Adding counts ...&quot;)
-  (let [body (:body data)]
-    (log/trace &quot;Body data:&quot; data)
-    (assoc
-      data
-      :char-count (util/count-chars body)
-      :word-count (util/count-words body)
-      :line-count (util/count-lines body))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-link
-  [this data]
-  (log/debug &quot;Adding post link ...&quot;)
-  (let [system (:system this)
-        url (str (config/posts-path system) &quot;/&quot; (:uri-path data))
-        link (format (config/link-tmpl system) url (:title data))]
-    (assoc data :url url
-                :link link)))</pre></td></tr><tr><td class="docs">
+  [this file-obj tmpl-cfg]
+  (log/debug &quot;Getting data from file ...&quot;)
+  (let [data (content/parse file-obj)]
+    (post-util/convert-body!
+      (post-util/copy-original-body data)
+      tmpl-cfg)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-dates
-  [this data]
+  [this src-file]
   (log/debug &quot;Adding post dates ...&quot;)
-  (let [date (util/path-&gt;date (:src-file data))
+  (let [date (util/path-&gt;date src-file)
         timestamp (util/format-timestamp date)
         timestamp-clean (string/replace timestamp #&quot;[^\d]&quot; )
         datestamp (util/format-datestamp date)]
-    (assoc
-      data
-      :date date
-      :month (util/month-&gt;name (:month date))
-      :month-short (util/month-&gt;short-name (:month date))
-      :time (util/format-time date)
-      :timestamp timestamp
-      :timestamp-long (Long/parseLong timestamp-clean)
-      :datestamp datestamp
-      :now-timestamp (util/format-timestamp (util/datetime-now))
-      :now-datestamp (util/format-datestamp (util/datetime-now)))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-tags
-  [this data]
-  (log/debug &quot;Updating tags ...&quot;)
-  (assoc data :tags (apply sorted-set (string/split
-                                       (:tags data)
-                                       (config/tag-separator
-                                        (:system this))))))</pre></td></tr><tr><td class="docs">
+    {:date date
+     :month (util/month-&gt;name (:month date))
+     :month-short (util/month-&gt;short-name (:month date))
+     :time (util/format-time date)
+     :timestamp timestamp
+     :timestamp-long (Long/parseLong timestamp-clean)
+     :datestamp datestamp
+     :now-timestamp (util/format-timestamp (util/datetime-now))
+     :now-datestamp (util/format-datestamp (util/datetime-now))}))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-excerpts
-  [this data]
+  [this body]
   (log/debug &quot;Converting post body ...&quot;)
   (let [system (:system this)
         paragraphs (string/split
-                    (:body data) (config/paragraph-separator system))
+                    body (config/paragraph-separator system))
         words (-&gt; paragraphs
                   first
                   (string/split (config/word-separator system)))
@@ -3539,35 +3493,65 @@ Public?: true
         excerpt-100 (post-util/join-excerpt system words-100 100 :as-html)
         excerpt-50 (post-util/join-excerpt system words-100 50 :as-html)
         excerpt-25 (post-util/join-excerpt system words-100 25 :as-html)]
-    (assoc data
-           :excerpt-100 excerpt-100
-           :excerpt-50 excerpt-50
-           :excerpt-25 excerpt-25
-           :excerpt-100-clean (post-util/scrub-html excerpt-100)
-           :excerpt-50-clean (post-util/scrub-html excerpt-50)
-           :excerpt-25-clean (post-util/scrub-html excerpt-25))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-body
-  [this data]
-  (log/debug &quot;Converting post body ...&quot;)
-  (let [system (:system this)]
-    (event/publish system tag/parse-content-pre {:body (:body data)})
-    (-&gt;&gt; data
-         :content-type
-         (post-util/convert-body! system data)
-         (event/publish-&gt;&gt; system
-                           tag/parse-content-post
-                           {:body (:body data)}))))</pre></td></tr><tr><td class="docs"><p>  Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+    {:excerpt-100 excerpt-100
+     :excerpt-50 excerpt-50
+     :excerpt-25 excerpt-25
+     :excerpt-100-clean (post-util/scrub-html excerpt-100)
+     :excerpt-50-clean (post-util/scrub-html excerpt-50)
+     :excerpt-25-clean (post-util/scrub-html excerpt-25)}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-stats
+  [this body]
+  (log/debug &quot;Adding stats ...&quot;)
+  (log/trace &quot;Body data:&quot; body)
+  {:char-count (util/count-chars body)
+   :word-count (util/count-words body)
+   :line-count (util/count-lines body)})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-tags
+  [this tags separator]
+  (log/debug &quot;Updating tags ...&quot;)
+  (apply sorted-set
+         (string/split tags separator)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn process-file
+  [this querier file data opts]
+  (log/infof &quot;Changed detected; processing %s ...&quot; (:src-file opts))
+  (let [src-dir (.getParent file)
+        filename-old (.getName file)
+        metadata (dissoc data :body :body-orig :tags :category)
+        uri-path (-&gt; (:src-file opts)
+                     (string/replace filename-old (:filename opts))
+                     (util/sanitize-post-path)
+                     (string/replace-first &quot;posts/&quot; ))
+        tags (get-tags this (:tags data) (:tag-separator opts))
+        dates (get-dates this (:src-file opts))
+        stats (get-stats this (:body data))
+        excerpts (get-excerpts this (:body data))]
+    (log/trace &quot;Got data:&quot; data)
+    (log/trace &quot;Got dates:&quot; dates)
+    (log/trace &quot;Got excerpts:&quot; excerpts)
+    (log/trace &quot;Got metadata:&quot; metadata)
+    (log/trace &quot;Got src-dir:&quot; src-dir)
+    (log/trace &quot;Got stats:&quot; stats)
+    (log/trace &quot;Got tags:&quot; tags)
+    (log/infof &quot;Post %s will be accessible at: %s&quot; (:title metadata) uri-path)
+    {:category (:category data)
+     :checksum (:checksum opts)
+     :content (:body data)
+     :content-source (:body-orig data)
+     :dates dates
+     :excerpts excerpts
+     :metadata metadata
+     :stats stats
+     :tags tags
+     :uri-path uri-path}))</pre></td></tr><tr><td class="docs"><p>  Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defrecord DefaultBlogPostProcessor [system])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def behaviour
   {:get-data get-data
-   :get-file-data get-file-data
-   :get-counts get-counts
-   :get-link get-link
    :get-dates get-dates
-   :get-tags get-tags
    :get-excerpts get-excerpts
-   :get-body get-body})</pre></td></tr><tr><td class="docs">
+   :get-stats get-stats
+   :get-tags get-tags
+   :process-file process-file})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn new-processor
   [system]
   (-&gt;DefaultBlogPostProcessor system))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.post.util" name="dragon.blog.post.util"><h1 class="project-name">dragon.blog.post.util</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
@@ -3583,34 +3567,34 @@ Public?: true
     [selmer.parser :as selmer]
     [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn md-&gt;html
-  [system md]
+  [body tmpl-cfg]
   (markdown/md-to-html-string
-   md
-   :inhibit-separator (config/template-skip-marker system)))</pre></td></tr><tr><td class="docs">
+   body
+   :inhibit-separator (:skip-marker tmpl-cfg)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn selmer-&gt;html
-  [system data content]
-  (selmer/render content (assoc data :system system)))</pre></td></tr><tr><td class="docs">
+  [data body tmpl-cfg]
+  (selmer/render body data))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn md+selmer-&gt;html
-  [system data content]
-  (-&gt;&gt; content
-       (md-&gt;html system)
-       (selmer-&gt;html system data)))</pre></td></tr><tr><td class="docs">
+  [data body tmpl-cfg]
+  (selmer-&gt;html
+    data
+    (md-&gt;html body tmpl-cfg)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn selmer+md-&gt;html
-  [system data content]
-  (-&gt;&gt; content
-       (selmer-&gt;html system data)
-       (md-&gt;html system)))</pre></td></tr><tr><td class="docs">
+  [data body tmpl-cfg]
+  (md-&gt;html
+    (selmer-&gt;html data body tmpl-cfg)
+    tmpl-cfg))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn convert-body!
-  [system data content-type]
-  (case content-type
+  [data tmpl-cfg]
+  (case (:content-type data)
     :md
-      (update-in data [:body] (partial md-&gt;html system))
+      (update-in data [:body] #(md-&gt;html % tmpl-cfg))
     :selmer
-      (update-in data [:body] (partial selmer-&gt;html system data))
+      (update-in data [:body] #(selmer-&gt;html data % tmpl-cfg))
     [:md :selmer]
-      (update-in data [:body] (partial md+selmer-&gt;html system data))
+      (update-in data [:body] #(md+selmer-&gt;html data % tmpl-cfg))
     [:selmer :md]
-      (update-in data [:body] (partial selmer+md-&gt;html system data))))</pre></td></tr><tr><td class="docs">
+      (update-in data [:body] #(selmer+md-&gt;html data % tmpl-cfg))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn join-excerpt
   ([system words number]
     (let [excerpt (string/join (config/word-joiner system)
@@ -3620,10 +3604,10 @@ Public?: true
         (str excerpt (config/ellipsis system)))))
   ([system words number flag]
     (case flag
-      :as-html (md-&gt;html system (join-excerpt system words number))
+      :as-html (md-&gt;html (join-excerpt system words number)
+                         (config/template-config system))
       (join-excerpt system words number))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmulti get-content-element
-  type)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmulti get-content-element type)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmethod get-content-element java.lang.String
   [element]
   element)</pre></td></tr><tr><td class="docs">
@@ -3676,20 +3660,19 @@ Public?: true
     [dragon.event.system.core :as event]
     [dragon.event.tag :as tag]
     [dragon.util :as util])
-  (:import (dragon.blog.post.impl.default DefaultBlogPostProcessor)))</pre></td></tr><tr><td class="docs"><p>  Protocols   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+  (:import
+    (dragon.blog.post.impl.default DefaultBlogPostProcessor)))</pre></td></tr><tr><td class="docs"><p>  Protocols   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 
 <p>Protocols and implementation behaviours are used here in an effort
 to provide easily-overridable implementations of the processing steps.</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defprotocol BlogPostProcessorAPI
-  (get-data [this data])
-  (get-file-data [this data])
-  (get-counts [this data])
-  (get-link [this data])
+  (get-data [this data template-config])
   (get-dates [this data])
-  (get-tags [this data])
   (get-excerpts [this data])
-  (get-body [this data]))</pre></td></tr><tr><td class="docs">
+  (get-stats [this data])
+  (get-tags [this data tag-separator])
+  (process-file [this querier file data opts]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(extend DefaultBlogPostProcessor
         BlogPostProcessorAPI
         default/behaviour)</pre></td></tr><tr><td class="docs"><p>  Constructor   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
@@ -3997,16 +3980,13 @@ to provide easily-overridable implementations of the processing steps.</p>
                  :title (:title opts)
                  :subtitle (:subtitle opts)
                  :body (content-fn content-filename)}))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.content.rfc5322" name="dragon.blog.content.rfc5322"><h1 class="project-name">dragon.blog.content.rfc5322</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.content.rfc5322
+</td><td class="codes"><pre class="brush: clojure">  (ns dragon.blog.content.rfc5322
   (:require
     [clojure.set :refer [rename-keys]]
     [clojure.string :as string]
     [clojure.walk :as walk]
-    [dragon.event.system.core :as event]
-    [dragon.event.tag :as tag]
     [instaparse.core :as instaparse]
-    [rfc5322.core :as rfc]
-    [rfc5322.dev :as rfc-dev]
+    [rfc5322.core :as rfc5322]
     [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs"><p>Used to convert to internet message header fields to internally-used
   metadata fields.</p>
 </td><td class="codes"><pre class="brush: clojure">(def rfc5322-names-&gt;metadata-names
@@ -4015,17 +3995,11 @@ to provide easily-overridable implementations of the processing steps.</p>
    :keywords :tags
    :comments :comment-link})</pre></td></tr><tr><td class="docs"><p>Parse the given message, converting the parsed tree into a Clojure map.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn parse
-  ([msg]
-    (parse nil msg))
-  ([system msg]
-    (log/debug &quot;Parsing message content ...&quot;)
-    (event/publish system tag/parse-file-pre)
-    (-&gt;&gt; msg
-         (instaparse/parse (rfc/make-lite-parser))
-         (rfc-dev/-&gt;map)
-         (walk/postwalk-replace rfc5322-names-&gt;metadata-names)
-         (into {})
-         (event/publish-&gt;&gt; system tag/parse-file-post))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.content.core" name="dragon.blog.content.core"><h1 class="project-name">dragon.blog.content.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+  [msg]
+  (log/debug &quot;Parsing message content ...&quot;)
+  (-&gt;&gt; (rfc5322/convert msg :lite :utf8)
+       (walk/postwalk-replace rfc5322-names-&gt;metadata-names)
+       (into {})))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.content.core" name="dragon.blog.content.core"><h1 class="project-name">dragon.blog.content.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.content.core
   (:require
     [clojure.string :as string]
@@ -4036,25 +4010,27 @@ to provide easily-overridable implementations of the processing steps.</p>
     [trifl.fs :as fs]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn parse-content-type
   [content-type]
+  (log/tracef &quot;Attempting to parse content type '%s' ...&quot; content-type)
   (let [types (string/split content-type #&quot;,&quot;)
         parts (count types)]
     (if (= 1 parts)
       (keyword content-type)
       (map (comp keyword string/trim) types))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn file-extension-dispatch
-  [system content extension]
+  [content extension]
   (case extension
-        :rfc5322 (rfc5322/parse system content)
+        :rfc5322 (rfc5322/parse content)
         :default {:raw-data content
                   :error :parser-not-found}))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn parse
-  [system file-obj]
-  (event/publish system tag/read-source-pre {:file file-obj})
-  (let [extension (fs/extension file-obj)
-        content (slurp file-obj)]
-    (event/publish system tag/read-source-post {:file file-obj})
-    (-&gt; extension
-        ((partial file-extension-dispatch system content))
+  [file-obj]
+  (let [content (slurp file-obj)
+        extension (fs/extension file-obj)
+        parsed (file-extension-dispatch content extension)]
+    (log/trace &quot;Parsed post extension:&quot; extension)
+    (log/trace &quot;Raw file data:&quot; content)
+    (log/trace &quot;Parsed file data:&quot; parsed)
+    (-&gt; parsed
         (update-in [:content-type] parse-content-type)
         (assoc :file-type extension))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.core" name="dragon.blog.core"><h1 class="project-name">dragon.blog.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.core
@@ -4064,9 +4040,9 @@ to provide easily-overridable implementations of the processing steps.</p>
     [dragon.blog.post.core :as post]
     [dragon.blog.post.impl.default :as default]
     [dragon.blog.tags :as tags]
-    [dragon.blog.workflow.core :as workflow]
     [dragon.components.config :as config]
-    [dragon.data.sources.core :as data-source]
+    [dragon.components.db :as db-component]
+    [dragon.data.sources.core :as db]
     [dragon.event.system.core :as event]
     [dragon.event.tag :as tag]
     [dragon.util :as util]
@@ -4165,22 +4141,33 @@ to provide easily-overridable implementations of the processing steps.</p>
          (map #(hash-map :file %)))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn process
   [system]
-  (log/info &quot;Processing posts ...&quot;)
-  (event/publish system tag/process-all-pre)
-  (let [raw-posts (get-posts system)
-        wf (workflow/new-workflow system)
-        processed-posts (workflow/files-&gt;data wf raw-posts)]
-    (-&gt;&gt; processed-posts
-         (sort compare-timestamp-desc)
-         (event/publish-&gt;&gt; system
-                           tag/process-all-post
-                           {:count (count processed-posts)})
-         vec)))</pre></td></tr><tr><td class="docs">
+  (doseq [file (sort (get-files (config/posts-path-src system)))]
+    (let [src-file (.getPath file)
+          _ (log/infof &quot;Checking source file %s ...&quot; src-file)
+          processor (post/new-processor system)
+          querier (db-component/db-querier system)
+          tmpl-cfg (config/template-config system)
+          data (post/get-data processor file tmpl-cfg)
+          checksum (util/check-sum (pr-str data))
+          filename (format (config/output-file-tmpl system)
+                           (util/sanitize-str (:title data)))
+          opts {:tag-separator (config/tag-separator system)
+                :checksum checksum
+                :src-file src-file
+                :filename filename}]
+      (log/debug &quot;Got checksum:&quot; (:checksum opts))
+      (log/debug &quot;Got filename:&quot; (:filename opts))
+      (if (db/post-changed? querier src-file checksum)
+        (db/set-post-data
+          querier
+          src-file
+          (post/process-file processor querier file data opts))
+        (log/infof &quot;File %s has already been processed; skipping ...&quot;
+                   src-file))))
+  :ok)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn reset-content-checksums
   [system]
-  (let [wf (workflow/new-workflow system)]
-    (log/info &quot;Resetting content checksums ...&quot;)
-    (workflow/bust-cache wf)))</pre></td></tr><tr><td class="docs"><p>  Core Grouping Multimethods   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+  ;; XXX re-implement without workflow ns ...)</pre></td></tr><tr><td class="docs"><p>  Core Grouping Multimethods   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmulti group-data
   (fn [type _] type))</pre></td></tr><tr><td class="docs">
@@ -4241,324 +4228,7 @@ to provide easily-overridable implementations of the processing steps.</p>
   (log/trace &quot;Got data:&quot; data)
   (-&gt;&gt; data
        (map (partial get-indexed-archive-route uri-base gen-func data))
-       (into {})))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.workflow.impl.msgs" name="dragon.blog.workflow.impl.msgs"><h1 class="project-name">dragon.blog.workflow.impl.msgs</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.workflow.impl.msgs
-  (:require
-  	[dragon.event.system.core :as event]
-    [dragon.event.tag :as tag]))</pre></td></tr><tr><td class="docs"><p>  Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn send-pre-notification
-  [system file-obj]
-  (event/publish system tag/process-one-pre {:file-obj file-obj})
-  file-obj)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn send-post-notification
-  [system data]
-  (event/publish-&gt;&gt; system tag/process-one-post {:data data})
-  data)</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.workflow.impl.iter-db" name="dragon.blog.workflow.impl.iter-db"><h1 class="project-name">dragon.blog.workflow.impl.iter-db</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.workflow.impl.iter-db
-  (:require
-    [clojure.java.io :as io]
-    [clojure.set :as set]
-    [clojure.string :as string]
-    [dragon.blog.post.core :as post]
-    [dragon.blog.workflow.impl.msgs :as msg]
-    [dragon.data.sources.core :as db]
-    [dragon.util :as util]
-    [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs"><p>  Support Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn- get-querier
-  [this]
-  (get-in this [:system :db :querier]))</pre></td></tr><tr><td class="docs"><p>  Iterators   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-
-<p>An iterative approach to data transformation.</p>
-</td><td class="codes"></td></tr><tr><td class="docs"><p>Set the checksum for a given post to the empty string. If no <code>src-file</code>
-  is passed, bust the cache for all posts.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn bust-cache
-  ([this]
-    (log/info &quot;Busting cache for all ...&quot;)
-    (db/set-posts-checksums (get-querier this) &quot;&quot;))
-  ([this src-file]
-    (log/debugf &quot;Busting cache for just %s ...&quot; src-file)
-    (db/set-post-checksum (get-querier this) src-file &quot;&quot;)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn do-file-data-step
-  [this init-data]
-  (let [processor (:processor this)
-        connector (get-in this [:system :db :connector])
-        querier (get-in this [:system :db :querier])
-        data (-&gt;&gt; init-data
-                  (post/get-data processor)
-                  (post/get-file-data processor))]
-    (log/trace &quot;data:&quot; (keys data))
-    (log/debug &quot;src-file:&quot; (:src-file data))
-    (log/debug &quot;checksum:&quot; (:checksum data))
-    data))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn- do-save-checksum
-  [this querier data]
-  (db/set-post-checksum querier (:src-file data) (:checksum data))
-  data)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn- do-save-file-data
-  [this querier data]
-  (db/set-file-data querier (:src-file data) data)
-  data)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn do-metadata-step
-  [this data]
-  (let [processor (:processor this)]
-    (-&gt;&gt; data
-         (post/get-counts processor)
-         (post/get-link processor)
-         (post/get-dates processor)
-         (post/get-tags processor))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn- do-save-metadata
-  [this querier file-data data]
-  (let [metadata-keys (vec (set/intersection (set (keys file-data))
-                                             (set (keys data))))
-        metadata (select-keys data metadata-keys)]
-    (db/set-metadata querier (:src-file data) metadata))
-  data)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn do-content-step
-  [this data]
-  (let [processor (:processor this)]
-    (-&gt;&gt; data
-         (post/get-excerpts processor)
-         (post/get-body processor))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn- do-save-content
-  [this querier data]
-  (db/set-content querier (:src-file data) (:body data))
-  data)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn- do-save-all-data
-  [this querier data]
-  (db/set-all-data querier (:src-file data) data)
-  data)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn do-all-steps
-  [this file-obj]
-  (let [system (:system this)
-        querier (get-querier this)
-        file-data (-&gt;&gt; file-obj
-                       (msg/send-pre-notification system)
-                       (do-file-data-step this))
-        post-key (:src-file file-data)]
-    (if (db/post-changed? querier file-data)
-      (do
-        (log/infof &quot;Changed detected; processing %s ...&quot; post-key)
-        (let [metadata (-&gt;&gt; file-data
-                            (do-save-checksum this querier)
-                            (do-save-file-data this querier)
-                            (do-metadata-step this))]
-          (-&gt;&gt; metadata
-               (do-save-metadata this querier file-data)
-               (do-content-step this)
-               (do-save-content this querier)
-               (do-save-all-data this querier)
-               (msg/send-post-notification system)
-               (into {}))))
-      (do
-        (log/debugf &quot;File %s has already been processed; retrieving ...&quot;
-                   post-key)
-        (db/get-all-data querier post-key)))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn files-&gt;data
-  [this file-objs]
-  (map (partial do-all-steps this) file-objs))</pre></td></tr><tr><td class="docs"><p>  Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defrecord IteratorDBWorkflow [system])</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def behaviour
-  {:bust-cache bust-cache
-   :do-file-data-step do-file-data-step
-   :do-metadata-step do-metadata-step
-   :do-content-step do-content-step
-   :do-all-steps do-all-steps
-   :files-&gt;data files-&gt;data})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn new-workflow
-  [system]
-  (map-&gt;IteratorDBWorkflow
-    {:system system
-     :processor (post/new-processor system)}))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.workflow.impl.xduce-db" name="dragon.blog.workflow.impl.xduce-db"><h1 class="project-name">dragon.blog.workflow.impl.xduce-db</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.workflow.impl.xduce-db
-  (:require
-    [clojure.java.io :as io]
-    [clojure.string :as string]
-    [dragon.blog.post.core :as post]
-    [dragon.components.db :as db-component]
-    [dragon.event.system.core :as event]
-    [dragon.event.tag :as tag]
-    [dragon.util :as util]))</pre></td></tr><tr><td class="docs"><p>  Transducers   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-
-<p>Functions that return transducers (composed and otherwise) that will be
-used to transform post data.</p>
-</td><td class="codes"></td></tr><tr><td class="docs"><p>  Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defrecord TransducerDBWorkflow [system])</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def behaviour
-  {})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn new-workflow
-  [system]
-  (map-&gt;TransducerDBWorkflow
-    {:system system
-     :processor (post/new-processor system)}))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.workflow.impl.xduce" name="dragon.blog.workflow.impl.xduce"><h1 class="project-name">dragon.blog.workflow.impl.xduce</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.workflow.impl.xduce
-  (:require
-    [clojure.java.io :as io]
-    [clojure.string :as string]
-    [dragon.blog.post.core :as post]
-    [dragon.blog.workflow.impl.msgs :as msg]
-    [dragon.util :as util]))</pre></td></tr><tr><td class="docs"><p>  Transducers   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-
-<p>Functions that return transducers (composed and otherwise) that will be
-used to transform post data.</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn do-file-data-step
-  [this]
-  (let [processor (:processor this)]
-    (comp
-      (map (partial post/get-data processor))
-      (filter util/public?)
-      (map (partial post/get-file-data processor)))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn do-metadata-step
-  [this]
-  (let [processor (:processor this)]
-    (comp
-      (map (partial post/get-counts processor))
-      (map (partial post/get-link processor))
-      (map (partial post/get-dates processor))
-      (map (partial post/get-tags processor)))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn do-content-step
-  [this]
-  (let [processor (:processor this)]
-    (comp
-      (map (partial post/get-excerpts processor))
-      (map (partial post/get-body processor)))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn do-all-steps
-  [this]
-  (let [system (:system this)]
-    (comp
-      (map (partial msg/send-pre-notification system)))
-      (do-file-data-step this)
-      (do-metadata-step this)
-      (do-content-step this)
-      (map (partial msg/send-post-notification system))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn files-&gt;data
-  [this file-objs]
-  (into [] (do-all-steps this) file-objs))</pre></td></tr><tr><td class="docs"><p>  Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defrecord TransducerWorkflow [system])</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def behaviour
-  {:do-file-data-step do-file-data-step
-   :do-metadata-step do-metadata-step
-   :do-content-step do-content-step
-   :do-all-steps do-all-steps
-   :files-&gt;data files-&gt;data})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn new-workflow
-  [system]
-  (map-&gt;TransducerWorkflow
-    {:system system
-     :processor (post/new-processor system)}))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.workflow.impl.iter" name="dragon.blog.workflow.impl.iter"><h1 class="project-name">dragon.blog.workflow.impl.iter</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.workflow.impl.iter
-  (:require
-    [clojure.java.io :as io]
-    [clojure.string :as string]
-    [dragon.blog.post.core :as post]
-    [dragon.blog.workflow.impl.msgs :as msg]
-    [dragon.util :as util]))</pre></td></tr><tr><td class="docs"><p>  Iterators   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-
-<p>An iterative approach to data transformation.</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn do-file-data-step
-  [this data]
-  (let [processor (:processor this)]
-    (-&gt;&gt; data
-         (post/get-data processor)
-         (post/get-file-data processor))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn do-metadata-step
-  [this data]
-  (let [processor (:processor this)]
-    (-&gt;&gt; data
-         (post/get-counts processor)
-         (post/get-link processor)
-         (post/get-dates processor)
-         (post/get-tags processor))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn do-content-step
-  [this data]
-  (let [processor (:processor this)]
-    (-&gt;&gt; data
-         (post/get-excerpts processor)
-         (post/get-body processor))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn do-all-steps
-  [this file-obj]
-  (let [system (:system this)]
-    (-&gt;&gt; (msg/send-pre-notification system file-obj)
-         (do-file-data-step this)
-         (do-metadata-step this)
-         (do-content-step this)
-         (msg/send-post-notification system)
-         (into {}))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn files-&gt;data
-  [this file-objs]
-  (map (partial do-all-steps this) file-objs))</pre></td></tr><tr><td class="docs"><p>  Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defrecord IteratorWorkflow [system])</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def behaviour
-  {:do-file-data-step do-file-data-step
-   :do-metadata-step do-metadata-step
-   :do-content-step do-content-step
-   :do-all-steps do-all-steps
-   :files-&gt;data files-&gt;data})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn new-workflow
-  [system]
-  (map-&gt;IteratorWorkflow
-    {:system system
-     :processor (post/new-processor system)}))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.blog.workflow.core" name="dragon.blog.workflow.core"><h1 class="project-name">dragon.blog.workflow.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><p>This namespace defines the API for the actions required to run
-  blog-generating workflows.</p>
-
-<p>  This is in contrast to the low-level processing of blog content at the data
-  source level (see <code>dragon.blog.post.core</code>).</p>
-</td><td class="codes"><pre class="brush: clojure">(ns dragon.blog.workflow.core
-  (:require
-    [clojure.java.io :as io]
-    [clojure.string :as string]
-    [dragon.blog.post.core :as steps]
-    [dragon.blog.workflow.impl.iter :as iterator]
-    [dragon.blog.workflow.impl.iter-db :as iterator-db]
-    [dragon.blog.workflow.impl.xduce :as transducer]
-    [dragon.blog.workflow.impl.xduce-db :as transducer-db]
-    [dragon.components.config :as config]
-    [dragon.event.system.core :as event]
-    [dragon.event.tag :as tag]
-    [dragon.util :as util])
-  (:import
-    (dragon.blog.workflow.impl.iter IteratorWorkflow)
-    (dragon.blog.workflow.impl.iter_db IteratorDBWorkflow)
-    (dragon.blog.workflow.impl.xduce TransducerWorkflow)
-    (dragon.blog.workflow.impl.xduce_db TransducerDBWorkflow)))</pre></td></tr><tr><td class="docs"><p>  Protocols   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-
-<p>Protocols and implementation behaviours are used here in an effort
-to provide easily-overridable implementations of the processing steps.</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defprotocol BlogPostWorkflowAPI
-  (bust-cache [this])
-  (do-file-data-step [this processor] [this processor data])
-  (do-metadata-step [this processor] [this processor data])
-  (do-content-step [this processor] [this processor data])
-  (do-all-steps [this processor] [this processor data])
-  (files-&gt;data [this file-objs]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(extend IteratorWorkflow
-        BlogPostWorkflowAPI
-        iterator/behaviour)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(extend IteratorDBWorkflow
-        BlogPostWorkflowAPI
-        iterator-db/behaviour)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(extend TransducerWorkflow
-        BlogPostWorkflowAPI
-        transducer/behaviour)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(extend TransducerDBWorkflow
-        BlogPostWorkflowAPI
-        transducer-db/behaviour)</pre></td></tr><tr><td class="docs"><p>  Constructor   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn new-workflow
-  [system]
-  (case (config/workflow-qualifier system)
-    [:iterator :memory] (iterator/new-workflow system)
-    [:iterator :db] (iterator-db/new-workflow system)
-    [:transducer :memory] (transducer/new-workflow system)
-    [:transducer :db] (transducer-db/new-workflow system)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.db" name="dragon.components.db"><h1 class="project-name">dragon.components.db</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+       (into {})))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.db" name="dragon.components.db"><h1 class="project-name">dragon.components.db</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.components.db
   (:require
     [com.stuartsierra.component :as component]
@@ -4571,37 +4241,39 @@ to provide easily-overridable implementations of the processing steps.</p>
     [dragon.util :as util]
     [taoensso.timbre :as log]))</pre></td></tr><tr><td class="docs"><p>  DB Component API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-db-conn
+</td><td class="codes"><pre class="brush: clojure">(defn db-conn
   [system]
   (get-in system [:db :conn]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-db-connector
+</td><td class="codes"><pre class="brush: clojure">(defn db-connector
   [system]
   (get-in system [:db :connector]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-db-querier
+</td><td class="codes"><pre class="brush: clojure">(defn db-querier
   [system]
-  (get-in system [:db :querier]))</pre></td></tr><tr><td class="docs"><p>  Component Support Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+  (get-in system [:db :querier]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn cmd
+  [system &amp; args]
+  (data-source/cmd (db-querier system) args))</pre></td></tr><tr><td class="docs"><p>  Component Support Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn run-setup-tasks
   [connector]
   (log/debug &quot;Starting db setup tasks ...&quot;)
-  (data-source/setup-schemas connector)
+  (data-source/setup-schema connector)
   (data-source/setup-subscribers connector)
   (log/debug &quot;Finished db setup tasks.&quot;))</pre></td></tr><tr><td class="docs"><p>  Component Lifecycle Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defrecord DataBase [connector querier])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord DataBase [conn connector querier])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn start
   [this]
   (log/info &quot;Starting db component ...&quot;)
   (log/trace &quot;component keys:&quot; (keys this))
   (log/debug &quot;Database component backend is&quot; (config/db-type this))
   (let [connector (data-source/new-connector this)
-        component (data-source/add-connection connector)
-        querier (data-source/new-querier component)]
+        conn (config/db-conn this)
+        querier (data-source/new-querier this conn)]
     (run-setup-tasks connector)
-    (reset! (:connector component) connector)
-    (reset! (:querier component) querier)
-    (assoc component :connector connector
-                     :querier querier)))</pre></td></tr><tr><td class="docs">
+    (assoc this :connector connector
+                :querier querier
+                :conn conn)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn stop
   [this]
   (log/info &quot;Stopping db component ...&quot;)
@@ -4623,9 +4295,7 @@ to provide easily-overridable implementations of the processing steps.</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn create-component
   []
-  (-&gt;DataBase
-    (atom {})
-    (atom {})))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.core" name="dragon.components.core"><h1 class="project-name">dragon.components.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+  (map-&gt;DataBase {}))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.components.core" name="dragon.components.core"><h1 class="project-name">dragon.components.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.components.core
   (:require
     [com.stuartsierra.component :as component]
@@ -4979,6 +4649,11 @@ to provide easily-overridable implementations of the processing steps.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn template-skip-marker
   [system]
   (get-in (get-cfg system) [:parsing :skip-marker]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn template-config
+  [system]
+  {:output-file (output-file-tmpl system)
+   :skip-marker (template-skip-marker system)
+   :link (link-tmpl system)})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn blocks-enabled
   [system]
   (get-in (get-cfg system) [:blocks :enabled]))</pre></td></tr><tr><td class="docs">
@@ -5027,16 +4702,6 @@ to provide easily-overridable implementations of the processing steps.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn processor-constructor
   [system]
   (get-in (get-cfg system) [:processor :constructor]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn workflow-type
-  [system]
-  (get-in (get-cfg system) [:workflow :type]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn workflow-storage
-  [system]
-  (get-in (get-cfg system) [:workflow :storage]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn workflow-qualifier
-  [system]
-  [(workflow-type system)
-   (workflow-storage system)])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn watcher-type
   [system]
   (get-in (get-cfg system) [:watcher :type]))</pre></td></tr><tr><td class="docs">
@@ -5436,6 +5101,7 @@ any future/additional passes, we need to escape it.</p>
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.data.sources.impl.redis
   (:require
     [clojure.java.io :as io]
+    [clojure.set :as set]
     [clojure.string :as string]
     [dragon.components.config :as config]
     [dragon.data.sources.impl.common :as common]
@@ -5446,45 +5112,32 @@ any future/additional passes, we need to escape it.</p>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>For the special case when <code>path-segment</code> is the string value <code>all-posts</code>,
   the cumulative data for all posts is referenced. This is applicable to
   <code>categoies</code>, <code>tags</code>, and <code>stats</code>.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn schemas
+
+<p>XXX This should be moved into a general redis support ns, not an
+    implementation ... the schemas need to be references from other
+    places in the code, and these should be wrapped with a protocol
+    some place sensible</p>
+</td><td class="codes"><pre class="brush: clojure">(defn schema
   [path-segment]
-  {:checksum (str path-segment &quot;:checksum&quot;)
+  {:category (str path-segment &quot;:category&quot;)
+   :checksum (str path-segment &quot;:checksum&quot;)
    :content (str path-segment &quot;:content&quot;)
-   :file-data (str path-segment &quot;:file-data&quot;)
+   :content-source (str path-segment &quot;:content-source&quot;)
+   :dates (str path-segment &quot;:dates&quot;)
+   :excerpts (str path-segment &quot;:excerpts&quot;)
    :metadata (str path-segment &quot;:metadata&quot;)
-   :categories (str path-segment &quot;:categories&quot;)
-   :tags (str path-segment &quot;:tags&quot;)
    :stats (str path-segment &quot;:stats&quot;)
-   :all-data (str path-segment &quot;:all-data&quot;)})</pre></td></tr><tr><td class="docs">
+   :tags (str path-segment &quot;:tags&quot;)
+   :uri-path (str path-segment &quot;:uri-path&quot;)})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn key-&gt;path-segment
   [schema-key]
-  (first (string/split schema-key #&quot;:&quot;)))</pre></td></tr><tr><td class="docs"><p>With this function we can do things like the following in the REPL (for
-  querying Redis):</p>
-
-<p>  ```clj
-  => (car/cmd 'ping)
-  => (car/cmd 'get "testkey")
-  => (car/cmd 'set "foo" "bar")
-  ```</p>
-
-<p>  (Note that the escaped strings are for the docstring, and not what you'd
-  actually type in the REPL.)</p>
-</td><td class="codes"><pre class="brush: clojure">(defn cmd
-  [component cmd &amp; args]
-  (log/debug &quot;cmd:&quot; cmd)
-  (log/debug &quot;args:&quot; args)
-  (log/debug &quot;conn:&quot; (:conn (config/db-config component)))
-  (log/debug &quot;car/cmr:&quot; (str &quot;car/&quot; cmd))
-  (log/trace &quot;symbol of car/cmr:&quot; (symbol (str &quot;car/&quot; cmd)))
-  (log/trace &quot;resolved car/cmr:&quot; (resolve (symbol (str &quot;taoensso.carmine/&quot; cmd))))
-  (car/wcar (:conn (config/db-config component))
-            (apply (resolve (symbol (str &quot;taoensso.carmine/&quot; cmd))) args)))</pre></td></tr><tr><td class="docs"><p>  Connector Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+  (first (string/split schema-key #&quot;:&quot;)))</pre></td></tr><tr><td class="docs"><p>  Connector Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defrecord RedisConnector [component])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn new-connector
   [component]
   (-&gt;RedisConnector component))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn setup-schemas
+</td><td class="codes"><pre class="brush: clojure">(defn setup-schema
   [this])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn setup-subscribers
   [this])</pre></td></tr><tr><td class="docs">
@@ -5494,126 +5147,210 @@ any future/additional passes, we need to escape it.</p>
 </td><td class="codes"><pre class="brush: clojure">(def connection-behaviour
   {:add-connection add-connection})</pre></td></tr><tr><td class="docs"><p>  Dragon Query Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defrecord RedisQuerier [component])</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn new-querier
-  [component]
-  (-&gt;RedisQuerier component))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord RedisQuerier [component conn])</pre></td></tr><tr><td class="docs"><p>With this function we can do things like the following in the REPL (for
+  querying Redis):</p>
+
+<p>  ```clj
+  => (cmd querier 'ping)
+  => (cmd querier :get "testkey")
+  => (cmd querier :set "foo" "bar")
+  ```</p>
+
+<p>  (Note that the escaped strings are for the docstring, and not what you'd
+  actually type in the REPL.)</p>
+</td><td class="codes"><pre class="brush: clojure">(defn cmd
+  [this args]
+  (let [[cmd &amp; cmd-args] args
+        driver-fn (resolve (symbol (str &quot;taoensso.carmine/&quot; (name cmd))))
+        result (car/wcar (:conn this)
+                :as-pipeline
+                (apply driver-fn cmd-args))]
+    (if (= 1 (count result))
+      (first result)
+      result)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-post-category
+  [this post-key]
+  (cmd (:conn this) [:get (:category (schema post-key))]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-post-checksum
   [this post-key]
-  (cmd (:component this) 'get (:checksum (schemas post-key))))</pre></td></tr><tr><td class="docs">
+  (cmd (:conn this) [:get (:checksum (schema post-key))]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-post-content
   [this post-key]
-  (cmd (:component this) 'get (:content (schemas post-key))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-post-keys
-  ([this]
-    (get-post-keys this &quot;*:all-data&quot;))
-  ([this schema-glob]
-    (sort (cmd (:component this) 'keys schema-glob))))</pre></td></tr><tr><td class="docs">
+  (cmd (:conn this) [:get (:content (schema post-key))]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-post-content-source
+  [this post-key]
+  (cmd (:conn this) [:get (:content-source (schema post-key))]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-post-dates
+  [this post-key]
+  (cmd (:conn this) [:get (:dates (schema post-key))]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-post-excerpts
+  [this post-key]
+  (cmd (:conn this) [:get (:excerpts (schema post-key))]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-post-metadata
   [this post-key]
-  (cmd (:component this) 'get (:metadata (schemas post-key))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-post-tags
-  [this post-key]
-  (cmd (:component this) 'get (:tags (schemas post-key))))</pre></td></tr><tr><td class="docs">
+  (cmd (:conn this) [:get (:metadata (schema post-key))]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-post-stats
   [this post-key]
-  (cmd (:component this) 'get (:stats (schemas post-key))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-all-categories
-  [this]
-  (cmd (:component this) 'get (:categories (schemas &quot;all-posts&quot;))))</pre></td></tr><tr><td class="docs">
+  (cmd (:conn this) [:get (:stats (schema post-key))]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-post-tags
+  [this post-key]
+  (cmd (:conn this) [:get (:tags (schema post-key))]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-post-uri-path
+  [this post-key]
+  (cmd (:conn this) [:get (:uri-path (schema post-key))]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-all-data
   [this post-key]
-  (cmd (:component this) 'get (:all-data (schemas post-key))))</pre></td></tr><tr><td class="docs">
+  {:category (get-post-category this post-key)
+   :checksum (get-post-checksum this post-key)
+   :content (get-post-content this post-key)
+   :dates (get-post-dates this post-key)
+   :excerpts (get-post-excerpts this post-key)
+   :metadata (get-post-metadata this post-key)
+   :stats (get-post-stats this post-key)
+   :tags (get-post-tags this post-key)
+   :uri-path (get-post-uri-path this post-key)})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-all-keys
+  ([this schema-glob]
+    (get-all-keys this schema-glob {}))
+  ([this schema-glob opts]
+    (let [all-keys (cmd this [:keys schema-glob])]
+      (if (:sorted opts)
+        (sort all-keys)
+        all-keys))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-all*
+  ([this glob]
+    (get-all* this glob {}))
+  ([this glob opts]
+    (let [results (cmd this
+                    (concat [:mget] (get-all-keys this glob opts)))]
+      (if (:unique opts)
+        (apply set/union results)
+        results))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-all-tags
   [this]
-  (cmd (:component this) 'get (:tags (schemas &quot;all-posts&quot;))))</pre></td></tr><tr><td class="docs">
+  (get-all* this &quot;*:tags&quot; {:unique true}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-all-categories
+  [this]
+  (get-all* this &quot;*:category&quot; {:unique true}))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-all-stats
   [this]
-  (cmd (:component this) 'get (:stats (schemas &quot;all-posts&quot;))))</pre></td></tr><tr><td class="docs">
+  (get-all* this &quot;*:stats&quot;))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-total-char-count
+  [this]
+  (reduce + (map :char-count (get-all-stats this))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-total-line-count
+  [this]
+  (reduce + (map :line-count (get-all-stats this))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-total-word-count
+  [this]
+  (reduce + (map :word-count (get-all-stats this))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-all-metadata
+  [this]
+  (get-all* this &quot;*:metadata&quot;))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-all-authors
+  [this]
+  (set (map :author (get-all-metadata this))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-all-posts
+  [this]
+  ;; XXX probably want to do some custom pipelining for this ...)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-raw
   [this redis-key]
-  (cmd (:component this) 'get redis-key))</pre></td></tr><tr><td class="docs">
+  (cmd (:conn this) :get redis-key))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmulti post-changed?
   (fn [this &amp; _]
     (config/db-type (:component this))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn post-changed?
-  [this post-data]
-  (let [post-key (:src-file post-data)
-        checksum (:checksum post-data)]
-    (log/debug &quot;new checksum:&quot; checksum)
-    (log/debug &quot;old checksum:&quot; (get-post-checksum this post-key))
-    (not= checksum (get-post-checksum this post-key))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn save-post-checksum
-  [this post-data]
-  (let [post-key (:src-file post-data)
-        checksum (util/check-sum (str post-data))]
-    (cmd (:component this)
-         'set
-         (:checksum (schemas post-key))
-         checksum)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn save-post-content
-  [this post-data]
-  (let [post-key (:src-file post-data)]
-    (cmd (:component this)
-         'set
-         (:content (schemas post-key))
-         (:data post-data))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn save-post-metadata
-  [this post-data]
-  (let [post-key (:src-file post-data)]
-    (cmd (:component this)
-         'set
-         (:metadata (schemas post-key))
-         (dissoc post-data :data))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn save-post
-  [this post-data]
-  (save-post-checksum this post-data)
-  (save-post-content this post-data)
-  (save-post-metadata this post-data)
-  ; (save-post-categories this post-data)
-  ; (save-post-tags this post-data)
-  ; (save-post-stats this post-data)
-  post-data)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn set-all-data
-  [this post-key data]
-  (cmd (:component this) 'set (:all-data (schemas post-key)) data))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn set-content
-  [this post-key data]
-  (cmd (:component this) 'set (:content (schemas post-key)) data))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn set-file-data
-  [this post-key data]
-  (cmd (:component this) 'set (:file-data (schemas post-key)) data))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn set-metadata
-  [this post-key data]
-  (cmd (:component this) 'set (:metadata (schemas post-key)) data))</pre></td></tr><tr><td class="docs">
+  [this src-file checksum]
+  (log/debug &quot;new checksum:&quot; checksum)
+  (log/debug &quot;old checksum:&quot; (get-post-checksum this src-file))
+  (not= checksum (get-post-checksum this src-file)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn set-post-excerpts
+  [this post-key dates]
+  (cmd (:conn this) [:set (:excerpts (schema post-key)) dates]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn set-post-category
+  [this post-key category]
+  (cmd (:conn this) [:set (:category (schema post-key)) category]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn set-post-checksum
   [this post-key checksum]
-  (cmd (:component this) 'set (:checksum (schemas post-key)) checksum))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn set-posts-checksums
+  (cmd (:conn this) [:set (:checksum (schema post-key)) checksum]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn set-post-content
+  [this post-key content]
+  (cmd (:conn this) [:set (:content (schema post-key)) content]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn set-post-content-source
+  [this post-key source]
+  (cmd (:conn this) [:set (:content-source (schema post-key)) source]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn set-post-dates
+  [this post-key dates]
+  (cmd (:conn this) [:set (:dates (schema post-key)) dates]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn set-post-metadata
+  [this post-key metadata]
+  (cmd (:conn this) [:set (:metadata (schema post-key)) metadata]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn set-post-stats
+  [this post-key stats]
+  (cmd (:conn this) [:set (:stats (schema post-key)) stats]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn set-post-tags
+  [this post-key tags]
+  (cmd (:conn this) [:set (:tags (schema post-key)) tags]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn set-post-uri-path
+  [this post-key uri-path]
+  (cmd (:conn this) [:set (:uri-path (schema post-key)) uri-path]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn set-all-checksums
   [this checksum]
   (log/infof &quot;Setting posts checksums to \&quot;%s\&quot; ...&quot; checksum)
-  (for [checksum-key (cmd (:component this) 'keys &quot;*:checksum&quot;)]
-    (cmd (:component this) 'set checksum-key checksum)))</pre></td></tr><tr><td class="docs">
+  (doseq [checksum-key (cmd (:conn this) [:keys &quot;*:checksum&quot;])]
+    (cmd (:conn this) [:set checksum-key checksum])))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn set-post-data
+  [this src-file {:keys [category checksum content content-source dates
+                         excerpts metadata stats tags uri-path]}]
+  (set-post-category this src-file category)
+  (set-post-checksum this src-file checksum)
+  (set-post-content this src-file content)
+  (set-post-content-source this src-file content-source)
+  (set-post-dates this src-file dates)
+  (set-post-excerpts this src-file excerpts)
+  (set-post-metadata this src-file metadata)
+  (set-post-stats this src-file stats)
+  (set-post-tags this src-file tags)
+  (set-post-uri-path this src-file uri-path))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def query-behaviour
-  {:get-post-checksum get-post-checksum
+  {:cmd cmd
+   :get-post-category get-post-checksum
+   :get-post-checksum get-post-checksum
    :get-post-content get-post-content
-   :get-post-keys get-post-keys
+   :get-post-content-source get-post-content-source
+   :get-post-dates get-post-dates
+   :get-post-excerpts get-post-excerpts
    :get-post-metadata get-post-metadata
-   :get-post-tags get-post-tags
    :get-post-stats get-post-stats
+   :get-post-tags get-post-tags
+   :get-post-uri-path get-post-uri-path
+   :get-all-keys get-all-keys
+   :get-all-authors get-all-authors
    :get-all-categories get-all-categories
    :get-all-data get-all-data
+   :get-all-metadata get-all-metadata
    :get-all-tags get-all-tags
    :get-all-stats get-all-stats
+   :get-total-char-count get-total-char-count
+   :get-total-line-count get-total-line-count
+   :get-total-word-count get-total-word-count
    :get-raw get-raw
    :post-changed? post-changed?
-   :save-post save-post
-   :set-all-data set-all-data
-   :set-content set-content
-   :set-file-data set-file-data
-   :set-metadata set-metadata
+   :set-post-category set-post-checksum
    :set-post-checksum set-post-checksum
-   :set-posts-checksums set-posts-checksums})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.data.sources.impl.common" name="dragon.data.sources.impl.common"><h1 class="project-name">dragon.data.sources.impl.common</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+   :set-post-content set-post-content
+   :set-post-content-source set-post-content-source
+   :set-post-data set-post-data
+   :set-post-dates set-post-dates
+   :set-post-excerpts set-post-excerpts
+   :set-post-metadata set-post-metadata
+   :set-post-stats set-post-stats
+   :set-post-tags set-post-tags
+   :set-post-uri-path set-post-uri-path
+   :set-all-checksums set-all-checksums})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn new-querier
+  [component conn]
+  (-&gt;RedisQuerier component conn))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.data.sources.impl.common" name="dragon.data.sources.impl.common"><h1 class="project-name">dragon.data.sources.impl.common</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.data.sources.impl.common
   (:require
     [clojure.java.shell :as shell]
@@ -5636,7 +5373,7 @@ any future/additional passes, we need to escape it.</p>
   (assoc (:component this) :conn nil))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def connection-behaviour
   {:execute-db-command! execute-db-command!
-   :setup-schemas :not-implemented
+   :setup-schema :not-implemented
    :setup-subscribers :not-implemented
    :add-connection :not-implemented
    :remove-connection remove-connection})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.data.sources.core" name="dragon.data.sources.core"><h1 class="project-name">dragon.data.sources.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
@@ -5652,7 +5389,7 @@ any future/additional passes, we need to escape it.</p>
     (dragon.data.sources.impl.redis RedisQuerier RedisConnector)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defprotocol DBConnector
   (execute-db-command! [this])
-  (setup-schemas [this])
+  (setup-schema [this])
   (setup-subscribers [this])
   (add-connection [this])
   (remove-connection [this]))</pre></td></tr><tr><td class="docs">
@@ -5665,32 +5402,49 @@ any future/additional passes, we need to escape it.</p>
   (case (config/db-type component)
     :redis (redis/new-connector component)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defprotocol DBQuerier
+  (cmd [this args])
+  (get-post-category [this post-key])
   (get-post-checksum [this post-key])
   (get-post-content [this post-key])
-  (get-post-keys [this] [this schema-glob])
+  (get-post-content-source [this post-key])
+  (get-post-dates [this post-key])
+  (get-post-excerpts [this post-key])
   (get-post-metadata [this post-key])
-  (get-post-tags [this post-key])
   (get-post-stats [this post-key])
+  (get-post-tags [this post-key])
+  (get-post-uri-path [this post-key])
+  (get-all-keys [this schema-glob] [this schema-glob opts])
+  (get-all-authors [this])
   (get-all-categories [this])
   (get-all-data [this post-key])
+  (get-all-metadata [this])
   (get-all-tags [this])
   (get-all-stats [this])
+  (get-total-char-count [this])
+  (get-total-line-count [this])
+  (get-total-word-count [this])
   (get-raw [this any-key])
-  (post-changed? [this post-key])
-  (save-post [this data])
+  (post-changed? [this post-key checksum])
+  (set-post-data [this post-key opts])
+  (set-post-category [this post-key value])
+  (set-post-checksum [this post-key value])
+  (set-post-content [this post-key value])
+  (set-post-content-source [this post-key value])
+  (set-post-dates [this post-key value])
+  (set-post-excerpts [this post-key value])
+  (set-post-metadata [this post-key value])
+  (set-post-stats [this post-key value])
+  (set-post-tags [this post-key value])
+  (set-post-uri-path [this post-key value])
   (set-all-data [this post-key data])
-  (set-content [this post-key data])
-  (set-file-data [this post-key data])
-  (set-metadata [this post-key data])
-  (set-post-checksum [this post-key checksum])
-  (set-posts-checksums [this checksum]))</pre></td></tr><tr><td class="docs">
+  (set-all-checksums [this value]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(extend RedisQuerier
         DBQuerier
         redis/query-behaviour)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn new-querier
-  [component]
+  [component conn]
   (case (config/db-type component)
-    :redis (redis/new-querier component)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.event.topic" name="dragon.event.topic"><h1 class="project-name">dragon.event.topic</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+    :redis (redis/new-querier component conn)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.event.topic" name="dragon.event.topic"><h1 class="project-name">dragon.event.topic</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.event.topic)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def dataflow-events ::dataflow-events)</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.event.message" name="dragon.event.message"><h1 class="project-name">dragon.event.message</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.event.message
@@ -5941,7 +5695,7 @@ any future/additional passes, we need to escape it.</p>
   ([]
     (data config-file))
   ([filename]
-    (config/data filename)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/gdeer81/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a><div id="floating-toc"><ul><li class="floating-toc-li" id="floating-toc_dragon.watcher.impl.hawk">dragon.watcher.impl.hawk</li><li class="floating-toc-li" id="floating-toc_dragon.watcher.core">dragon.watcher.core</li><li class="floating-toc-li" id="floating-toc_dragon.util">dragon.util</li><li class="floating-toc-li" id="floating-toc_dragon.core">dragon.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.show.posts">dragon.cli.show.posts</li><li class="floating-toc-li" id="floating-toc_dragon.cli.show.core">dragon.cli.show.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.core">dragon.cli.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.stub">dragon.cli.new.stub</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.core">dragon.cli.new.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.post">dragon.cli.new.post</li><li class="floating-toc-li" id="floating-toc_dragon.blog.post.impl.default">dragon.blog.post.impl.default</li><li class="floating-toc-li" id="floating-toc_dragon.blog.post.util">dragon.blog.post.util</li><li class="floating-toc-li" id="floating-toc_dragon.blog.post.core">dragon.blog.post.core</li><li class="floating-toc-li" id="floating-toc_dragon.blog.tags">dragon.blog.tags</li><li class="floating-toc-li" id="floating-toc_dragon.blog.categories">dragon.blog.categories</li><li class="floating-toc-li" id="floating-toc_dragon.blog.generator">dragon.blog.generator</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.block">dragon.blog.content.block</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.data">dragon.blog.content.data</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.rfc5322">dragon.blog.content.rfc5322</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.core">dragon.blog.content.core</li><li class="floating-toc-li" id="floating-toc_dragon.blog.core">dragon.blog.core</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.impl.msgs">dragon.blog.workflow.impl.msgs</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.impl.iter-db">dragon.blog.workflow.impl.iter-db</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.impl.xduce-db">dragon.blog.workflow.impl.xduce-db</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.impl.xduce">dragon.blog.workflow.impl.xduce</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.impl.iter">dragon.blog.workflow.impl.iter</li><li class="floating-toc-li" id="floating-toc_dragon.blog.workflow.core">dragon.blog.workflow.core</li><li class="floating-toc-li" id="floating-toc_dragon.components.db">dragon.components.db</li><li class="floating-toc-li" id="floating-toc_dragon.components.core">dragon.components.core</li><li class="floating-toc-li" id="floating-toc_dragon.components.logging">dragon.components.logging</li><li class="floating-toc-li" id="floating-toc_dragon.components.watcher">dragon.components.watcher</li><li class="floating-toc-li" id="floating-toc_dragon.components.event">dragon.components.event</li><li class="floating-toc-li" id="floating-toc_dragon.components.responder">dragon.components.responder</li><li class="floating-toc-li" id="floating-toc_dragon.components.config">dragon.components.config</li><li class="floating-toc-li" id="floating-toc_dragon.components.httpd">dragon.components.httpd</li><li class="floating-toc-li" id="floating-toc_dragon.main">dragon.main</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.core">dragon.selmer.core</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.flickr">dragon.selmer.tags.flickr</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.panel">dragon.selmer.tags.panel</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.util">dragon.selmer.tags.util</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.core">dragon.selmer.tags.core</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.demo">dragon.selmer.tags.demo</li><li class="floating-toc-li" id="floating-toc_dragon.data.core">dragon.data.core</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.impl.redis">dragon.data.sources.impl.redis</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.impl.common">dragon.data.sources.impl.common</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.core">dragon.data.sources.core</li><li class="floating-toc-li" id="floating-toc_dragon.event.topic">dragon.event.topic</li><li class="floating-toc-li" id="floating-toc_dragon.event.message">dragon.event.message</li><li class="floating-toc-li" id="floating-toc_dragon.event.subscription">dragon.event.subscription</li><li class="floating-toc-li" id="floating-toc_dragon.event.system.impl">dragon.event.system.impl</li><li class="floating-toc-li" id="floating-toc_dragon.event.system.core">dragon.event.system.core</li><li class="floating-toc-li" id="floating-toc_dragon.event.tag">dragon.event.tag</li><li class="floating-toc-li" id="floating-toc_dragon.config">dragon.config</li></ul></div></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
+    (config/data filename)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/gdeer81/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a><div id="floating-toc"><ul><li class="floating-toc-li" id="floating-toc_dragon.watcher.impl.hawk">dragon.watcher.impl.hawk</li><li class="floating-toc-li" id="floating-toc_dragon.watcher.core">dragon.watcher.core</li><li class="floating-toc-li" id="floating-toc_dragon.util">dragon.util</li><li class="floating-toc-li" id="floating-toc_dragon.core">dragon.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.show.posts">dragon.cli.show.posts</li><li class="floating-toc-li" id="floating-toc_dragon.cli.show.core">dragon.cli.show.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.core">dragon.cli.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.stub">dragon.cli.new.stub</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.core">dragon.cli.new.core</li><li class="floating-toc-li" id="floating-toc_dragon.cli.new.post">dragon.cli.new.post</li><li class="floating-toc-li" id="floating-toc_dragon.blog.post.impl.default">dragon.blog.post.impl.default</li><li class="floating-toc-li" id="floating-toc_dragon.blog.post.util">dragon.blog.post.util</li><li class="floating-toc-li" id="floating-toc_dragon.blog.post.core">dragon.blog.post.core</li><li class="floating-toc-li" id="floating-toc_dragon.blog.tags">dragon.blog.tags</li><li class="floating-toc-li" id="floating-toc_dragon.blog.categories">dragon.blog.categories</li><li class="floating-toc-li" id="floating-toc_dragon.blog.generator">dragon.blog.generator</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.block">dragon.blog.content.block</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.data">dragon.blog.content.data</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.rfc5322">dragon.blog.content.rfc5322</li><li class="floating-toc-li" id="floating-toc_dragon.blog.content.core">dragon.blog.content.core</li><li class="floating-toc-li" id="floating-toc_dragon.blog.core">dragon.blog.core</li><li class="floating-toc-li" id="floating-toc_dragon.components.db">dragon.components.db</li><li class="floating-toc-li" id="floating-toc_dragon.components.core">dragon.components.core</li><li class="floating-toc-li" id="floating-toc_dragon.components.logging">dragon.components.logging</li><li class="floating-toc-li" id="floating-toc_dragon.components.watcher">dragon.components.watcher</li><li class="floating-toc-li" id="floating-toc_dragon.components.event">dragon.components.event</li><li class="floating-toc-li" id="floating-toc_dragon.components.responder">dragon.components.responder</li><li class="floating-toc-li" id="floating-toc_dragon.components.config">dragon.components.config</li><li class="floating-toc-li" id="floating-toc_dragon.components.httpd">dragon.components.httpd</li><li class="floating-toc-li" id="floating-toc_dragon.main">dragon.main</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.core">dragon.selmer.core</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.flickr">dragon.selmer.tags.flickr</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.panel">dragon.selmer.tags.panel</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.util">dragon.selmer.tags.util</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.core">dragon.selmer.tags.core</li><li class="floating-toc-li" id="floating-toc_dragon.selmer.tags.demo">dragon.selmer.tags.demo</li><li class="floating-toc-li" id="floating-toc_dragon.data.core">dragon.data.core</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.impl.redis">dragon.data.sources.impl.redis</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.impl.common">dragon.data.sources.impl.common</li><li class="floating-toc-li" id="floating-toc_dragon.data.sources.core">dragon.data.sources.core</li><li class="floating-toc-li" id="floating-toc_dragon.event.topic">dragon.event.topic</li><li class="floating-toc-li" id="floating-toc_dragon.event.message">dragon.event.message</li><li class="floating-toc-li" id="floating-toc_dragon.event.subscription">dragon.event.subscription</li><li class="floating-toc-li" id="floating-toc_dragon.event.system.impl">dragon.event.system.impl</li><li class="floating-toc-li" id="floating-toc_dragon.event.system.core">dragon.event.system.core</li><li class="floating-toc-li" id="floating-toc_dragon.event.tag">dragon.event.tag</li><li class="floating-toc-li" id="floating-toc_dragon.config">dragon.config</li></ul></div></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
 SyntaxHighlighter.all();
 
 // hackity hack
