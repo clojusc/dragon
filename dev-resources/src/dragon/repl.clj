@@ -131,9 +131,3 @@
 (defn force-regenerate
   []
   (call-by-name generator-ns "force-regenerate" system))
-
-(comment
-  (dragon.blog.workflow.core/new-workflow system [:iterator :db])
-  (-> system
-      dragon.blog.core/get-posts
-  )

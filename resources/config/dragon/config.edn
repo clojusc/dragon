@@ -39,11 +39,6 @@
        :pool {}
        :spec {
          :host "127.0.0.1" :port 6379}}}
-   :workflow {
-     ;:type :transducer
-     :type :iterator
-     ;:storage :db
-     :storage :memory}
    :watcher {
      :type :hawk
      :content {

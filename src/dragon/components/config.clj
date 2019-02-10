@@ -148,19 +148,6 @@
   [system]
   (get-in (get-cfg system) [:processor :constructor]))
 
-(defn workflow-type
-  [system]
-  (get-in (get-cfg system) [:workflow :type]))
-
-(defn workflow-storage
-  [system]
-  (get-in (get-cfg system) [:workflow :storage]))
-
-(defn workflow-qualifier
-  [system]
-  [(workflow-type system)
-   (workflow-storage system)])
-
 (defn watcher-type
   [system]
   (get-in (get-cfg system) [:watcher :type]))
