@@ -93,83 +93,43 @@
 
 (defn get-post-category
   [this post-key]
-  (cmd (:conn this) :get (:category (schema post-key))))
-
-(defn set-post-category
-  [this post-key category]
-  (cmd (:conn this) :set (:category (schema post-key)) category))
+  (cmd (:conn this) [:get (:category (schema post-key))]))
 
 (defn get-post-checksum
   [this post-key]
-  (cmd (:conn this) :get (:checksum (schema post-key))))
-
-(defn set-post-checksum
-  [this post-key checksum]
-  (cmd (:conn this) :set (:checksum (schema post-key)) checksum))
+  (cmd (:conn this) [:get (:checksum (schema post-key))]))
 
 (defn get-post-content
   [this post-key]
-  (cmd (:conn this) :get (:content (schema post-key))))
-
-(defn set-post-content
-  [this post-key content]
-  (cmd (:conn this) :set (:content (schema post-key)) content))
+  (cmd (:conn this) [:get (:content (schema post-key))]))
 
 (defn get-post-content-source
   [this post-key]
-  (cmd (:conn this) :get (:content-source (schema post-key))))
-
-(defn set-post-content-source
-  [this post-key source]
-  (cmd (:conn this) :set (:content-source (schema post-key)) source))
+  (cmd (:conn this) [:get (:content-source (schema post-key))]))
 
 (defn get-post-dates
   [this post-key]
-  (cmd (:conn this) :get (:dates (schema post-key))))
-
-(defn set-post-dates
-  [this post-key dates]
-  (cmd (:conn this) :set (:dates (schema post-key)) dates))
+  (cmd (:conn this) [:get (:dates (schema post-key))]))
 
 (defn get-post-excerpts
   [this post-key]
-  (cmd (:conn this) :get (:excerpts (schema post-key))))
-
-(defn set-post-excerpts
-  [this post-key dates]
-  (cmd (:conn this) :set (:excerpts (schema post-key)) dates))
+  (cmd (:conn this) [:get (:excerpts (schema post-key))]))
 
 (defn get-post-metadata
   [this post-key]
-  (cmd (:conn this) :get (:metadata (schema post-key))))
-
-(defn set-post-metadata
-  [this post-key metadata]
-  (cmd (:conn this) :set (:metadata (schema post-key)) metadata))
+  (cmd (:conn this) [:get (:metadata (schema post-key))]))
 
 (defn get-post-stats
   [this post-key]
-  (cmd (:conn this) :get (:stats (schema post-key))))
-
-(defn set-post-stats
-  [this post-key stats]
-  (cmd (:conn this) :set (:stats (schema post-key)) stats))
+  (cmd (:conn this) [:get (:stats (schema post-key))]))
 
 (defn get-post-tags
   [this post-key]
-  (cmd (:conn this) :get (:tags (schema post-key))))
-
-(defn set-post-tags
-  [this post-key tags]
-  (cmd (:conn this) :set (:tags (schema post-key)) tags))
+  (cmd (:conn this) [:get (:tags (schema post-key))]))
 
 (defn get-post-uri-path
   [this post-key]
-  (cmd (:conn this) :get (:uri-path (schema post-key))))
-
-(defn set-post-uri-path
-  [this post-key uri-path]
-  (cmd (:conn this) :set (:uri-path (schema post-key)) uri-path))
+  (cmd (:conn this) [:get (:uri-path (schema post-key))]))
 
 (defn get-all-data
   [this post-key]
@@ -253,11 +213,65 @@
   (log/debug "old checksum:" (get-post-checksum this src-file))
   (not= checksum (get-post-checksum this src-file)))
 
+(defn set-post-excerpts
+  [this post-key dates]
+  (cmd (:conn this) [:set (:excerpts (schema post-key)) dates]))
+
+(defn set-post-category
+  [this post-key category]
+  (cmd (:conn this) [:set (:category (schema post-key)) category]))
+
+(defn set-post-checksum
+  [this post-key checksum]
+  (cmd (:conn this) [:set (:checksum (schema post-key)) checksum]))
+
+(defn set-post-content
+  [this post-key content]
+  (cmd (:conn this) [:set (:content (schema post-key)) content]))
+
+(defn set-post-content-source
+  [this post-key source]
+  (cmd (:conn this) [:set (:content-source (schema post-key)) source]))
+
+(defn set-post-dates
+  [this post-key dates]
+  (cmd (:conn this) [:set (:dates (schema post-key)) dates]))
+
+(defn set-post-metadata
+  [this post-key metadata]
+  (cmd (:conn this) [:set (:metadata (schema post-key)) metadata]))
+
+(defn set-post-stats
+  [this post-key stats]
+  (cmd (:conn this) [:set (:stats (schema post-key)) stats]))
+
+(defn set-post-tags
+  [this post-key tags]
+  (cmd (:conn this) [:set (:tags (schema post-key)) tags]))
+
+(defn set-post-uri-path
+  [this post-key uri-path]
+  (cmd (:conn this) [:set (:uri-path (schema post-key)) uri-path]))
+
 (defn set-all-checksums
   [this checksum]
   (log/infof "Setting posts checksums to \"%s\" ..." checksum)
-  (for [checksum-key (cmd (:conn this) 'keys "*:checksum")]
-    (cmd (:conn this) :set checksum-key checksum)))
+  (doseq [checksum-key (cmd (:conn this) [:keys "*:checksum"])]
+    (cmd (:conn this) [:set checksum-key checksum])))
+
+(defn set-post-data
+  [this src-file {:keys [category checksum content content-source dates
+                         excerpts metadata stats tags uri-path]}]
+  (set-post-category this src-file category)
+  (set-post-checksum this src-file checksum)
+  (set-post-content this src-file content)
+  (set-post-content-source this src-file content-source)
+  (set-post-dates this src-file dates)
+  (set-post-excerpts this src-file excerpts)
+  (set-post-metadata this src-file metadata)
+  (set-post-stats this src-file stats)
+  (set-post-tags this src-file tags)
+  (set-post-uri-path this src-file uri-path))
 
 (def query-behaviour
   {:cmd cmd
@@ -287,6 +301,7 @@
    :set-post-checksum set-post-checksum
    :set-post-content set-post-content
    :set-post-content-source set-post-content-source
+   :set-post-data set-post-data
    :set-post-dates set-post-dates
    :set-post-excerpts set-post-excerpts
    :set-post-metadata set-post-metadata

@@ -50,7 +50,7 @@
   (get-total-word-count [this])
   (get-raw [this any-key])
   (post-changed? [this post-key checksum])
-  (save-post [this data])
+  (set-post-data [this post-key opts])
   (set-post-category [this post-key value])
   (set-post-checksum [this post-key value])
   (set-post-content [this post-key value])

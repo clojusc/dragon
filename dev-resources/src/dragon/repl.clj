@@ -107,19 +107,6 @@
 ;;;   Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn show-lines-with-error
-  "Process posts and show the lines of text that threw exceptions."
-  ([]
-    (show-lines-with-error #'system))
-  ([system]
-    (let [processor (post/new-processor system)]
-      (->> processor
-           (blog/get-posts)
-           (map #(->> %
-                     (post/get-data processor)
-                     :text))
-           (pprint)))))
-
 (defn show-posts
   []
   (cli-show-posts/run system))

@@ -5,6 +5,9 @@
     [dragon.blog.content.core :as content]
     [dragon.blog.post.util :as post-util]
     [dragon.components.config :as config]
+    [dragon.components.db :as db-component]
+    [dragon.data.sources.core :as db]
+    [dragon.data.sources.impl.redis :refer [schema]]
     [dragon.event.system.core :as event]
     [dragon.event.tag :as tag]
     [dragon.util :as util]
@@ -73,6 +76,40 @@
   (apply sorted-set
          (string/split tags separator)))
 
+(defn process-file
+  [this querier file data opts]
+  (log/infof "Changed detected; processing %s ..." (:src-file opts))
+  (let [src-dir (.getParent file)
+        filename-old (.getName file)
+        metadata (dissoc data :body :body-orig :tags :category)
+        uri-path (-> (:src-file opts)
+                     (string/replace filename-old (:filename opts))
+                     (util/sanitize-post-path)
+                     (string/replace-first "posts/" ""))
+
+        tags (get-tags this (:tags data) (:tag-separator opts))
+        dates (get-dates this (:src-file opts))
+        stats (get-stats this (:body data))
+        excerpts (get-excerpts this (:body data))]
+    (log/trace "Got data:" data)
+    (log/trace "Got dates:" dates)
+    (log/trace "Got excerpts:" excerpts)
+    (log/trace "Got metadata:" metadata)
+    (log/trace "Got src-dir:" src-dir)
+    (log/trace "Got stats:" stats)
+    (log/trace "Got tags:" tags)
+    (log/infof "Post %s will be accessible at: %s" (:title metadata) uri-path)
+    {:category (:category data)
+     :checksum (:checksum opts)
+     :content (:body data)
+     :content-source (:body-orig data)
+     :dates dates
+     :excerpts excerpts
+     :metadata metadata
+     :stats stats
+     :tags tags
+     :uri-path uri-path}))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -84,7 +121,8 @@
    :get-dates get-dates
    :get-excerpts get-excerpts
    :get-stats get-stats
-   :get-tags get-tags})
+   :get-tags get-tags
+   :process-file process-file})
 
 (defn new-processor
   [system]

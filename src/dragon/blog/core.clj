@@ -5,9 +5,9 @@
     [dragon.blog.post.core :as post]
     [dragon.blog.post.impl.default :as default]
     [dragon.blog.tags :as tags]
-    [dragon.blog.workflow.core :as workflow]
     [dragon.components.config :as config]
-    [dragon.data.sources.core :as data-source]
+    [dragon.components.db :as db-component]
+    [dragon.data.sources.core :as db]
     [dragon.event.system.core :as event]
     [dragon.event.tag :as tag]
     [dragon.util :as util]
@@ -131,25 +131,35 @@
 
 (defn process
   [system]
-  (log/info "Processing posts ...")
-  ; (event/publish system tag/process-all-pre)
-  (let [raw-posts (get-posts system)
-        wf (workflow/new-workflow system)
-        processed-posts (workflow/files->data wf raw-posts)]
-    (dorun
-      (->> processed-posts
-           (sort compare-timestamp-desc)
-           ; (event/publish->> system
-           ;                   tag/process-all-post
-           ;                   {:count (count processed-posts)})
-           )))
+  (doseq [file (sort (get-files (config/posts-path-src system)))]
+    (let [src-file (.getPath file)
+          _ (log/infof "Checking source file %s ..." src-file)
+          processor (post/new-processor system)
+          querier (db-component/db-querier system)
+          tmpl-cfg (config/template-config system)
+          data (post/get-data processor file tmpl-cfg)
+          checksum (util/check-sum (pr-str data))
+          filename (format (config/output-file-tmpl system)
+                           (util/sanitize-str (:title data)))
+          opts {:tag-separator (config/tag-separator system)
+                :checksum checksum
+                :src-file src-file
+                :filename filename}]
+      (log/debug "Got checksum:" (:checksum opts))
+      (log/debug "Got filename:" (:filename opts))
+      (if (db/post-changed? querier src-file checksum)
+        (db/set-post-data
+          querier
+          src-file
+          (post/process-file processor querier file data opts))
+        (log/infof "File %s has already been processed; skipping ..."
+                   src-file))))
   :ok)
 
 (defn reset-content-checksums
   [system]
-  (let [wf (workflow/new-workflow system)]
-    (log/info "Resetting content checksums ...")
-    (workflow/bust-cache wf)))
+  ;; XXX re-implement without workflow ns ...
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Core Grouping Multimethods   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
