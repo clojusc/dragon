@@ -14,17 +14,24 @@
 ;;;   DB Component API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn get-db-conn
+(defn db-conn
   [system]
   (get-in system [:db :conn]))
 
-(defn get-db-connector
+(defn db-connector
   [system]
   (get-in system [:db :connector]))
 
-(defn get-db-querier
+(defn db-querier
   [system]
   (get-in system [:db :querier]))
+
+(defn cmd
+  [system & args]
+  (apply data-source/cmd
+         (concat [(db-querier system)
+                  (db-conn system)]
+                 args)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Component Support Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -33,7 +40,7 @@
 (defn run-setup-tasks
   [connector]
   (log/debug "Starting db setup tasks ...")
-  (data-source/setup-schemas connector)
+  (data-source/setup-schema connector)
   (data-source/setup-subscribers connector)
   (log/debug "Finished db setup tasks."))
 
@@ -41,7 +48,7 @@
 ;;;   Component Lifecycle Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defrecord DataBase [connector querier])
+(defrecord DataBase [conn connector querier])
 
 (defn start
   [this]
@@ -49,13 +56,11 @@
   (log/trace "component keys:" (keys this))
   (log/debug "Database component backend is" (config/db-type this))
   (let [connector (data-source/new-connector this)
-        component (data-source/add-connection connector)
-        querier (data-source/new-querier component)]
+        querier (data-source/new-querier this)]
     (run-setup-tasks connector)
-    (reset! (:connector component) connector)
-    (reset! (:querier component) querier)
-    (assoc component :connector connector
-                     :querier querier)))
+    (assoc this :connector connector
+                :querier querier
+                :conn (config/db-conn this))))
 
 (defn stop
   [this]
@@ -85,6 +90,4 @@
 (defn create-component
   ""
   []
-  (->DataBase
-    (atom {})
-    (atom {})))
+  (map->DataBase {}))

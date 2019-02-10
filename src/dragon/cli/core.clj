@@ -46,7 +46,7 @@
   [system [cmd & args]]
   (log/debug "Got cmd:" cmd)
   (log/debug "Got args:" args)
-  (event/publish system tag/run-cli {:cmd cmd :args args})
+  ; (event/publish system tag/run-cli {:cmd cmd :args args})
   (case cmd
     :new (new/run system args)
     :show (show/run system args)
@@ -59,4 +59,5 @@
     :--version (version-cmd)
     :-h (docs/print-docstring #'run)
     :-v (version-cmd))
-  (event/publish system tag/shutdown-cli))
+  ; (event/publish system tag/shutdown-cli)
+  )

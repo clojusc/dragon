@@ -23,7 +23,7 @@
 
 (def connection-behaviour
   {:execute-db-command! execute-db-command!
-   :setup-schemas :not-implemented
+   :setup-schema :not-implemented
    :setup-subscribers :not-implemented
    :add-connection :not-implemented
    :remove-connection remove-connection})

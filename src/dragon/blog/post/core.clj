@@ -21,7 +21,8 @@
     [dragon.event.system.core :as event]
     [dragon.event.tag :as tag]
     [dragon.util :as util])
-  (:import (dragon.blog.post.impl.default DefaultBlogPostProcessor)))
+  (:import
+    (dragon.blog.post.impl.default DefaultBlogPostProcessor)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Protocols   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -32,8 +33,7 @@
 
 (defprotocol BlogPostProcessorAPI
   (get-data [this data])
-  (get-file-data [this data])
-  (get-counts [this data])
+  (get-stats [this data])
   (get-link [this data])
   (get-dates [this data])
   (get-tags [this data])

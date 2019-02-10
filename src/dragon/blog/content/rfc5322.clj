@@ -1,4 +1,4 @@
-(ns dragon.blog.content.rfc5322
+  (ns dragon.blog.content.rfc5322
   (:require
     [clojure.set :refer [rename-keys]]
     [clojure.string :as string]
@@ -6,8 +6,7 @@
     [dragon.event.system.core :as event]
     [dragon.event.tag :as tag]
     [instaparse.core :as instaparse]
-    [rfc5322.core :as rfc]
-    [rfc5322.dev :as rfc-dev]
+    [rfc5322.core :as rfc5322]
     [taoensso.timbre :as log]))
 
 (def rfc5322-names->metadata-names
@@ -24,10 +23,9 @@
     (parse nil msg))
   ([system msg]
     (log/debug "Parsing message content ...")
-    (event/publish system tag/parse-file-pre)
-    (->> msg
-         (instaparse/parse (rfc/make-lite-parser))
-         (rfc-dev/->map)
+    ; (event/publish system tag/parse-file-pre)
+    (->> (rfc5322/convert msg :lite :utf8)
          (walk/postwalk-replace rfc5322-names->metadata-names)
          (into {})
-         (event/publish->> system tag/parse-file-post))))
+         ; (event/publish->> system tag/parse-file-post)
+         )))

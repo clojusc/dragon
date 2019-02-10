@@ -31,10 +31,6 @@
 
 (defprotocol BlogPostWorkflowAPI
   (bust-cache [this])
-  (do-file-data-step [this processor] [this processor data])
-  (do-metadata-step [this processor] [this processor data])
-  (do-content-step [this processor] [this processor data])
-  (do-all-steps [this processor] [this processor data])
   (files->data [this file-objs]))
 
 (extend IteratorWorkflow
@@ -58,9 +54,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn new-workflow
-  [system]
-  (case (config/workflow-qualifier system)
-    [:iterator :memory] (iterator/new-workflow system)
-    [:iterator :db] (iterator-db/new-workflow system)
-    [:transducer :memory] (transducer/new-workflow system)
-    [:transducer :db] (transducer-db/new-workflow system)))
+  ([system]
+    (new-workflow system (config/workflow-qualifier system)))
+  ([system workflow-qualifier]
+    (case workflow-qualifier
+      [:iterator :memory] (iterator/new-workflow system)
+      [:iterator :db] (iterator-db/new-workflow system)
+      [:transducer :memory] (transducer/new-workflow system)
+      [:transducer :db] (transducer-db/new-workflow system))))

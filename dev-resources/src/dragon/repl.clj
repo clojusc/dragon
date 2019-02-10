@@ -25,6 +25,7 @@
     [dragon.cli.core :as cli]
     [dragon.cli.show.posts :as cli-show-posts]
     [dragon.components.core :as components]
+    [dragon.components.db :as db-component]
     [dragon.config :as config]
     [dragon.core]
     [dragon.data.sources.core :as data-source]
@@ -130,3 +131,9 @@
 (defn force-regenerate
   []
   (call-by-name generator-ns "force-regenerate" system))
+
+(comment
+  (dragon.blog.workflow.core/new-workflow system [:iterator :db])
+  (-> system
+      dragon.blog.core/get-posts
+  )

@@ -3,7 +3,6 @@
     [clojure.edn :as edn]
     [clojure.string :as string]
     [dragon.blog.content.core :as content]
-    [dragon.blog.content.core :as content]
     [dragon.blog.post.util :as post-util]
     [dragon.components.config :as config]
     [dragon.event.system.core :as event]
@@ -44,16 +43,13 @@
                          (util/sanitize-post-path)
                          (string/replace-first "posts/" "")))))
 
-(defn get-counts
-  [this data]
-  (log/debug "Adding counts ...")
-  (let [body (:body data)]
-    (log/trace "Body data:" data)
-    (assoc
-      data
-      :char-count (util/count-chars body)
-      :word-count (util/count-words body)
-      :line-count (util/count-lines body))))
+(defn get-stats
+  [this body]
+  (log/debug "Adding stats ...")
+  (log/trace "Body data:" body)
+  {:char-count (util/count-chars body)
+   :word-count (util/count-words body)
+   :line-count (util/count-lines body)})
 
 (defn get-link
   [this data]
@@ -65,38 +61,34 @@
                 :link link)))
 
 (defn get-dates
-  [this data]
+  [this src-file]
   (log/debug "Adding post dates ...")
-  (let [date (util/path->date (:src-file data))
+  (let [date (util/path->date src-file)
         timestamp (util/format-timestamp date)
         timestamp-clean (string/replace timestamp #"[^\d]" "")
         datestamp (util/format-datestamp date)]
-    (assoc
-      data
-      :date date
-      :month (util/month->name (:month date))
-      :month-short (util/month->short-name (:month date))
-      :time (util/format-time date)
-      :timestamp timestamp
-      :timestamp-long (Long/parseLong timestamp-clean)
-      :datestamp datestamp
-      :now-timestamp (util/format-timestamp (util/datetime-now))
-      :now-datestamp (util/format-datestamp (util/datetime-now)))))
+    {:date date
+     :month (util/month->name (:month date))
+     :month-short (util/month->short-name (:month date))
+     :time (util/format-time date)
+     :timestamp timestamp
+     :timestamp-long (Long/parseLong timestamp-clean)
+     :datestamp datestamp
+     :now-timestamp (util/format-timestamp (util/datetime-now))
+     :now-datestamp (util/format-datestamp (util/datetime-now))}))
 
 (defn get-tags
-  [this data]
+  [this tags]
   (log/debug "Updating tags ...")
-  (assoc data :tags (apply sorted-set (string/split
-                                       (:tags data)
-                                       (config/tag-separator
-                                        (:system this))))))
+  (apply sorted-set
+         (string/split tags (config/tag-separator (:system this)))))
 
 (defn get-excerpts
-  [this data]
+  [this body]
   (log/debug "Converting post body ...")
   (let [system (:system this)
         paragraphs (string/split
-                    (:body data) (config/paragraph-separator system))
+                    body (config/paragraph-separator system))
         words (-> paragraphs
                   first
                   (string/split (config/word-separator system)))
@@ -104,25 +96,25 @@
         excerpt-100 (post-util/join-excerpt system words-100 100 :as-html)
         excerpt-50 (post-util/join-excerpt system words-100 50 :as-html)
         excerpt-25 (post-util/join-excerpt system words-100 25 :as-html)]
-    (assoc data
-           :excerpt-100 excerpt-100
-           :excerpt-50 excerpt-50
-           :excerpt-25 excerpt-25
-           :excerpt-100-clean (post-util/scrub-html excerpt-100)
-           :excerpt-50-clean (post-util/scrub-html excerpt-50)
-           :excerpt-25-clean (post-util/scrub-html excerpt-25))))
+    {:excerpt-100 excerpt-100
+     :excerpt-50 excerpt-50
+     :excerpt-25 excerpt-25
+     :excerpt-100-clean (post-util/scrub-html excerpt-100)
+     :excerpt-50-clean (post-util/scrub-html excerpt-50)
+     :excerpt-25-clean (post-util/scrub-html excerpt-25)}))
 
 (defn get-body
   [this data]
   (log/debug "Converting post body ...")
   (let [system (:system this)]
-    (event/publish system tag/parse-content-pre {:body (:body data)})
+    ; (event/publish system tag/parse-content-pre {:body (:body data)})
     (->> data
          :content-type
          (post-util/convert-body! system data)
-         (event/publish->> system
-                           tag/parse-content-post
-                           {:body (:body data)}))))
+         ; (event/publish->> system
+         ;                   tag/parse-content-post
+         ;                   {:body (:body data)})
+         )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -132,8 +124,7 @@
 
 (def behaviour
   {:get-data get-data
-   :get-file-data get-file-data
-   :get-counts get-counts
+   :get-stats get-stats
    :get-link get-link
    :get-dates get-dates
    :get-tags get-tags

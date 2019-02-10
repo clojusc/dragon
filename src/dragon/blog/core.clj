@@ -132,16 +132,18 @@
 (defn process
   [system]
   (log/info "Processing posts ...")
-  (event/publish system tag/process-all-pre)
+  ; (event/publish system tag/process-all-pre)
   (let [raw-posts (get-posts system)
         wf (workflow/new-workflow system)
         processed-posts (workflow/files->data wf raw-posts)]
-    (->> processed-posts
-         (sort compare-timestamp-desc)
-         (event/publish->> system
-                           tag/process-all-post
-                           {:count (count processed-posts)})
-         vec)))
+    (dorun
+      (->> processed-posts
+           (sort compare-timestamp-desc)
+           ; (event/publish->> system
+           ;                   tag/process-all-post
+           ;                   {:count (count processed-posts)})
+           )))
+  :ok)
 
 (defn reset-content-checksums
   [system]
