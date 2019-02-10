@@ -17,22 +17,20 @@
       (map (comp keyword string/trim) types))))
 
 (defn file-extension-dispatch
-  [system content extension]
+  [content extension]
   (case extension
-        :rfc5322 (rfc5322/parse system content)
+        :rfc5322 (rfc5322/parse content)
         :default {:raw-data content
                   :error :parser-not-found}))
 
 (defn parse
-  [system file-obj]
-  ; (event/publish system tag/read-source-pre {:file file-obj})
+  [file-obj]
   (let [content (slurp file-obj)
         extension (fs/extension file-obj)
-        parsed (file-extension-dispatch system content extension)]
+        parsed (file-extension-dispatch content extension)]
     (log/trace "Parsed post extension:" extension)
     (log/trace "Raw file data:" content)
     (log/trace "Parsed file data:" parsed)
-    ; (event/publish system tag/read-source-post {:file file-obj})
     (-> parsed
         (update-in [:content-type] parse-content-type)
         (assoc :file-type extension))))

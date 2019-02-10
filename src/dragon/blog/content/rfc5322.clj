@@ -3,8 +3,6 @@
     [clojure.set :refer [rename-keys]]
     [clojure.string :as string]
     [clojure.walk :as walk]
-    [dragon.event.system.core :as event]
-    [dragon.event.tag :as tag]
     [instaparse.core :as instaparse]
     [rfc5322.core :as rfc5322]
     [taoensso.timbre :as log]))
@@ -19,13 +17,8 @@
 
 (defn parse
   "Parse the given message, converting the parsed tree into a Clojure map."
-  ([msg]
-    (parse nil msg))
-  ([system msg]
-    (log/debug "Parsing message content ...")
-    ; (event/publish system tag/parse-file-pre)
-    (->> (rfc5322/convert msg :lite :utf8)
-         (walk/postwalk-replace rfc5322-names->metadata-names)
-         (into {})
-         ; (event/publish->> system tag/parse-file-post)
-         )))
+  [msg]
+  (log/debug "Parsing message content ...")
+  (->> (rfc5322/convert msg :lite :utf8)
+       (walk/postwalk-replace rfc5322-names->metadata-names)
+       (into {})))

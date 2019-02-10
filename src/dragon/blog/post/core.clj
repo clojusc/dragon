@@ -32,13 +32,11 @@
 ;;; to provide easily-overridable implementations of the processing steps.
 
 (defprotocol BlogPostProcessorAPI
-  (get-data [this data])
-  (get-stats [this data])
-  (get-link [this data])
+  (get-data [this data template-config])
   (get-dates [this data])
-  (get-tags [this data])
   (get-excerpts [this data])
-  (get-body [this data]))
+  (get-stats [this data])
+  (get-tags [this data tag-separator]))
 
 (extend DefaultBlogPostProcessor
         BlogPostProcessorAPI

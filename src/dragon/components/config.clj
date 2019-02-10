@@ -79,6 +79,12 @@
   [system]
   (get-in (get-cfg system) [:parsing :skip-marker]))
 
+(defn template-config
+  [system]
+  {:output-file (output-file-tmpl system)
+   :skip-marker (template-skip-marker system)
+   :link (link-tmpl system)})
+
 (defn blocks-enabled
   [system]
   (get-in (get-cfg system) [:blocks :enabled]))

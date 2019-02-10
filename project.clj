@@ -23,6 +23,8 @@
   :license {
     :name "Apache License, Version 2.0"
     :url "http://www.apache.org/licenses/LICENSE-2.0"}
+  :jvm-opts ["-Dapple.awt.UIElement=1"
+             "-Djava.awt.headless=true"]
   :exclusions [
     [args4j]
     [clojusc/cljs-tools]
@@ -125,6 +127,7 @@
                   "for commands")}
       ["with-profile" "+cli"
        "run" "-m" "dragon.main" "cli"]
+    "trampoline" ["with-profile" "+dev,+custom-repl,+test,+cli" "trampoline"]
     "repl" ["with-profile" "+custom-repl,+test" "repl"]
     "ubercompile" ["with-profile" "+ubercompile" "compile"]
     "check-vers" ["with-profile" "+test" "ancient" "check" ":all"]

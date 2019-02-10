@@ -28,10 +28,7 @@
 
 (defn cmd
   [system & args]
-  (apply data-source/cmd
-         (concat [(db-querier system)
-                  (db-conn system)]
-                 args)))
+  (data-source/cmd (db-querier system) args))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Component Support Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -56,11 +53,12 @@
   (log/trace "component keys:" (keys this))
   (log/debug "Database component backend is" (config/db-type this))
   (let [connector (data-source/new-connector this)
-        querier (data-source/new-querier this)]
+        conn (config/db-conn this)
+        querier (data-source/new-querier this conn)]
     (run-setup-tasks connector)
     (assoc this :connector connector
                 :querier querier
-                :conn (config/db-conn this))))
+                :conn conn)))
 
 (defn stop
   [this]

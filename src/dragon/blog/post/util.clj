@@ -11,38 +11,38 @@
     [taoensso.timbre :as log]))
 
 (defn md->html
-  [system md]
+  [body tmpl-cfg]
   (markdown/md-to-html-string
-   md
-   :inhibit-separator (config/template-skip-marker system)))
+   body
+   :inhibit-separator (:skip-marker tmpl-cfg)))
 
 (defn selmer->html
-  [system data content]
-  (selmer/render content (assoc data :system system)))
+  [data body tmpl-cfg]
+  (selmer/render body data))
 
 (defn md+selmer->html
-  [system data content]
-  (->> content
-       (md->html system)
-       (selmer->html system data)))
+  [data body tmpl-cfg]
+  (selmer->html
+    data
+    (md->html body tmpl-cfg)))
 
 (defn selmer+md->html
-  [system data content]
-  (->> content
-       (selmer->html system data)
-       (md->html system)))
+  [data body tmpl-cfg]
+  (md->html
+    (selmer->html data body tmpl-cfg)
+    tmpl-cfg))
 
 (defn convert-body!
-  [system data content-type]
-  (case content-type
+  [data tmpl-cfg]
+  (case (:content-type data)
     :md
-      (update-in data [:body] (partial md->html system))
+      (update-in data [:body] #(md->html % tmpl-cfg))
     :selmer
-      (update-in data [:body] (partial selmer->html system data))
+      (update-in data [:body] #(selmer->html data % tmpl-cfg))
     [:md :selmer]
-      (update-in data [:body] (partial md+selmer->html system data))
+      (update-in data [:body] #(md+selmer->html data % tmpl-cfg))
     [:selmer :md]
-      (update-in data [:body] (partial selmer+md->html system data))))
+      (update-in data [:body] #(selmer+md->html data % tmpl-cfg))))
 
 (defn join-excerpt
   ([system words number]
@@ -53,11 +53,11 @@
         (str excerpt (config/ellipsis system)))))
   ([system words number flag]
     (case flag
-      :as-html (md->html system (join-excerpt system words number))
+      :as-html (md->html (join-excerpt system words number)
+                         (config/template-config system))
       (join-excerpt system words number))))
 
-(defmulti get-content-element
-  type)
+(defmulti get-content-element type)
 
 (defmethod get-content-element java.lang.String
   [element]

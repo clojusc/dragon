@@ -27,10 +27,11 @@
     :redis (redis/new-connector component)))
 
 (defprotocol DBQuerier
-  (cmd [this cmd & args])
+  (cmd [this args])
   (get-post-category [this post-key])
   (get-post-checksum [this post-key])
   (get-post-content [this post-key])
+  (get-post-content-source [this post-key])
   (get-post-dates [this post-key])
   (get-post-excerpts [this post-key])
   (get-post-metadata [this post-key])
@@ -48,6 +49,7 @@
   (set-post-category [this post-key value])
   (set-post-checksum [this post-key value])
   (set-post-content [this post-key value])
+  (set-post-content-source [this post-key value])
   (set-post-dates [this post-key value])
   (set-post-excerpts [this post-key value])
   (set-post-metadata [this post-key value])
@@ -62,6 +64,6 @@
         redis/query-behaviour)
 
 (defn new-querier
-  [component]
+  [component conn]
   (case (config/db-type component)
-    :redis (redis/new-querier component)))
+    :redis (redis/new-querier component conn)))
