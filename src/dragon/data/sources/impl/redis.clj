@@ -8,7 +8,9 @@
     [dragon.util :as util]
     [taoensso.carmine :as car :refer [wcar]]
     [taoensso.timbre :as log]
-    [trifl.fs :as fs]))
+    [trifl.fs :as fs])
+  (:import
+    (clojure.lang Keyword)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Constants & Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -37,6 +39,14 @@
 (defn key->path-segment
   [schema-key]
   (first (string/split schema-key #":")))
+
+(defn get-query
+  [schema-key post-key]
+  [:get (schema-key (schema post-key))])
+
+(defn set-query
+  [schema-key post-key & args]
+  (concat [:set (schema-key (schema post-key))] args))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Connector Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -69,79 +79,87 @@
 
 (defrecord RedisQuerier [component conn])
 
+(defn pipeline
+  "Make one or more calls to the Redis server using the pipeline mechanism:
+  ```
+  => (pipeline querier [[:get \"foo\"]
+                        [:get \"bar\"]
+                        [:get \"baz\"]
+                        [:get \"quux\"]])
+  ```"
+  [this lines]
+  (car/wcar
+    (:conn this)
+    :as-pipeline
+    (apply car/redis-call lines)))
+
 (defn cmd
-  "With this function we can do things like the following in the REPL (for
-  querying Redis):
+  "With this function we can query Redis like the following:
 
   ```clj
-  => (cmd querier 'ping)
-  => (cmd querier :get \"testkey\")
-  => (cmd querier :set \"foo\" \"bar\")
+  => (cmd querier [:ping])
+  => (cmd querier [:get \"testkey\"])
+  => (cmd querier [:set \"foo\" \"bar\"])
   ```
 
   (Note that the escaped strings are for the docstring, and not what you'd
-  actually type in the REPL.)"
+  actually type.)"
   [this args]
-  (let [[cmd & cmd-args] args
-        driver-fn (resolve (symbol (str "taoensso.carmine/" (name cmd))))
-        result (car/wcar (:conn this)
-                :as-pipeline
-                (apply driver-fn cmd-args))]
+  (let [result (pipeline this [args])]
     (if (= 1 (count result))
       (first result)
       result)))
 
 (defn get-post-category
   [this post-key]
-  (cmd (:conn this) [:get (:category (schema post-key))]))
+  (cmd (:conn this) (get-query :category post-key)))
 
 (defn get-post-checksum
   [this post-key]
-  (cmd (:conn this) [:get (:checksum (schema post-key))]))
+  (cmd (:conn this) (get-query :category post-key)))
 
 (defn get-post-content
   [this post-key]
-  (cmd (:conn this) [:get (:content (schema post-key))]))
+  (cmd (:conn this) (get-query :category post-key)))
 
 (defn get-post-content-source
   [this post-key]
-  (cmd (:conn this) [:get (:content-source (schema post-key))]))
+  (cmd (:conn this) (get-query :category post-key)))
 
 (defn get-post-dates
   [this post-key]
-  (cmd (:conn this) [:get (:dates (schema post-key))]))
+  (cmd (:conn this) (get-query :category post-key)))
 
 (defn get-post-excerpts
   [this post-key]
-  (cmd (:conn this) [:get (:excerpts (schema post-key))]))
+  (cmd (:conn this) (get-query :category post-key)))
 
 (defn get-post-metadata
   [this post-key]
-  (cmd (:conn this) [:get (:metadata (schema post-key))]))
+  (cmd (:conn this) (get-query :category post-key)))
 
 (defn get-post-stats
   [this post-key]
-  (cmd (:conn this) [:get (:stats (schema post-key))]))
+  (cmd (:conn this) (get-query :category post-key)))
 
 (defn get-post-tags
   [this post-key]
-  (cmd (:conn this) [:get (:tags (schema post-key))]))
+  (cmd (:conn this) (get-query :category post-key)))
 
 (defn get-post-uri-path
   [this post-key]
-  (cmd (:conn this) [:get (:uri-path (schema post-key))]))
+  (cmd (:conn this) (get-query :category post-key)))
 
 (defn get-all-data
   [this post-key]
-  {:category (get-post-category this post-key)
-   :checksum (get-post-checksum this post-key)
-   :content (get-post-content this post-key)
-   :dates (get-post-dates this post-key)
-   :excerpts (get-post-excerpts this post-key)
-   :metadata (get-post-metadata this post-key)
-   :stats (get-post-stats this post-key)
-   :tags (get-post-tags this post-key)
-   :uri-path (get-post-uri-path this post-key)})
+  (let [data-keys [:category :checksum :content :content-source
+                   :dates :excerpts :metadata :stats :tags :uri-path]
+        results (pipeline this (mapv #(get-query % post-key) data-keys))]
+    (->> results
+         (interleave data-keys)
+         (partition 2)
+         (map vec)
+         (into {}))))
 
 (defn get-all-keys
   ([this schema-glob]
