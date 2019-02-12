@@ -41,12 +41,12 @@
   (first (string/split schema-key #":")))
 
 (defn get-query
-  [schema-key post-key]
-  [:get (schema-key (schema post-key))])
+  [schema-key src-file]
+  [:get (schema-key (schema src-file))])
 
 (defn set-query
-  [schema-key post-key & args]
-  (concat [:set (schema-key (schema post-key))] args))
+  [schema-key src-file & args]
+  (concat [:set (schema-key (schema src-file))] args))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Connector Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -111,50 +111,50 @@
       result)))
 
 (defn get-post-category
-  [this post-key]
-  (cmd (:conn this) (get-query :category post-key)))
+  [this src-file]
+  (cmd (:conn this) (get-query :category src-file)))
 
 (defn get-post-checksum
-  [this post-key]
-  (cmd (:conn this) (get-query :category post-key)))
+  [this src-file]
+  (cmd (:conn this) (get-query :category src-file)))
 
 (defn get-post-content
-  [this post-key]
-  (cmd (:conn this) (get-query :category post-key)))
+  [this src-file]
+  (cmd (:conn this) (get-query :category src-file)))
 
 (defn get-post-content-source
-  [this post-key]
-  (cmd (:conn this) (get-query :category post-key)))
+  [this src-file]
+  (cmd (:conn this) (get-query :category src-file)))
 
 (defn get-post-dates
-  [this post-key]
-  (cmd (:conn this) (get-query :category post-key)))
+  [this src-file]
+  (cmd (:conn this) (get-query :category src-file)))
 
 (defn get-post-excerpts
-  [this post-key]
-  (cmd (:conn this) (get-query :category post-key)))
+  [this src-file]
+  (cmd (:conn this) (get-query :category src-file)))
 
 (defn get-post-metadata
-  [this post-key]
-  (cmd (:conn this) (get-query :category post-key)))
+  [this src-file]
+  (cmd (:conn this) (get-query :category src-file)))
 
 (defn get-post-stats
-  [this post-key]
-  (cmd (:conn this) (get-query :category post-key)))
+  [this src-file]
+  (cmd (:conn this) (get-query :category src-file)))
 
 (defn get-post-tags
-  [this post-key]
-  (cmd (:conn this) (get-query :category post-key)))
+  [this src-file]
+  (cmd (:conn this) (get-query :category src-file)))
 
 (defn get-post-uri-path
-  [this post-key]
-  (cmd (:conn this) (get-query :category post-key)))
+  [this src-file]
+  (cmd (:conn this) (get-query :category src-file)))
 
 (defn get-all-data
-  [this post-key]
+  [this src-file]
   (let [data-keys [:category :checksum :content :content-source
                    :dates :excerpts :metadata :stats :tags :uri-path]
-        results (pipeline this (mapv #(get-query % post-key) data-keys))]
+        results (pipeline this (mapv #(get-query % src-file) data-keys))]
     (->> results
          (interleave data-keys)
          (partition 2)
@@ -182,11 +182,31 @@
 
 (defn get-all-tags
   [this]
-  (get-all* this "*:tags" {:unique true}))
+  (get-all* this "*:tags" {:unique true :sorted true}))
+
+(defn get-tag-freqs
+  [this]
+  (let [tags (frequencies (mapcat vec (get-all* this "*:tags")))]
+    {:tags tags
+     :counts (sort #(> (first %1) (first %2))
+                   (mapv (fn [[k v]] [v k]) tags))}))
+
+(defn- -get-all-categories
+  [this]
+  (get-all* this "*:category" {:sorted true}))
 
 (defn get-all-categories
   [this]
-  (get-all* this "*:category" {:unique true}))
+  (set (remove #(or (nil? %) (empty? %))
+               (-get-all-categories this))))
+
+(defn get-category-freqs
+  [this]
+  (frequencies (-get-all-categories this)))
+
+(defn get-all-checksums
+  [this]
+  (get-all* this "*:checksum"))
 
 (defn get-all-stats
   [this]
@@ -231,65 +251,69 @@
   (log/debug "old checksum:" (get-post-checksum this src-file))
   (not= checksum (get-post-checksum this src-file)))
 
-(defn set-post-excerpts
-  [this post-key dates]
-  (cmd (:conn this) [:set (:excerpts (schema post-key)) dates]))
-
 (defn set-post-category
-  [this post-key category]
-  (cmd (:conn this) [:set (:category (schema post-key)) category]))
+  [this src-file category]
+  (cmd (:conn this) (set-query :category src-file category)))
 
 (defn set-post-checksum
-  [this post-key checksum]
-  (cmd (:conn this) [:set (:checksum (schema post-key)) checksum]))
+  [this src-file checksum]
+  (cmd (:conn this) (set-query :checksum src-file checksum)))
 
 (defn set-post-content
-  [this post-key content]
-  (cmd (:conn this) [:set (:content (schema post-key)) content]))
+  [this src-file content]
+  (cmd (:conn this) (set-query :content src-file content)))
 
 (defn set-post-content-source
-  [this post-key source]
-  (cmd (:conn this) [:set (:content-source (schema post-key)) source]))
+  [this src-file source]
+  (cmd (:conn this) (set-query :content-source src-file source)))
 
 (defn set-post-dates
-  [this post-key dates]
-  (cmd (:conn this) [:set (:dates (schema post-key)) dates]))
+  [this src-file dates]
+  (cmd (:conn this) (set-query :dates src-file dates)))
+
+(defn set-post-excerpts
+  [this src-file excerpts]
+  (cmd (:conn this) (set-query :excerpts src-file excerpts)))
 
 (defn set-post-metadata
-  [this post-key metadata]
-  (cmd (:conn this) [:set (:metadata (schema post-key)) metadata]))
+  [this src-file metadata]
+  (cmd (:conn this) (set-query :metadata src-file metadata)))
 
 (defn set-post-stats
-  [this post-key stats]
-  (cmd (:conn this) [:set (:stats (schema post-key)) stats]))
+  [this src-file stats]
+  (cmd (:conn this) (set-query :stats src-file stats)))
 
 (defn set-post-tags
-  [this post-key tags]
-  (cmd (:conn this) [:set (:tags (schema post-key)) tags]))
+  [this src-file tags]
+  (cmd (:conn this) (set-query :tags src-file tags)))
 
 (defn set-post-uri-path
-  [this post-key uri-path]
-  (cmd (:conn this) [:set (:uri-path (schema post-key)) uri-path]))
+  [this src-file uri-path]
+  (cmd (:conn this) (set-query :uri-path src-file uri-path)))
 
 (defn set-all-checksums
   [this checksum]
   (log/infof "Setting posts checksums to \"%s\" ..." checksum)
-  (doseq [checksum-key (cmd (:conn this) [:keys "*:checksum"])]
-    (cmd (:conn this) [:set checksum-key checksum])))
+  (pipeline this (mapv #(vector :set % checksum)
+                       (get-all-checksums this))))
 
-(defn set-post-data
-  [this src-file {:keys [category checksum content content-source dates
-                         excerpts metadata stats tags uri-path]}]
-  (set-post-category this src-file category)
-  (set-post-checksum this src-file checksum)
-  (set-post-content this src-file content)
-  (set-post-content-source this src-file content-source)
-  (set-post-dates this src-file dates)
-  (set-post-excerpts this src-file excerpts)
-  (set-post-metadata this src-file metadata)
-  (set-post-stats this src-file stats)
-  (set-post-tags this src-file tags)
-  (set-post-uri-path this src-file uri-path))
+(defn set-all-data
+  [this src-file {:keys [category checksum content content-source
+                         dates excerpts metadata stats tags uri-path]}]
+  (let [data-keys [:category :checksum :content :content-source
+                   :dates :excerpts :metadata :stats :tags :uri-path]
+        set-vars [category checksum content content-source
+                  dates excerpts metadata stats tags uri-path]
+        set-data (->> set-vars
+                      (interleave data-keys)
+                      (partition 2))
+        results (pipeline this (mapv (fn [[k v]]
+                                       (set-query k src-file v)) set-data))]
+    (->> results
+         (interleave data-keys)
+         (partition 2)
+         (map vec)
+         (into {}))))
 
 (def query-behaviour
   {:cmd cmd
@@ -303,13 +327,15 @@
    :get-post-stats get-post-stats
    :get-post-tags get-post-tags
    :get-post-uri-path get-post-uri-path
-   :get-all-keys get-all-keys
    :get-all-authors get-all-authors
    :get-all-categories get-all-categories
    :get-all-data get-all-data
+   :get-all-keys get-all-keys
    :get-all-metadata get-all-metadata
    :get-all-tags get-all-tags
    :get-all-stats get-all-stats
+   :get-category-freqs get-category-freqs
+   :get-tag-freqs get-tag-freqs
    :get-total-char-count get-total-char-count
    :get-total-line-count get-total-line-count
    :get-total-word-count get-total-word-count
@@ -319,14 +345,14 @@
    :set-post-checksum set-post-checksum
    :set-post-content set-post-content
    :set-post-content-source set-post-content-source
-   :set-post-data set-post-data
    :set-post-dates set-post-dates
    :set-post-excerpts set-post-excerpts
    :set-post-metadata set-post-metadata
    :set-post-stats set-post-stats
    :set-post-tags set-post-tags
    :set-post-uri-path set-post-uri-path
-   :set-all-checksums set-all-checksums})
+   :set-all-checksums set-all-checksums
+   :set-all-data set-all-data})
 
 (defn new-querier
   [component conn]

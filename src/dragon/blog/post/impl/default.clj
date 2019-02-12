@@ -74,7 +74,9 @@
   [this tags separator]
   (log/debug "Updating tags ...")
   (apply sorted-set
-         (string/split tags separator)))
+         (->> (string/split tags separator)
+              (map #'string/trim)
+              (remove #(or (nil? %) (empty? %))))))
 
 (defn process-file
   [this querier file data opts]
@@ -99,7 +101,7 @@
     (log/trace "Got stats:" stats)
     (log/trace "Got tags:" tags)
     (log/infof "Post %s will be accessible at: %s" (:title metadata) uri-path)
-    {:category (:category data)
+    {:category (string/trim (:category data))
      :checksum (:checksum opts)
      :content (:body data)
      :content-source (:body-orig data)

@@ -148,7 +148,7 @@
       (log/debug "Got checksum:" (:checksum opts))
       (log/debug "Got filename:" (:filename opts))
       (if (db/post-changed? querier src-file checksum)
-        (db/set-post-data
+        (db/set-all-data
           querier
           src-file
           (post/process-file processor querier file data opts))
