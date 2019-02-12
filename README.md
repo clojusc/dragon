@@ -39,46 +39,90 @@ so I borrowed the name and images for a "Clojure version" :-)
 
 ## Configuration [&#x219F;](#contents)
 
-Every project that uses Dragon to generate static content needs to add some
-configuration to its `project.clj` file. Here's an example taken from
-the [Clojang Blog](http://clojang.lfe.io/) e.g.:
+Every project that uses Dragon to generate static content needs to add an
+EDN configuration file in a resource directory (e.g.,
+`resource/my-blog/config.edn`). Here's some example content for the file:
 
 ```clj
-:profiles {
-  ...
-  :dragon {
-    :domain "clojang.lfe.io"
-    :name "The Clojang Blog"
-    :description "News, Information, & Tutorials for the Clojang Library Collection"
-    :dev-port 5097
-    :output-dir "docs"
-    :posts-path "/archives"
-    :feed-count 20
-    :cli {
-      :log-level :info
-      :log-ns [clojang.blog dragon]}}
-  ...
-  }
+  {:name "Chuffed: A Blog"
+   :description "Thoughts on the good things in life ..."
+   :domain "chuffed.github.io/blog"
+   :port 5097
+   :paths {
+     :output "blog"}
+   :logging {
+     :level :debug
+     :nss [clojusc dragon chuffed rfc5322]}}
+
 ```
 
-Note that by default, Dragon uses a Redis-backed content cache running in a
-Docker container. If for any reason you can't or won't run Docker on one of
-your machines, you can run Redis natively (if it's installed) on that machine
-only by overriding the default with the following `profiles.clj` file in your
-blog app's top-level directory (sibling to the `project.clj` file):
+These config entries override the defaults, which are available
+[here](https://github.com/clojusc/dragon/blob/master/resources/config/dragon/config.edn):
 
 ```clj
-{:dragon {
-  :db {:type :redis-native}}}
-```
-
-You may also want to override the default logging, too, while you're checking
-the setup:
-
-```clj
-{:dragon {
-  :cli {:log-level :debug}
-  :db {:type :redis-native}}}
+  {:name "Dragon Blog Generator"
+   :description "A fire-breathing blog generator"
+   :domain "dragon.github.io"
+   :port 5097
+   :paths {
+     :input "./posts"
+     :output "docs"
+     :base "/blog"
+     :posts "/blog/archives"}
+   :files {
+     :output-template "%s.html"}
+   :links {
+     :template "<a href=\"%s\">%s</a>"}
+   :feed {
+     :count 20}
+   :logging {
+     :level :trace
+     :nss [clojusc dragon]
+     :color true}
+   :parsing {
+     :skip-marker "%%%"
+     :word-separator "\\s"
+     :word-joiner " "
+     :paragraph-separator "\n\n"
+     :tag-separator ",\\s?"
+     :sentence-end "."
+     :ellipsis " ..."
+     :period-ellipsis ".."}
+   :blocks {
+     :enabled #{}}
+   :robots {
+     :allow #{"/blog"}
+     :disallow #{}}
+   :processor {
+     :constructor :default}
+   :db {
+     :type :redis
+     :redis {
+       :pool {}
+       :spec {
+         :host "127.0.0.1" :port 6379}}}
+   :watcher {
+     :type :hawk
+     :content {
+       :dirs ["./posts"]
+       :action clojure.core/constantly
+       :restart? false}
+     :docs {
+       :dirs []
+       :restart? false}
+     :sass {
+       :dirs []
+       :restart? false}}
+   :apis {
+     :flickr {
+       :access "~/.flickr/access.key"}
+     :twitter {
+       :app-consumer {
+         :key "~/.twitter/app-consumer.key"
+         :secret "~/.twitter/app-consumer.secret"}
+       :user-access {
+         :token "~/.twitter/user-access.token"
+         :secret "~/.twitter/user-access.secret"}}}}
 ```
 
 
