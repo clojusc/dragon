@@ -168,67 +168,73 @@
   (cmd (:conn this) [:smembers (:keys (schema))]))
 
 (defn get-n-keys
-  [this n order]
-  (cmd (:conn this) [:sort (:keys (schema)) :limit 0 n :alpha order]))
+  ([this nth order]
+    (get-n-keys this 0 nth order))
+  ([this offset count order]
+    (cmd (:conn this) [:sort
+                       (:keys (schema))
+                       :limit offset count
+                       :alpha order])))
 
 (defn get-first-n-keys
-  [this n]
-  (get-n-keys this n :asc))
+  ([this nth]
+    (get-first-n-keys this 0 nth))
+  ([this offset count]
+    (get-n-keys this offset count :asc)))
 
 (defn get-last-n-keys
-  [this n]
-  (get-n-keys this n :desc))
-
-(defn get-all-keys
-  ([this schema-glob]
-    (get-all-keys this schema-glob {}))
-  ([this schema-glob opts]
-    (let [all-keys (cmd this [:keys schema-glob])]
-      (if (:sorted opts)
-        (sort all-keys)
-        all-keys))))
+  ([this nth]
+    (get-last-n-keys this 0 nth))
+  ([this offset count]
+    (get-n-keys this offset count :desc)))
 
 (defn get-all*
-  ([this glob]
-    (get-all* this glob {}))
-  ([this glob opts]
+  ([this ^Keyword schema-key]
+    (get-all* this schema-key {}))
+  ([this ^Keyword schema-key opts]
     (let [results (cmd this
-                    (concat [:mget] (get-all-keys this glob opts)))]
+                       (concat [:mget]
+                              (mapv #(str % schema-key)
+                                    (get-keys this))))]
       (if (:unique opts)
         (apply set/union results)
         results))))
 
 (defn get-all-tags
   [this]
-  (get-all* this "*:tags" {:unique true :sorted true}))
+  (get-all* this :tags {:unique true :sorted true}))
 
 (defn get-tag-freqs
   [this]
-  (let [tags (frequencies (mapcat vec (get-all* this "*:tags")))]
+  (let [tags (frequencies (mapcat vec (get-all* this :tags)))]
     {:tags tags
-     :counts (sort #(> (first %1) (first %2))
-                   (mapv (fn [[k v]] [v k]) tags))}))
+     :counts (sort util/compare-first
+                   (util/invert-tuple tags))}))
 
 (defn- -get-all-categories
   [this]
-  (get-all* this "*:category" {:sorted true}))
+  (sort (get-all* this :category)))
 
 (defn get-all-categories
   [this]
-  (set (remove #(or (nil? %) (empty? %))
-               (-get-all-categories this))))
+  (remove
+    util/nada?
+    (-get-all-categories this)))
 
 (defn get-category-freqs
   [this]
-  (frequencies (-get-all-categories this)))
+  (let [cats (frequencies (get-all-categories this))]
+    {:categoies cats
+     :counts (sort util/compare-first
+                   (util/invert-tuple cats))}))
 
 (defn get-all-checksums
   [this]
-  (get-all* this "*:checksum"))
+  (get-all* this :checksum))
 
 (defn get-all-stats
   [this]
-  (get-all* this "*:stats"))
+  (get-all* this :stats))
 
 (defn get-total-char-count
   [this]
@@ -356,7 +362,6 @@
    :get-all-authors get-all-authors
    :get-all-categories get-all-categories
    :get-all-data get-all-data
-   :get-all-keys get-all-keys
    :get-all-metadata get-all-metadata
    :get-all-tags get-all-tags
    :get-all-stats get-all-stats

@@ -223,3 +223,15 @@
       fs/expand-home
       slurp
       string/trim))
+
+(defn compare-first
+  [a b]
+  (> (first a) (first b)))
+
+(defn invert-tuple
+  [coll]
+  (mapv (fn [[k v]] [v k]) coll))
+
+(defn nada?
+  [x]
+  (or (nil? x) (empty? x)))
