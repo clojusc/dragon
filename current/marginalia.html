@@ -3107,7 +3107,16 @@ net.brehaut.ClojureTools = (function (SH) {
   (-&gt; file-path
       fs/expand-home
       slurp
-      string/trim))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.core" name="dragon.core"><h1 class="project-name">dragon.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+      string/trim))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn compare-first
+  [a b]
+  (&gt; (first a) (first b)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn invert-tuple
+  [coll]
+  (mapv (fn [[k v]] [v k]) coll))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn nada?
+  [x]
+  (or (nil? x) (empty? x)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.core" name="dragon.core"><h1 class="project-name">dragon.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dragon.core
   (:require
     [clojusc.twig :as logger]
@@ -4135,37 +4144,35 @@ to provide easily-overridable implementations of the processing steps.</p>
        (filter legal-content-file?)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-posts
   [system]
-  (let [posts-path (config/posts-path-src system)]
-    (log/debugf &quot;Finding posts under '%s' dir ...&quot; posts-path)
-    (-&gt;&gt; posts-path
-         (get-files)
-         ((fn [x] (log/debugf &quot;Found %s files ...&quot; (count x)) x))
-         (map #(hash-map :file %)))))</pre></td></tr><tr><td class="docs">
+  (sort (get-files (config/posts-path-src system))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn process
   [system]
-  (doseq [file (sort (get-files (config/posts-path-src system)))]
-    (let [src-file (.getPath file)
-          _ (log/infof &quot;Checking source file %s ...&quot; src-file)
-          processor (post/new-processor system)
-          querier (db-component/db-querier system)
-          tmpl-cfg (config/template-config system)
-          data (post/get-data processor file tmpl-cfg)
-          checksum (util/check-sum (pr-str data))
-          filename (format (config/output-file-tmpl system)
-                           (util/sanitize-str (:title data)))
-          opts {:tag-separator (config/tag-separator system)
-                :checksum checksum
-                :src-file src-file
-                :filename filename}]
-      (log/debug &quot;Got checksum:&quot; (:checksum opts))
-      (log/debug &quot;Got filename:&quot; (:filename opts))
-      (if (db/post-changed? querier src-file checksum)
-        (db/set-all-data
-          querier
-          src-file
-          (post/process-file processor querier file data opts))
-        (log/infof &quot;File %s has already been processed; skipping ...&quot;
-                   src-file))))
+  (let [files (get-posts system)
+        processor (post/new-processor system)
+        querier (db-component/db-querier system)
+        added (db/set-keys querier (mapv #(.getPath %) files))]
+    (log/infof &quot;Added %s new blog post keys ...&quot; added)
+    (doseq [file files]
+      (let [src-file (.getPath file)
+            _ (log/infof &quot;Checking source file %s ...&quot; src-file)
+            tmpl-cfg (config/template-config system)
+            data (post/get-data processor file tmpl-cfg)
+            checksum (util/check-sum (pr-str data))
+            filename (format (config/output-file-tmpl system)
+                             (util/sanitize-str (:title data)))
+            opts {:tag-separator (config/tag-separator system)
+                  :checksum checksum
+                  :src-file src-file
+                  :filename filename}]
+        (log/debug &quot;Got checksum:&quot; (:checksum opts))
+        (log/debug &quot;Got filename:&quot; (:filename opts))
+        (if (db/post-changed? querier src-file checksum)
+          (db/set-all-data
+            querier
+            src-file
+            (post/process-file processor querier file data opts))
+          (log/infof &quot;File %s has already been processed; skipping ...&quot;
+                     src-file)))))
   :ok)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn reset-content-checksums
   [system]
@@ -5122,17 +5129,19 @@ any future/additional passes, we need to escape it.</p>
     places in the code, and these should be wrapped with a protocol
     some place sensible</p>
 </td><td class="codes"><pre class="brush: clojure">(defn schema
-  [path-segment]
-  {:category (str path-segment &quot;:category&quot;)
-   :checksum (str path-segment &quot;:checksum&quot;)
-   :content (str path-segment &quot;:content&quot;)
-   :content-source (str path-segment &quot;:content-source&quot;)
-   :dates (str path-segment &quot;:dates&quot;)
-   :excerpts (str path-segment &quot;:excerpts&quot;)
-   :metadata (str path-segment &quot;:metadata&quot;)
-   :stats (str path-segment &quot;:stats&quot;)
-   :tags (str path-segment &quot;:tags&quot;)
-   :uri-path (str path-segment &quot;:uri-path&quot;)})</pre></td></tr><tr><td class="docs">
+  ([]
+    {:keys &quot;path-segments&quot;})
+  ([path-segment]
+    {:category (str path-segment &quot;:category&quot;)
+     :checksum (str path-segment &quot;:checksum&quot;)
+     :content (str path-segment &quot;:content&quot;)
+     :content-source (str path-segment &quot;:content-source&quot;)
+     :dates (str path-segment &quot;:dates&quot;)
+     :excerpts (str path-segment &quot;:excerpts&quot;)
+     :metadata (str path-segment &quot;:metadata&quot;)
+     :stats (str path-segment &quot;:stats&quot;)
+     :tags (str path-segment &quot;:tags&quot;)
+     :uri-path (str path-segment &quot;:uri-path&quot;)}))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn key-&gt;path-segment
   [schema-key]
   (first (string/split schema-key #&quot;:&quot;)))</pre></td></tr><tr><td class="docs">
@@ -5225,48 +5234,67 @@ any future/additional passes, we need to escape it.</p>
          (partition 2)
          (map vec)
          (into {}))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-all-keys
-  ([this schema-glob]
-    (get-all-keys this schema-glob {}))
-  ([this schema-glob opts]
-    (let [all-keys (cmd this [:keys schema-glob])]
-      (if (:sorted opts)
-        (sort all-keys)
-        all-keys))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-keys
+  [this]
+  (cmd (:conn this) [:smembers (:keys (schema))]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-n-keys
+  ([this nth order]
+    (get-n-keys this 0 nth order))
+  ([this offset count order]
+    (cmd (:conn this) [:sort
+                       (:keys (schema))
+                       :limit offset count
+                       :alpha order])))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-first-n-keys
+  ([this nth]
+    (get-first-n-keys this 0 nth))
+  ([this offset count]
+    (get-n-keys this offset count :asc)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-last-n-keys
+  ([this nth]
+    (get-last-n-keys this 0 nth))
+  ([this offset count]
+    (get-n-keys this offset count :desc)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-all*
-  ([this glob]
-    (get-all* this glob {}))
-  ([this glob opts]
+  ([this ^Keyword schema-key]
+    (get-all* this schema-key {}))
+  ([this ^Keyword schema-key opts]
     (let [results (cmd this
-                    (concat [:mget] (get-all-keys this glob opts)))]
+                       (concat [:mget]
+                              (mapv #(str % schema-key)
+                                    (get-keys this))))]
       (if (:unique opts)
         (apply set/union results)
         results))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-all-tags
   [this]
-  (get-all* this &quot;*:tags&quot; {:unique true :sorted true}))</pre></td></tr><tr><td class="docs">
+  (get-all* this :tags {:unique true :sorted true}))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-tag-freqs
   [this]
-  (let [tags (frequencies (mapcat vec (get-all* this &quot;*:tags&quot;)))]
+  (let [tags (frequencies (mapcat vec (get-all* this :tags)))]
     {:tags tags
-     :counts (sort #(&gt; (first %1) (first %2))
-                   (mapv (fn [[k v]] [v k]) tags))}))</pre></td></tr><tr><td class="docs">
+     :counts (sort util/compare-first
+                   (util/invert-tuple tags))}))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- -get-all-categories
   [this]
-  (get-all* this &quot;*:category&quot; {:sorted true}))</pre></td></tr><tr><td class="docs">
+  (sort (get-all* this :category)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-all-categories
   [this]
-  (set (remove #(or (nil? %) (empty? %))
-               (-get-all-categories this))))</pre></td></tr><tr><td class="docs">
+  (remove
+    util/nada?
+    (-get-all-categories this)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-category-freqs
   [this]
-  (frequencies (-get-all-categories this)))</pre></td></tr><tr><td class="docs">
+  (let [cats (frequencies (get-all-categories this))]
+    {:categoies cats
+     :counts (sort util/compare-first
+                   (util/invert-tuple cats))}))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-all-checksums
   [this]
-  (get-all* this &quot;*:checksum&quot;))</pre></td></tr><tr><td class="docs">
+  (get-all* this :checksum))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-all-stats
   [this]
-  (get-all* this &quot;*:stats&quot;))</pre></td></tr><tr><td class="docs">
+  (get-all* this :stats))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-total-char-count
   [this]
   (reduce + (map :char-count (get-all-stats this))))</pre></td></tr><tr><td class="docs">
@@ -5296,6 +5324,9 @@ any future/additional passes, we need to escape it.</p>
   (log/debug &quot;new checksum:&quot; checksum)
   (log/debug &quot;old checksum:&quot; (get-post-checksum this src-file))
   (not= checksum (get-post-checksum this src-file)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn set-keys
+  [this src-files]
+  (cmd (:conn this) (concat [:sadd (:keys (schema))] src-files)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn set-post-category
   [this src-file category]
   (cmd (:conn this) (set-query :category src-file category)))</pre></td></tr><tr><td class="docs">
@@ -5350,6 +5381,10 @@ any future/additional passes, we need to escape it.</p>
          (into {}))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def query-behaviour
   {:cmd cmd
+   :get-keys get-keys
+   :get-n-keys get-n-keys
+   :get-first-n-keys get-first-n-keys
+   :get-last-n-keys get-last-n-keys
    :get-post-category get-post-checksum
    :get-post-checksum get-post-checksum
    :get-post-content get-post-content
@@ -5363,7 +5398,6 @@ any future/additional passes, we need to escape it.</p>
    :get-all-authors get-all-authors
    :get-all-categories get-all-categories
    :get-all-data get-all-data
-   :get-all-keys get-all-keys
    :get-all-metadata get-all-metadata
    :get-all-tags get-all-tags
    :get-all-stats get-all-stats
@@ -5374,6 +5408,7 @@ any future/additional passes, we need to escape it.</p>
    :get-total-word-count get-total-word-count
    :get-raw get-raw
    :post-changed? post-changed?
+   :set-keys set-keys
    :set-post-category set-post-checksum
    :set-post-checksum set-post-checksum
    :set-post-content set-post-content
@@ -5441,6 +5476,10 @@ any future/additional passes, we need to escape it.</p>
     :redis (redis/new-connector component)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defprotocol DBQuerier
   (cmd [this args])
+  (get-keys [this])
+  (get-n-keys [this n order] [this offset n order])
+  (get-first-n-keys [this n] [this offset n])
+  (get-last-n-keys [this n] [this offset n])
   (get-post-category [this post-key])
   (get-post-checksum [this post-key])
   (get-post-content [this post-key])
@@ -5451,7 +5490,6 @@ any future/additional passes, we need to escape it.</p>
   (get-post-stats [this post-key])
   (get-post-tags [this post-key])
   (get-post-uri-path [this post-key])
-  (get-all-keys [this schema-glob] [this schema-glob opts])
   (get-all-authors [this])
   (get-all-categories [this])
   (get-all-data [this post-key])
@@ -5465,6 +5503,7 @@ any future/additional passes, we need to escape it.</p>
   (get-total-word-count [this])
   (get-raw [this any-key])
   (post-changed? [this post-key checksum])
+  (set-keys [this post-keys])
   (set-post-category [this post-key value])
   (set-post-checksum [this post-key value])
   (set-post-content [this post-key value])
