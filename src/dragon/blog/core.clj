@@ -122,38 +122,36 @@
 
 (defn get-posts
   [system]
-  (let [posts-path (config/posts-path-src system)]
-    (log/debugf "Finding posts under '%s' dir ..." posts-path)
-    (->> posts-path
-         (get-files)
-         ((fn [x] (log/debugf "Found %s files ..." (count x)) x))
-         (map #(hash-map :file %)))))
+  (sort (get-files (config/posts-path-src system))))
 
 (defn process
   [system]
-  (doseq [file (sort (get-files (config/posts-path-src system)))]
-    (let [src-file (.getPath file)
-          _ (log/infof "Checking source file %s ..." src-file)
-          processor (post/new-processor system)
-          querier (db-component/db-querier system)
-          tmpl-cfg (config/template-config system)
-          data (post/get-data processor file tmpl-cfg)
-          checksum (util/check-sum (pr-str data))
-          filename (format (config/output-file-tmpl system)
-                           (util/sanitize-str (:title data)))
-          opts {:tag-separator (config/tag-separator system)
-                :checksum checksum
-                :src-file src-file
-                :filename filename}]
-      (log/debug "Got checksum:" (:checksum opts))
-      (log/debug "Got filename:" (:filename opts))
-      (if (db/post-changed? querier src-file checksum)
-        (db/set-all-data
-          querier
-          src-file
-          (post/process-file processor querier file data opts))
-        (log/infof "File %s has already been processed; skipping ..."
-                   src-file))))
+  (let [files (get-posts system)
+        processor (post/new-processor system)
+        querier (db-component/db-querier system)
+        added (db/set-keys querier (mapv #(.getPath %) files))]
+    (log/infof "Added %s new blog post keys ..." added)
+    (doseq [file files]
+      (let [src-file (.getPath file)
+            _ (log/infof "Checking source file %s ..." src-file)
+            tmpl-cfg (config/template-config system)
+            data (post/get-data processor file tmpl-cfg)
+            checksum (util/check-sum (pr-str data))
+            filename (format (config/output-file-tmpl system)
+                             (util/sanitize-str (:title data)))
+            opts {:tag-separator (config/tag-separator system)
+                  :checksum checksum
+                  :src-file src-file
+                  :filename filename}]
+        (log/debug "Got checksum:" (:checksum opts))
+        (log/debug "Got filename:" (:filename opts))
+        (if (db/post-changed? querier src-file checksum)
+          (db/set-all-data
+            querier
+            src-file
+            (post/process-file processor querier file data opts))
+          (log/infof "File %s has already been processed; skipping ..."
+                     src-file)))))
   :ok)
 
 (defn reset-content-checksums

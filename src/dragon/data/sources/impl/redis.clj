@@ -24,17 +24,19 @@
   "For the special case when `path-segment` is the string value `all-posts`,
   the cumulative data for all posts is referenced. This is applicable to
   `categoies`, `tags`, and `stats`."
-  [path-segment]
-  {:category (str path-segment ":category")
-   :checksum (str path-segment ":checksum")
-   :content (str path-segment ":content")
-   :content-source (str path-segment ":content-source")
-   :dates (str path-segment ":dates")
-   :excerpts (str path-segment ":excerpts")
-   :metadata (str path-segment ":metadata")
-   :stats (str path-segment ":stats")
-   :tags (str path-segment ":tags")
-   :uri-path (str path-segment ":uri-path")})
+  ([]
+    {:keys "path-segments"})
+  ([path-segment]
+    {:category (str path-segment ":category")
+     :checksum (str path-segment ":checksum")
+     :content (str path-segment ":content")
+     :content-source (str path-segment ":content-source")
+     :dates (str path-segment ":dates")
+     :excerpts (str path-segment ":excerpts")
+     :metadata (str path-segment ":metadata")
+     :stats (str path-segment ":stats")
+     :tags (str path-segment ":tags")
+     :uri-path (str path-segment ":uri-path")}))
 
 (defn key->path-segment
   [schema-key]
@@ -161,6 +163,22 @@
          (map vec)
          (into {}))))
 
+(defn get-keys
+  [this]
+  (cmd (:conn this) [:smembers (:keys (schema))]))
+
+(defn get-n-keys
+  [this n order]
+  (cmd (:conn this) [:sort (:keys (schema)) :limit 0 n :alpha order]))
+
+(defn get-first-n-keys
+  [this n]
+  (get-n-keys this n :asc))
+
+(defn get-last-n-keys
+  [this n]
+  (get-n-keys this n :desc))
+
 (defn get-all-keys
   ([this schema-glob]
     (get-all-keys this schema-glob {}))
@@ -251,6 +269,10 @@
   (log/debug "old checksum:" (get-post-checksum this src-file))
   (not= checksum (get-post-checksum this src-file)))
 
+(defn set-keys
+  [this src-files]
+  (cmd (:conn this) (concat [:sadd (:keys (schema))] src-files)))
+
 (defn set-post-category
   [this src-file category]
   (cmd (:conn this) (set-query :category src-file category)))
@@ -317,6 +339,10 @@
 
 (def query-behaviour
   {:cmd cmd
+   :get-keys get-keys
+   :get-n-keys get-n-keys
+   :get-first-n-keys get-first-n-keys
+   :get-last-n-keys get-last-n-keys
    :get-post-category get-post-checksum
    :get-post-checksum get-post-checksum
    :get-post-content get-post-content
@@ -341,6 +367,7 @@
    :get-total-word-count get-total-word-count
    :get-raw get-raw
    :post-changed? post-changed?
+   :set-keys set-keys
    :set-post-category set-post-checksum
    :set-post-checksum set-post-checksum
    :set-post-content set-post-content

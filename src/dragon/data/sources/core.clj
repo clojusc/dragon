@@ -28,6 +28,10 @@
 
 (defprotocol DBQuerier
   (cmd [this args])
+  (get-keys [this])
+  (get-n-keys [this n order])
+  (get-first-n-keys [this n])
+  (get-last-n-keys [this n])
   (get-post-category [this post-key])
   (get-post-checksum [this post-key])
   (get-post-content [this post-key])
@@ -52,6 +56,7 @@
   (get-total-word-count [this])
   (get-raw [this any-key])
   (post-changed? [this post-key checksum])
+  (set-keys [this post-keys])
   (set-post-category [this post-key value])
   (set-post-checksum [this post-key value])
   (set-post-content [this post-key value])
