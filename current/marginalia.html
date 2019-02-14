@@ -3750,8 +3750,8 @@ to provide easily-overridable implementations of the processing steps.</p>
            :five-star (Math/round (* 5 percent))
            :hundred (Math/round (* 100 percent)))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn add-all-percents
-  [total highest categorys-data]
-  (map #(add-percents total highest %) categorys-data))</pre></td></tr><tr><td class="docs">
+  [total highest categories-data]
+  (map #(add-percents total highest %) categories-data))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-stats
   [data]
   (let [freqs (get-freqs data)
@@ -4075,7 +4075,7 @@ to provide easily-overridable implementations of the processing steps.</p>
        ((fn [x] (log/tracef &quot;Found file: %s&quot; x) x))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn post-url
   [uri-base post]
-  ;; XXX maybe use config function to get uri-based instead of passing it?
+  ;; XXX maybe use config function to get uri-base instead of passing it?
   (format &quot;%s/%s&quot; uri-base (:uri-path post)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn data-for-logs
   [data]
@@ -4145,7 +4145,7 @@ to provide easily-overridable implementations of the processing steps.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn get-posts
   [system]
   (sort (get-files (config/posts-path-src system))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn process
+</td><td class="codes"><pre class="brush: clojure">(defn process-files
   [system]
   (let [files (get-posts system)
         processor (post/new-processor system)
@@ -4174,9 +4174,69 @@ to provide easily-overridable implementations of the processing steps.</p>
           (log/infof &quot;File %s has already been processed; skipping ...&quot;
                      src-file)))))
   :ok)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-ratios
+  ([data max factor]
+    (-&gt;&gt; data
+         (map (fn [[k v]]
+               [k (Math/round (* factor (float (/ v max))))]))
+         (into {})))
+  ([data max factor mode]
+    (case mode
+      :inverted (-&gt;&gt; (get-ratios data max factor)
+                     (map (fn [[k v]] [k (- factor v)]))
+                     (into {})))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-stats
+  [freqs-segment total max]
+  {:five (get-ratios freqs-segment max 5)
+   :five-inverted (get-ratios freqs-segment max 5 :inverted)
+   :hundred (get-ratios freqs-segment max 100)
+   :hundred-inverted (get-ratios freqs-segment max 100 :inverted)
+   :max max
+   :percent (get-ratios freqs-segment total 100)
+   :percent-inverted (get-ratios freqs-segment total 100 :inverted)
+   :ten (get-ratios freqs-segment max 10)
+   :ten-inverted (get-ratios freqs-segment max 10 :inverted)
+   :total total})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn process-category-stats
+  [system]
+  (log/info &quot;Adding blog-wide category stats to db ...&quot;)
+  (let [querier (db-component/db-querier system)
+        total (db/get-category-totals querier)
+        max (db/get-category-max-count querier)
+        freqs (db/get-category-freqs querier)]
+    (db/set-category-stats
+      querier
+      (merge freqs (get-stats (:categories freqs) total max)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn process-tag-stats
+  [system]
+  (log/info &quot;Adding blog-wide tag stats to db ...&quot;)
+  (let [querier (db-component/db-querier system)
+        total (db/get-tag-totals querier)
+        max (db/get-tag-max-count querier)
+        freqs (db/get-tag-freqs querier)]
+    (db/set-tag-stats
+      querier
+      (merge freqs (get-stats (:tags freqs) total max)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn process-text-stats
+  [system]
+  (log/info &quot;Adding blog-wide textual stats to db ...&quot;)
+  (let [querier (db-component/db-querier system)
+        data {:chars (db/get-total-char-count querier)
+              :lines (db/get-total-line-count querier)
+              :words (db/get-total-word-count querier)}]
+    (db/set-text-stats querier data)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn process
+  [system]
+  (process-files system)
+  (process-text-stats system)
+  (process-category-stats system)
+  (process-tag-stats system))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn reset-content-checksums
   [system]
-  ;; XXX re-implement without workflow ns ...)</pre></td></tr><tr><td class="docs"><p>  Core Grouping Multimethods   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+  (db/set-all-checksums
+    (db-component/db-querier (system))
+    &quot;invalidate&quot;)
+  :ok)</pre></td></tr><tr><td class="docs"><p>  Core Grouping Multimethods   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmulti group-data
   (fn [type _] type))</pre></td></tr><tr><td class="docs">
@@ -5120,17 +5180,15 @@ any future/additional passes, we need to escape it.</p>
     [trifl.fs :as fs])
   (:import
     (clojure.lang Keyword)))</pre></td></tr><tr><td class="docs"><p>  Constants &amp; Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
-</td><td class="codes"></td></tr><tr><td class="docs"><p>For the special case when <code>path-segment</code> is the string value <code>all-posts</code>,
-  the cumulative data for all posts is referenced. This is applicable to
-  <code>categoies</code>, <code>tags</code>, and <code>stats</code>.</p>
-
-<p>XXX This should be moved into a general redis support ns, not an
-    implementation ... the schemas need to be references from other
-    places in the code, and these should be wrapped with a protocol
-    some place sensible</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>This function retuns the Redis 'schemas' (for lack of a better word) for a
+  given path-segment (blog post key). If a key is not passed, the implication
+  is that blog-wide, non-post-specific data is being referenced.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn schema
   ([]
-    {:keys &quot;path-segments&quot;})
+    {:text-stats &quot;all-text-stats&quot;
+     :category-stats &quot;all-category-stats&quot;
+     :keys &quot;path-segments&quot;
+     :tag-stats &quot;all-tag-stats&quot;})
   ([path-segment]
     {:category (str path-segment &quot;:category&quot;)
      :checksum (str path-segment &quot;:checksum&quot;)
@@ -5146,11 +5204,16 @@ any future/additional passes, we need to escape it.</p>
   [schema-key]
   (first (string/split schema-key #&quot;:&quot;)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-query
-  [schema-key src-file]
-  [:get (schema-key (schema src-file))])</pre></td></tr><tr><td class="docs">
+  [schema-key &amp; [src-file]]
+  (if (nil? src-file)
+    [:get (schema-key (schema))]
+    [:get (schema-key (schema src-file))]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn set-query
-  [schema-key src-file &amp; args]
-  (concat [:set (schema-key (schema src-file))] args))</pre></td></tr><tr><td class="docs"><p>  Connector Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
+  [schema-key &amp; args]
+  (if (= 1 (count args))
+    (concat [:set (schema-key (schema))] args)
+    (let [[src-file &amp; args] args]
+      (concat [:set (schema-key (schema src-file))] args))))</pre></td></tr><tr><td class="docs"><p>  Connector Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defrecord RedisConnector [component])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn new-connector
@@ -5275,6 +5338,15 @@ any future/additional passes, we need to escape it.</p>
     {:tags tags
      :counts (sort util/compare-first
                    (util/invert-tuple tags))}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-tag-totals
+  [this]
+  (reduce + (map first (:counts (get-tag-freqs this)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-tag-max-count
+  [this]
+  (apply max (map first (:counts (get-tag-freqs this)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-tag-stats
+  [this]
+  (cmd (:conn this) (get-query :tag-stats)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- -get-all-categories
   [this]
   (sort (get-all* this :category)))</pre></td></tr><tr><td class="docs">
@@ -5286,9 +5358,18 @@ any future/additional passes, we need to escape it.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn get-category-freqs
   [this]
   (let [cats (frequencies (get-all-categories this))]
-    {:categoies cats
+    {:categories cats
      :counts (sort util/compare-first
                    (util/invert-tuple cats))}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-category-totals
+  [this]
+  (reduce + (map first (:counts (get-category-freqs this)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-category-max-count
+  [this]
+  (apply max (map first (:counts (get-category-freqs this)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-category-stats
+  [this]
+  (cmd (:conn this) (get-query :category-stats)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-all-checksums
   [this]
   (get-all* this :checksum))</pre></td></tr><tr><td class="docs">
@@ -5304,6 +5385,9 @@ any future/additional passes, we need to escape it.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn get-total-word-count
   [this]
   (reduce + (map :word-count (get-all-stats this))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn get-text-stats
+  [this]
+  (cmd (:conn this) (get-query :text-stats)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn get-all-metadata
   [this]
   (get-all* this &quot;*:metadata&quot;))</pre></td></tr><tr><td class="docs">
@@ -5379,12 +5463,31 @@ any future/additional passes, we need to escape it.</p>
          (partition 2)
          (map vec)
          (into {}))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn set-category-stats
+  [this stats]
+  (cmd (:conn this) (set-query :category-stats stats)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn set-tag-stats
+  [this stats]
+  (cmd (:conn this) (set-query :tag-stats stats)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn set-text-stats
+  [this stats]
+  (cmd (:conn this) (set-query :text-stats stats)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def query-behaviour
   {:cmd cmd
-   :get-keys get-keys
-   :get-n-keys get-n-keys
+   :get-all-authors get-all-authors
+   :get-all-categories get-all-categories
+   :get-all-data get-all-data
+   :get-all-metadata get-all-metadata
+   :get-all-stats get-all-stats
+   :get-all-tags get-all-tags
+   :get-category-freqs get-category-freqs
+   :get-category-max-count get-category-max-count
+   :get-category-stats get-category-stats
+   :get-category-totals get-category-totals
    :get-first-n-keys get-first-n-keys
+   :get-keys get-keys
    :get-last-n-keys get-last-n-keys
+   :get-n-keys get-n-keys
    :get-post-category get-post-checksum
    :get-post-checksum get-post-checksum
    :get-post-content get-post-content
@@ -5395,19 +5498,19 @@ any future/additional passes, we need to escape it.</p>
    :get-post-stats get-post-stats
    :get-post-tags get-post-tags
    :get-post-uri-path get-post-uri-path
-   :get-all-authors get-all-authors
-   :get-all-categories get-all-categories
-   :get-all-data get-all-data
-   :get-all-metadata get-all-metadata
-   :get-all-tags get-all-tags
-   :get-all-stats get-all-stats
-   :get-category-freqs get-category-freqs
+   :get-raw get-raw
    :get-tag-freqs get-tag-freqs
+   :get-tag-max-count get-tag-max-count
+   :get-tag-stats get-tag-stats
+   :get-tag-totals get-tag-totals
+   :get-text-stats get-text-stats
    :get-total-char-count get-total-char-count
    :get-total-line-count get-total-line-count
    :get-total-word-count get-total-word-count
-   :get-raw get-raw
    :post-changed? post-changed?
+   :set-all-checksums set-all-checksums
+   :set-all-data set-all-data
+   :set-category-stats set-category-stats
    :set-keys set-keys
    :set-post-category set-post-checksum
    :set-post-checksum set-post-checksum
@@ -5419,8 +5522,8 @@ any future/additional passes, we need to escape it.</p>
    :set-post-stats set-post-stats
    :set-post-tags set-post-tags
    :set-post-uri-path set-post-uri-path
-   :set-all-checksums set-all-checksums
-   :set-all-data set-all-data})</pre></td></tr><tr><td class="docs">
+   :set-tag-stats set-tag-stats
+   :set-text-stats set-text-stats})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn new-querier
   [component conn]
   (-&gt;RedisQuerier component conn))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dragon.data.sources.impl.common" name="dragon.data.sources.impl.common"><h1 class="project-name">dragon.data.sources.impl.common</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
@@ -5476,10 +5579,20 @@ any future/additional passes, we need to escape it.</p>
     :redis (redis/new-connector component)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defprotocol DBQuerier
   (cmd [this args])
-  (get-keys [this])
-  (get-n-keys [this n order] [this offset n order])
+  (get-all-authors [this])
+  (get-all-categories [this])
+  (get-all-data [this post-key])
+  (get-all-metadata [this])
+  (get-all-stats [this])
+  (get-all-tags [this])
+  (get-category-freqs [this])
+  (get-category-max-count [this])
+  (get-category-stats [this])
+  (get-category-totals [this])
   (get-first-n-keys [this n] [this offset n])
+  (get-keys [this])
   (get-last-n-keys [this n] [this offset n])
+  (get-n-keys [this n order] [this offset n order])
   (get-post-category [this post-key])
   (get-post-checksum [this post-key])
   (get-post-content [this post-key])
@@ -5490,19 +5603,19 @@ any future/additional passes, we need to escape it.</p>
   (get-post-stats [this post-key])
   (get-post-tags [this post-key])
   (get-post-uri-path [this post-key])
-  (get-all-authors [this])
-  (get-all-categories [this])
-  (get-all-data [this post-key])
-  (get-all-metadata [this])
-  (get-all-tags [this])
-  (get-all-stats [this])
-  (get-category-freqs [this])
+  (get-raw [this any-key])
   (get-tag-freqs [this])
+  (get-tag-max-count [this])
+  (get-tag-stats [this])
+  (get-tag-totals [this])
+  (get-text-stats [this])
   (get-total-char-count [this])
   (get-total-line-count [this])
   (get-total-word-count [this])
-  (get-raw [this any-key])
   (post-changed? [this post-key checksum])
+  (set-all-checksums [this value])
+  (set-all-data [this post-key post-data])
+  (set-category-stats [this data])
   (set-keys [this post-keys])
   (set-post-category [this post-key value])
   (set-post-checksum [this post-key value])
@@ -5514,8 +5627,8 @@ any future/additional passes, we need to escape it.</p>
   (set-post-stats [this post-key value])
   (set-post-tags [this post-key value])
   (set-post-uri-path [this post-key value])
-  (set-all-checksums [this value])
-  (set-all-data [this post-key post-data]))</pre></td></tr><tr><td class="docs">
+  (set-tag-stats [this data])
+  (set-text-stats [this data]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(extend RedisQuerier
         DBQuerier
         redis/query-behaviour)</pre></td></tr><tr><td class="docs">
