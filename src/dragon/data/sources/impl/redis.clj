@@ -16,16 +16,15 @@
 ;;;   Constants & Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; XXX This should be moved into a general redis support ns, not an
-;;     implementation ... the schemas need to be references from other
-;;     places in the code, and these should be wrapped with a protocol
-;;     some place sensible
 (defn schema
-  "For the special case when `path-segment` is the string value `all-posts`,
-  the cumulative data for all posts is referenced. This is applicable to
-  `categoies`, `tags`, and `stats`."
+  "This function retuns the Redis 'schemas' (for lack of a better word) for a
+  given path-segment (blog post key). If a key is not passed, the implication
+  is that blog-wide, non-post-specific data is being referenced."
   ([]
-    {:keys "path-segments"})
+    {:text-stats "all-text-stats"
+     :category-stats "all-category-stats"
+     :keys "path-segments"
+     :tag-stats "all-tag-stats"})
   ([path-segment]
     {:category (str path-segment ":category")
      :checksum (str path-segment ":checksum")
@@ -43,12 +42,17 @@
   (first (string/split schema-key #":")))
 
 (defn get-query
-  [schema-key src-file]
-  [:get (schema-key (schema src-file))])
+  [schema-key & [src-file]]
+  (if (nil? src-file)
+    [:get (schema-key (schema))]
+    [:get (schema-key (schema src-file))]))
 
 (defn set-query
-  [schema-key src-file & args]
-  (concat [:set (schema-key (schema src-file))] args))
+  [schema-key & args]
+  (if (= 1 (count args))
+    (concat [:set (schema-key (schema))] args)
+    (let [[src-file & args] args]
+      (concat [:set (schema-key (schema src-file))] args))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Connector Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -211,6 +215,18 @@
      :counts (sort util/compare-first
                    (util/invert-tuple tags))}))
 
+(defn get-tag-totals
+  [this]
+  (reduce + (map first (:counts (get-tag-freqs this)))))
+
+(defn get-tag-max-count
+  [this]
+  (apply max (map first (:counts (get-tag-freqs this)))))
+
+(defn get-tag-stats
+  [this]
+  (cmd (:conn this) (get-query :tag-stats)))
+
 (defn- -get-all-categories
   [this]
   (sort (get-all* this :category)))
@@ -224,9 +240,21 @@
 (defn get-category-freqs
   [this]
   (let [cats (frequencies (get-all-categories this))]
-    {:categoies cats
+    {:categories cats
      :counts (sort util/compare-first
                    (util/invert-tuple cats))}))
+
+(defn get-category-totals
+  [this]
+  (reduce + (map first (:counts (get-category-freqs this)))))
+
+(defn get-category-max-count
+  [this]
+  (apply max (map first (:counts (get-category-freqs this)))))
+
+(defn get-category-stats
+  [this]
+  (cmd (:conn this) (get-query :category-stats)))
 
 (defn get-all-checksums
   [this]
@@ -247,6 +275,10 @@
 (defn get-total-word-count
   [this]
   (reduce + (map :word-count (get-all-stats this))))
+
+(defn get-text-stats
+  [this]
+  (cmd (:conn this) (get-query :text-stats)))
 
 (defn get-all-metadata
   [this]
@@ -343,12 +375,34 @@
          (map vec)
          (into {}))))
 
+(defn set-category-stats
+  [this stats]
+  (cmd (:conn this) (set-query :category-stats stats)))
+
+(defn set-tag-stats
+  [this stats]
+  (cmd (:conn this) (set-query :tag-stats stats)))
+
+(defn set-text-stats
+  [this stats]
+  (cmd (:conn this) (set-query :text-stats stats)))
+
 (def query-behaviour
   {:cmd cmd
-   :get-keys get-keys
-   :get-n-keys get-n-keys
+   :get-all-authors get-all-authors
+   :get-all-categories get-all-categories
+   :get-all-data get-all-data
+   :get-all-metadata get-all-metadata
+   :get-all-stats get-all-stats
+   :get-all-tags get-all-tags
+   :get-category-freqs get-category-freqs
+   :get-category-max-count get-category-max-count
+   :get-category-stats get-category-stats
+   :get-category-totals get-category-totals
    :get-first-n-keys get-first-n-keys
+   :get-keys get-keys
    :get-last-n-keys get-last-n-keys
+   :get-n-keys get-n-keys
    :get-post-category get-post-checksum
    :get-post-checksum get-post-checksum
    :get-post-content get-post-content
@@ -359,19 +413,19 @@
    :get-post-stats get-post-stats
    :get-post-tags get-post-tags
    :get-post-uri-path get-post-uri-path
-   :get-all-authors get-all-authors
-   :get-all-categories get-all-categories
-   :get-all-data get-all-data
-   :get-all-metadata get-all-metadata
-   :get-all-tags get-all-tags
-   :get-all-stats get-all-stats
-   :get-category-freqs get-category-freqs
+   :get-raw get-raw
    :get-tag-freqs get-tag-freqs
+   :get-tag-max-count get-tag-max-count
+   :get-tag-stats get-tag-stats
+   :get-tag-totals get-tag-totals
+   :get-text-stats get-text-stats
    :get-total-char-count get-total-char-count
    :get-total-line-count get-total-line-count
    :get-total-word-count get-total-word-count
-   :get-raw get-raw
    :post-changed? post-changed?
+   :set-all-checksums set-all-checksums
+   :set-all-data set-all-data
+   :set-category-stats set-category-stats
    :set-keys set-keys
    :set-post-category set-post-checksum
    :set-post-checksum set-post-checksum
@@ -383,8 +437,8 @@
    :set-post-stats set-post-stats
    :set-post-tags set-post-tags
    :set-post-uri-path set-post-uri-path
-   :set-all-checksums set-all-checksums
-   :set-all-data set-all-data})
+   :set-tag-stats set-tag-stats
+   :set-text-stats set-text-stats})
 
 (defn new-querier
   [component conn]

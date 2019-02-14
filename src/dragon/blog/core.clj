@@ -35,7 +35,7 @@
 
 (defn post-url
   [uri-base post]
-  ;; XXX maybe use config function to get uri-based instead of passing it?
+  ;; XXX maybe use config function to get uri-base instead of passing it?
   (format "%s/%s" uri-base (:uri-path post)))
 
 (defn data-for-logs
@@ -124,7 +124,7 @@
   [system]
   (sort (get-files (config/posts-path-src system))))
 
-(defn process
+(defn process-files
   [system]
   (let [files (get-posts system)
         processor (post/new-processor system)
@@ -154,10 +154,75 @@
                      src-file)))))
   :ok)
 
+(defn get-ratios
+  ([data max factor]
+    (->> data
+         (map (fn [[k v]]
+               [k (Math/round (* factor (float (/ v max))))]))
+         (into {})))
+  ([data max factor mode]
+    (case mode
+      :inverted (->> (get-ratios data max factor)
+                     (map (fn [[k v]] [k (- factor v)]))
+                     (into {})))))
+
+(defn get-stats
+  [freqs-segment total max]
+  {:five (get-ratios freqs-segment max 5)
+   :five-inverted (get-ratios freqs-segment max 5 :inverted)
+   :hundred (get-ratios freqs-segment max 100)
+   :hundred-inverted (get-ratios freqs-segment max 100 :inverted)
+   :max max
+   :percent (get-ratios freqs-segment total 100)
+   :percent-inverted (get-ratios freqs-segment total 100 :inverted)
+   :ten (get-ratios freqs-segment max 10)
+   :ten-inverted (get-ratios freqs-segment max 10 :inverted)
+   :total total})
+
+(defn process-category-stats
+  [system]
+  (log/info "Adding blog-wide category stats to db ...")
+  (let [querier (db-component/db-querier system)
+        total (db/get-category-totals querier)
+        max (db/get-category-max-count querier)
+        freqs (db/get-category-freqs querier)]
+    (db/set-category-stats
+      querier
+      (merge freqs (get-stats (:categories freqs) total max)))))
+
+(defn process-tag-stats
+  [system]
+  (log/info "Adding blog-wide tag stats to db ...")
+  (let [querier (db-component/db-querier system)
+        total (db/get-tag-totals querier)
+        max (db/get-tag-max-count querier)
+        freqs (db/get-tag-freqs querier)]
+    (db/set-tag-stats
+      querier
+      (merge freqs (get-stats (:tags freqs) total max)))))
+
+(defn process-text-stats
+  [system]
+  (log/info "Adding blog-wide textual stats to db ...")
+  (let [querier (db-component/db-querier system)
+        data {:chars (db/get-total-char-count querier)
+              :lines (db/get-total-line-count querier)
+              :words (db/get-total-word-count querier)}]
+    (db/set-text-stats querier data)))
+
+(defn process
+  [system]
+  (process-files system)
+  (process-text-stats system)
+  (process-category-stats system)
+  (process-tag-stats system))
+
 (defn reset-content-checksums
   [system]
-  ;; XXX re-implement without workflow ns ...
-  )
+  (db/set-all-checksums
+    (db-component/db-querier (system))
+    "invalidate")
+  :ok)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Core Grouping Multimethods   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

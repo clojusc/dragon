@@ -27,8 +27,8 @@
            :hundred (Math/round (* 100 percent)))))
 
 (defn add-all-percents
-  [total highest categorys-data]
-  (map #(add-percents total highest %) categorys-data))
+  [total highest categories-data]
+  (map #(add-percents total highest %) categories-data))
 
 (defn get-stats
   [data]
