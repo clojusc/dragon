@@ -37,7 +37,7 @@
   (get-excerpts [this data])
   (get-stats [this data])
   (get-tags [this data tag-separator])
-  (process-file [this querier file data opts]))
+  (process-file [this file data opts]))
 
 (extend DefaultBlogPostProcessor
         BlogPostProcessorAPI

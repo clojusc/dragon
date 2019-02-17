@@ -94,19 +94,19 @@
   (group-by :author data))
 
 (defn group-year-by-month
-  [[year-key  year-data]]
-  {:year year-key
-   :months (group-by-month year-data)})
+  [[key data]]
+  {:year key
+   :months (group-by-month data)})
 
 (defn update-category-groups
-  [[cat-key cat-data]]
-  {:category cat-key
-   :posts cat-data})
+  [[key data]]
+  {:category key
+   :posts data})
 
 (defn update-author-groups
-  [[auth-key auth-data]]
-  {:author auth-key
-   :posts auth-data})
+  [[key data]]
+  {:author key
+   :posts data})
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Core Processing Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -124,6 +124,43 @@
   [system]
   (sort (get-files (config/posts-path-src system))))
 
+(defn process-file
+  [system processor querier file]
+  (let [src-file (.getPath file)
+        _ (log/infof "Checking source file %s ..." src-file)
+        tmpl-cfg (config/template-config system)
+        data (post/get-data processor file tmpl-cfg)
+        checksum (util/check-sum (pr-str data))
+        filename (format (config/output-file-tmpl system)
+                         (util/sanitize-str (:title data)))
+        opts {:tag-separator (config/tag-separator system)
+              :checksum checksum
+              :src-file src-file
+              :filename filename}]
+    (log/debug "Got checksum:" (:checksum opts))
+    (log/debug "Got filename:" (:filename opts))
+    (if (db/post-changed? querier src-file checksum)
+      (let [processed-data (post/process-file processor file data opts)
+            author (get-in processed-data [:metadata :author])
+            cat (:category processed-data)
+            year (get-in processed-data [:dates :date :year])]
+        (log/debug "Got author: " author)
+        (log/debug "Got category: " cat)
+        (log/debug "Got year: " year)
+        (db/set-all-data querier src-file processed-data)
+        ;; The following inserts will be used latest in various group-by
+        ;; queries.
+        (db/pipeline
+          querier
+          (concat
+            [(db/set-add-query querier :author-posts author src-file)
+             (db/set-add-query querier :category-posts cat src-file)
+             (db/set-add-query querier :year-posts year src-file)]
+            (mapv #(db/set-add-query querier :tag-posts % src-file)
+                  (:tags processed-data)))))
+      (log/infof "File %s has already been processed; skipping ..."
+                 src-file))))
+
 (defn process-files
   [system]
   (let [files (get-posts system)
@@ -132,26 +169,7 @@
         added (db/set-keys querier (mapv #(.getPath %) files))]
     (log/infof "Added %s new blog post keys ..." added)
     (doseq [file files]
-      (let [src-file (.getPath file)
-            _ (log/infof "Checking source file %s ..." src-file)
-            tmpl-cfg (config/template-config system)
-            data (post/get-data processor file tmpl-cfg)
-            checksum (util/check-sum (pr-str data))
-            filename (format (config/output-file-tmpl system)
-                             (util/sanitize-str (:title data)))
-            opts {:tag-separator (config/tag-separator system)
-                  :checksum checksum
-                  :src-file src-file
-                  :filename filename}]
-        (log/debug "Got checksum:" (:checksum opts))
-        (log/debug "Got filename:" (:filename opts))
-        (if (db/post-changed? querier src-file checksum)
-          (db/set-all-data
-            querier
-            src-file
-            (post/process-file processor querier file data opts))
-          (log/infof "File %s has already been processed; skipping ..."
-                     src-file)))))
+      (process-file system processor querier file)))
   :ok)
 
 (defn get-ratios
@@ -212,7 +230,9 @@
 
 (defn process
   [system]
+  ;; Iterate through files on filesystem -- sources of truth
   (process-files system)
+  ;; Post-process: look at all posts and extract stats
   (process-text-stats system)
   (process-category-stats system)
   (process-tag-stats system))
@@ -220,9 +240,24 @@
 (defn reset-content-checksums
   [system]
   (db/set-all-checksums
-    (db-component/db-querier (system))
-    "invalidate")
+    (db-component/db-querier system)
+    "invalidated")
   :ok)
+
+(defn reset-listing-data
+  [system]
+  (let [querier (db-component/db-querier system)]
+      (db/pipeline
+        querier
+        (concat
+          (mapv #(db/del-query querier :author-posts %)
+                (db/get-all-authors querier))
+          (mapv #(db/del-query querier :category-posts %)
+                (db/get-all-categories querier))
+          (mapv #(db/del-query querier :tag-posts %)
+                (db/get-all-tags querier))
+          (mapv #(db/del-query querier :year-posts %)
+                (map #(get-in % [:date :year]) (db/get-all-dates querier)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Core Grouping Multimethods   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -250,8 +285,8 @@
     (map (partial group-by-tag data) unique-tags)))
 
 (defmethod group-data :authors
-  [_type data]
-  (->> data
+  [_type system]
+  (->> system
        (group-by-author)
        (map update-author-groups)
        (sort compare-author)))

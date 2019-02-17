@@ -79,7 +79,7 @@
               (remove #(or (nil? %) (empty? %))))))
 
 (defn process-file
-  [this querier file data opts]
+  [this file data opts]
   (log/infof "Changed detected; processing %s ..." (:src-file opts))
   (let [src-dir (.getParent file)
         filename-old (.getName file)
