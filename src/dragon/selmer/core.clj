@@ -2,6 +2,7 @@
   (:require
     [clojusc.twig :refer [pprint]]
     [dragon.selmer.tags.core :as custom-tags]
+    [selmer.filters :as filters]
     [selmer.parser :as parser]
     [selmer.tags :as tags]
     [taoensso.timbre :as log]))
@@ -11,6 +12,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (custom-tags/register!)
+(filters/add-filter! :key key)
+(filters/add-filter! :val val)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
