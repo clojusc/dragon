@@ -36,6 +36,7 @@
   (get-all-metadata [this])
   (get-all-stats [this])
   (get-all-tags [this])
+  (get-all-years [this])
   (get-author-posts [this author])
   (get-category-freqs [this])
   (get-category-max-count [this])

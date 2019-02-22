@@ -148,6 +148,46 @@
   [system]
   (get-in (get-cfg system) [:processor :constructor]))
 
+(defn headlines-count
+  [system]
+  (get-in (get-cfg system) [:headlines :count]))
+
+(defn default-images-headliner-tmpl
+  [system]
+  (get-in (get-cfg system) [:default-images :headliner]))
+
+(defn default-images-post-tmpl
+  [system]
+  (get-in (get-cfg system) [:default-images :post]))
+
+(defn default-images-small-tmpl
+  [system]
+  (get-in (get-cfg system) [:default-images :small]))
+
+(defn default-images-thumb-tmpl
+  [system]
+  (get-in (get-cfg system) [:default-images :thumb]))
+
+(defn default-images-count
+  [system]
+  (get-in (get-cfg system) [:default-images :count]))
+
+(defn headlines-supporting-count
+  [system]
+  (get-in (get-cfg system) [:headlines :supporting :count]))
+
+(defn headlines-middle-count
+  [system]
+  (get-in (get-cfg system) [:headlines :middle :count]))
+
+(defn headlines-trailing-count
+  [system]
+  (get-in (get-cfg system) [:headlines :trailing :count]))
+
+(defn headlines-trailing-rows
+  [system]
+  (get-in (get-cfg system) [:headlines :trailing :rows]))
+
 (defn watcher-type
   [system]
   (get-in (get-cfg system) [:watcher :type]))

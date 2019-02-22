@@ -13,4 +13,5 @@
        (log/warn "Routes are manually set to be empty! Please fix."))
      (log/infof "Writing generated content to '%s' ..." out-dir)
      (stasis/export-pages routes out-dir)
-     (log/info "Static generation complete."))))
+     (log/info "Static generation complete."))
+   :ok))

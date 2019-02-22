@@ -277,7 +277,7 @@
 
 (defn get-all-tags
   [this]
-  (get-all* this :tags {:unique true :sorted true}))
+  (sort (get-all* this :tags {:unique true})))
 
 (defn get-tag-freqs
   [this]
@@ -368,6 +368,14 @@
 (defn get-all-authors
   [this]
   (set (map :author (get-all-metadata this))))
+
+(defn get-all-years
+  [this]
+  (->> (get-all-dates this)
+       (map #(get-in % [:date :year]))
+       set
+       vec
+       sort))
 
 (defn get-all-posts
   [this]
@@ -478,6 +486,7 @@
    :get-all-metadata get-all-metadata
    :get-all-stats get-all-stats
    :get-all-tags get-all-tags
+   :get-all-years get-all-years
    :get-author-posts get-author-posts
    :get-category-freqs get-category-freqs
    :get-category-max-count get-category-max-count

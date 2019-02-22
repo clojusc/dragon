@@ -33,6 +33,17 @@
      :disallow #{}}
    :processor {
      :constructor :default}
+   :headlines {
+     :count 20
+     :lead {
+       :default-image-tmpl "/blog/img/default-headline-img-%s.png"
+       :default-image-count 8
+       :supporting {
+         :count 5}
+       :middle {
+         :count 5}
+       :trailing {
+         :count 10}}}
    :db {
      :type :redis
      :redis {
