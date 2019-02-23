@@ -13,6 +13,8 @@
      :template "<a href=\"%s\">%s</a>"}
    :feed {
      :count 20}
+   :archives {
+     :posts-per-page 50}
    :logging {
      :level :trace
      :nss [clojusc dragon]

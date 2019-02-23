@@ -148,7 +148,7 @@
         (log/debug "Got category: " cat)
         (log/debug "Got year: " year)
         (db/set-all-data querier src-file processed-data)
-        ;; The following inserts will be used latest in various group-by
+        ;; The following inserts will be used later in various group-by
         ;; queries.
         (db/pipeline
           querier

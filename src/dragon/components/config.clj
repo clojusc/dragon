@@ -148,10 +148,6 @@
   [system]
   (get-in (get-cfg system) [:processor :constructor]))
 
-(defn headlines-count
-  [system]
-  (get-in (get-cfg system) [:headlines :count]))
-
 (defn default-images-headliner-tmpl
   [system]
   (get-in (get-cfg system) [:default-images :headliner]))
@@ -187,6 +183,20 @@
 (defn headlines-trailing-rows
   [system]
   (get-in (get-cfg system) [:headlines :trailing :rows]))
+
+(defn headlines-count
+  [system]
+  (inc (+ (headlines-supporting-count system)
+          (headlines-middle-count system)
+          (headlines-trailing-count system))))
+
+(defn archives-posts-per-page
+  [system]
+  (get-in (get-cfg system) [:archives :posts-per-page]))
+
+(defn archives-page-count
+  [system posts-count]
+  (int (/ posts-count (float (archives-posts-per-page system)))))
 
 (defn watcher-type
   [system]
