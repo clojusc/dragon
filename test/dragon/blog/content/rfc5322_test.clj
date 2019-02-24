@@ -8,6 +8,10 @@
   (let [data (rfc5322/parse (slurp (io/resource "sample-post.rfc5322")))]
     (is (= (:title data) "Pretty Cool Title"))
     (is (= (:subtitle data) "An Even Cooler Subtitle"))
+    (is (= (:header-image data) "img/900x300.jpg"))
+    (is (= (:headliner-image data) "img/750x300.jpg"))
+    (is (= (:small-image data) "img/200x200.png"))
+    (is (= (:thumbnail-image data) "img/100x100.png"))
     (is (= (count (:excerpt data)) 58))
     (is (= (:author data) "Yours V. Truly"))
     (is (= (:category data) "Fantastic Things"))
