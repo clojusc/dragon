@@ -487,8 +487,10 @@
 
 (defn uri-path->file
   [this uri-path]
-  (let [lookup (->> (get-all-uri-paths this)
-                    (map (fn [[k v]] [v k]))
+  (let [lookup (->> (get-keys this)
+                    (interleave (get-all-uri-paths this))
+                    (partition 2)
+                    (map vec)
                     (into {}))]
     (get lookup uri-path)))
 
