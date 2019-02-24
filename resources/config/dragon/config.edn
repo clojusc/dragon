@@ -39,13 +39,14 @@
      :count 20
      :lead {
        :default-image-tmpl "/blog/img/default-headline-img-%s.png"
-       :default-image-count 8
-       :supporting {
-         :count 5}
-       :middle {
-         :count 5}
-       :trailing {
-         :count 10}}}
+       :default-image-count 8}
+     :supporting {
+       :count 5}
+     :middle {
+       :count 5}
+     :trailing {
+       :count 12
+       :per-row 3}}
    :db {
      :type :redis
      :redis {

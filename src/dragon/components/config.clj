@@ -180,9 +180,9 @@
   [system]
   (get-in (get-cfg system) [:headlines :trailing :count]))
 
-(defn headlines-trailing-rows
+(defn headlines-trailing-per-row
   [system]
-  (get-in (get-cfg system) [:headlines :trailing :rows]))
+  (get-in (get-cfg system) [:headlines :trailing :per-row]))
 
 (defn headlines-count
   [system]
