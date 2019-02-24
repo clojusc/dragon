@@ -125,41 +125,48 @@
   (sort (get-files (config/posts-path-src system))))
 
 (defn process-file
-  [system processor querier file]
-  (let [src-file (.getPath file)
-        _ (log/infof "Checking source file %s ..." src-file)
-        tmpl-cfg (config/template-config system)
-        data (post/get-data processor file tmpl-cfg)
-        checksum (util/check-sum (pr-str data))
-        filename (format (config/output-file-tmpl system)
-                         (util/sanitize-str (:title data)))
-        opts {:tag-separator (config/tag-separator system)
-              :checksum checksum
-              :src-file src-file
-              :filename filename}]
-    (log/debug "Got checksum:" (:checksum opts))
-    (log/debug "Got filename:" (:filename opts))
-    (if (db/post-changed? querier src-file checksum)
-      (let [processed-data (post/process-file processor file data opts)
-            author (get-in processed-data [:metadata :author])
-            cat (:category processed-data)
-            year (get-in processed-data [:dates :date :year])]
-        (log/debug "Got author: " author)
-        (log/debug "Got category: " cat)
-        (log/debug "Got year: " year)
-        (db/set-all-data querier src-file processed-data)
-        ;; The following inserts will be used later in various group-by
-        ;; queries.
-        (db/pipeline
-          querier
-          (concat
-            [(db/set-add-query querier :author-posts author src-file)
-             (db/set-add-query querier :category-posts cat src-file)
-             (db/set-add-query querier :year-posts year src-file)]
-            (mapv #(db/set-add-query querier :tag-posts % src-file)
-                  (:tags processed-data)))))
-      (log/infof "File %s has already been processed; skipping ..."
-                 src-file))))
+  ([system file]
+    (process-file system
+                  (post/new-processor system)
+                  (db-component/db-querier system)
+                  (if (instance? java.io.File file)
+                    file
+                    (io/file file))))
+  ([system processor querier file]
+    (let [src-file (.getPath file)
+          _ (log/infof "Checking source file %s ..." src-file)
+          tmpl-cfg (config/template-config system)
+          data (post/get-data processor file tmpl-cfg)
+          checksum (util/check-sum (pr-str data))
+          filename (format (config/output-file-tmpl system)
+                           (util/sanitize-str (:title data)))
+          opts {:tag-separator (config/tag-separator system)
+                :checksum checksum
+                :src-file src-file
+                :filename filename}]
+      (log/debug "Got checksum:" (:checksum opts))
+      (log/debug "Got filename:" (:filename opts))
+      (if (db/post-changed? querier src-file checksum)
+        (let [processed-data (post/process-file processor file data opts)
+              author (get-in processed-data [:metadata :author])
+              cat (:category processed-data)
+              year (get-in processed-data [:dates :date :year])]
+          (log/debug "Got author: " author)
+          (log/debug "Got category: " cat)
+          (log/debug "Got year: " year)
+          (db/set-all-data querier src-file processed-data)
+          ;; The following inserts will be used later in various group-by
+          ;; queries.
+          (db/pipeline
+            querier
+            (concat
+              [(db/set-add-query querier :author-posts author src-file)
+               (db/set-add-query querier :category-posts cat src-file)
+               (db/set-add-query querier :year-posts year src-file)]
+              (mapv #(db/set-add-query querier :tag-posts % src-file)
+                    (:tags processed-data)))))
+        (log/infof "File %s has already been processed; skipping ..."
+                   src-file)))))
 
 (defn process-files
   [system]

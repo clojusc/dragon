@@ -485,6 +485,13 @@
   [this stats]
   (cmd (:conn this) (set-query :text-stats stats)))
 
+(defn uri-path->file
+  [this uri-path]
+  (let [lookup (->> (get-all-uri-paths this)
+                    (map (fn [[k v]] [v k]))
+                    (into {}))]
+    (get lookup uri-path)))
+
 (def query-behaviour
   {:cmd cmd
    :del-query del-query
@@ -555,7 +562,8 @@
    :set-tag-stats set-tag-stats
    :set-text-stats set-text-stats
    :set-year-posts set-year-posts
-   :sorted-set-members-query sorted-set-members-query})
+   :sorted-set-members-query sorted-set-members-query
+   :uri-path->file uri-path->file})
 
 (defn new-querier
   [component conn]

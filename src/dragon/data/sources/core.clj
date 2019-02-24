@@ -94,7 +94,8 @@
   (set-tag-stats [this data])
   (set-text-stats [this data])
   (set-year-posts [this year post-keys])
-  (sorted-set-members-query [this schema-key schema-arg]))
+  (sorted-set-members-query [this schema-key schema-arg])
+  (uri-path->file [this uri-path]))
 
 (extend RedisQuerier
         DBQuerier
