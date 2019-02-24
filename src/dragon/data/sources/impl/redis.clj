@@ -240,7 +240,9 @@
 
 (defn get-keys
   [this]
-  (cmd (:conn this) [:smembers (:keys (schema))]))
+  (cmd (:conn this) [:sort
+                     (:keys (schema))
+                     :alpha :desc]))
 
 (defn get-n-keys
   ([this nth order]
@@ -270,10 +272,13 @@
     (let [results (cmd this
                        (concat [:mget]
                               (mapv #(str % schema-key)
-                                    (get-keys this))))]
+                                    (get-keys this))))
+          sorted (if (:sorted opts)
+                   (reverse (sort results))
+                   results)]
       (if (:unique opts)
-        (apply set/union results)
-        results))))
+        (apply set/union sorted)
+        sorted))))
 
 (defn get-all-tags
   [this]
@@ -300,7 +305,7 @@
 
 (defn- -get-all-categories
   [this]
-  (sort (get-all* this :category)))
+  (get-all* this :category {:sorted true}))
 
 (defn get-all-categories
   [this]
@@ -364,6 +369,10 @@
 (defn get-all-metadata
   [this]
   (get-all* this :metadata))
+
+(defn get-all-uri-paths
+  [this]
+  (get-all* this :uri-path {:sorted true}))
 
 (defn get-all-authors
   [this]
@@ -486,6 +495,7 @@
    :get-all-metadata get-all-metadata
    :get-all-stats get-all-stats
    :get-all-tags get-all-tags
+   :get-all-uri-paths get-all-uri-paths
    :get-all-years get-all-years
    :get-author-posts get-author-posts
    :get-category-freqs get-category-freqs
