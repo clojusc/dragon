@@ -35,10 +35,7 @@
      :content-source (str arg ":content-source")
      :dates (str arg ":dates")
      :excerpts (str arg ":excerpts")
-     :image-header (str arg ":header-image")
-     :image-headliner (str arg ":headliner-image")
-     :image-small (str arg ":small-image")
-     :image-thumb (str arg ":thumbnail-image")
+     :images (str arg ":images")
      :metadata (str arg ":metadata")
      :stats (str arg ":stats")
      :tags (str arg ":tags")
@@ -215,9 +212,9 @@
   [this src-file]
   (cmd (:conn this) (get-query :excerpts src-file)))
 
-(defn get-post-image-header
+(defn get-post-images
   [this src-file]
-  (cmd (:conn this) (get-query :image-header src-file)))
+  (cmd (:conn this) (get-query :images src-file)))
 
 (defn get-post-image-headliner
   [this src-file]
@@ -453,21 +450,9 @@
   [this src-file excerpts]
   (cmd (:conn this) (set-query :excerpts src-file excerpts)))
 
-(defn set-post-image-header
-  [this src-file img-path]
-  (cmd (:conn this) (set-query :image-header src-file img-path)))
-
-(defn set-post-image-headliner
-  [this src-file img-path]
-  (cmd (:conn this) (set-query :image-headliner src-file img-path)))
-
-(defn set-post-image-small
-  [this src-file img-path]
-  (cmd (:conn this) (set-query :image-small src-file img-path)))
-
-(defn set-post-image-thumb
-  [this src-file img-path]
-  (cmd (:conn this) (set-query :image-thumb src-file img-path)))
+(defn set-post-images
+  [this src-file img-data]
+  (cmd (:conn this) (set-query :images src-file img-data)))
 
 (defn set-post-metadata
   [this src-file metadata]
@@ -558,10 +543,7 @@
    :get-post-content-source get-post-content-source
    :get-post-dates get-post-dates
    :get-post-excerpts get-post-excerpts
-   :get-post-image-header get-post-image-header
-   :get-post-image-headliner get-post-image-headliner
-   :get-post-image-small get-post-image-small
-   :get-post-image-thumb get-post-image-thumb
+   :get-post-images get-post-images
    :get-post-metadata get-post-metadata
    :get-post-stats get-post-stats
    :get-post-tags get-post-tags
