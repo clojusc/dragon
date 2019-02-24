@@ -35,6 +35,10 @@
      :content-source (str arg ":content-source")
      :dates (str arg ":dates")
      :excerpts (str arg ":excerpts")
+     :image-header (str arg ":header-image")
+     :image-headliner (str arg ":headliner-image")
+     :image-small (str arg ":small-image")
+     :image-thumb (str arg ":thumbnail-image")
      :metadata (str arg ":metadata")
      :stats (str arg ":stats")
      :tags (str arg ":tags")
@@ -210,6 +214,22 @@
 (defn get-post-excerpts
   [this src-file]
   (cmd (:conn this) (get-query :excerpts src-file)))
+
+(defn get-post-image-header
+  [this src-file]
+  (cmd (:conn this) (get-query :image-header src-file)))
+
+(defn get-post-image-headliner
+  [this src-file]
+  (cmd (:conn this) (get-query :image-headliner src-file)))
+
+(defn get-post-image-small
+  [this src-file]
+  (cmd (:conn this) (get-query :image-small src-file)))
+
+(defn get-post-image-thumb
+  [this src-file]
+  (cmd (:conn this) (get-query :image-thumb src-file)))
 
 (defn get-post-metadata
   [this src-file]
@@ -433,6 +453,22 @@
   [this src-file excerpts]
   (cmd (:conn this) (set-query :excerpts src-file excerpts)))
 
+(defn set-post-image-header
+  [this src-file img-path]
+  (cmd (:conn this) (set-query :image-header src-file img-path)))
+
+(defn set-post-image-headliner
+  [this src-file img-path]
+  (cmd (:conn this) (set-query :image-headliner src-file img-path)))
+
+(defn set-post-image-small
+  [this src-file img-path]
+  (cmd (:conn this) (set-query :image-small src-file img-path)))
+
+(defn set-post-image-thumb
+  [this src-file img-path]
+  (cmd (:conn this) (set-query :image-thumb src-file img-path)))
+
 (defn set-post-metadata
   [this src-file metadata]
   (cmd (:conn this) (set-query :metadata src-file metadata)))
@@ -522,6 +558,10 @@
    :get-post-content-source get-post-content-source
    :get-post-dates get-post-dates
    :get-post-excerpts get-post-excerpts
+   :get-post-image-header get-post-image-header
+   :get-post-image-headliner get-post-image-headliner
+   :get-post-image-small get-post-image-small
+   :get-post-image-thumb get-post-image-thumb
    :get-post-metadata get-post-metadata
    :get-post-stats get-post-stats
    :get-post-tags get-post-tags
@@ -554,6 +594,10 @@
    :set-post-content-source set-post-content-source
    :set-post-dates set-post-dates
    :set-post-excerpts set-post-excerpts
+   :set-post-image-header set-post-image-header
+   :set-post-image-headliner set-post-image-headliner
+   :set-post-image-small set-post-image-small
+   :set-post-image-thumb set-post-image-thumb
    :set-post-metadata set-post-metadata
    :set-post-stats set-post-stats
    :set-post-tags set-post-tags
