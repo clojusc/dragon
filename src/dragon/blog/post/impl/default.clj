@@ -78,6 +78,13 @@
               (map #'string/trim)
               (remove #(or (nil? %) (empty? %))))))
 
+(defn get-images
+  [this data]
+  {:header (:header-image data)
+   :headliner (:headliner-image data)
+   :small (:small-image data)
+   :thumb (:thumbnail-image data)})
+
 (defn process-file
   [this file data opts]
   (log/infof "Changed detected; processing %s ..." (:src-file opts))
@@ -92,7 +99,8 @@
         tags (get-tags this (:tags data) (:tag-separator opts))
         dates (get-dates this (:src-file opts))
         stats (get-stats this (:body data))
-        excerpts (get-excerpts this (:body data))]
+        excerpts (get-excerpts this (:body data))
+        images (get-images this data)]
     (log/trace "Got data:" data)
     (log/trace "Got dates:" dates)
     (log/trace "Got excerpts:" excerpts)
@@ -107,6 +115,7 @@
      :content-source (:body-orig data)
      :dates dates
      :excerpts excerpts
+     :images images
      :metadata metadata
      :stats stats
      :tags tags
