@@ -35,11 +35,15 @@
      :disallow #{}}
    :processor {
      :constructor :default}
+   :default-images {
+     :post "post-%s.jpg"
+     :headliner "headline-%s.jpg"
+     :small "small-%s.png"
+     :thumb "thumb-%s.png"
+     :count 8}
    :headlines {
      :count 20
-     :lead {
-       :default-image-tmpl "/blog/img/default-headline-img-%s.png"
-       :default-image-count 8}
+     :lead {}
      :supporting {
        :count 5}
      :middle {
