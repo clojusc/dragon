@@ -80,10 +80,11 @@
 
 (defn get-images
   [this data]
-  {:header (:header-image data)
-   :headliner (:headliner-image data)
-   :small (:small-image data)
-   :thumb (:thumbnail-image data)})
+  (let [title (:title data)]
+    {:header (:header-image data)
+     :headliner (:headliner-image data)
+     :small (:small-image data)
+     :thumb (:thumbnail-image data)}))
 
 (defn process-file
   [this file data opts]
@@ -95,7 +96,6 @@
                      (string/replace filename-old (:filename opts))
                      (util/sanitize-post-path)
                      (string/replace-first "posts/" ""))
-
         tags (get-tags this (:tags data) (:tag-separator opts))
         dates (get-dates this (:src-file opts))
         stats (get-stats this (:body data))
@@ -104,7 +104,8 @@
     (log/trace "Got data:" data)
     (log/trace "Got dates:" dates)
     (log/trace "Got excerpts:" excerpts)
-    (log/trace "Got metadata:" metadata)
+    (log/trace "Got excerpts:" excerpts)
+    (log/debug "Got images:" images)
     (log/trace "Got src-dir:" src-dir)
     (log/trace "Got stats:" stats)
     (log/trace "Got tags:" tags)

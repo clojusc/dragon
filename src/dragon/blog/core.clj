@@ -124,6 +124,13 @@
   [system]
   (sort (get-files (config/posts-path-src system))))
 
+(defn update-images
+  [system {:keys [header headliner small thumb]} post-title]
+  {:header header
+   :headliner headliner
+   :small small
+   :thumb thumb})
+
 (defn process-file
   ([system file]
     (process-file system
@@ -150,7 +157,10 @@
         (let [processed-data (post/process-file processor file data opts)
               author (get-in processed-data [:metadata :author])
               cat (:category processed-data)
-              year (get-in processed-data [:dates :date :year])]
+              year (get-in processed-data [:dates :date :year])
+              images (update-images processor
+                                    (:images processed-data)
+                                    (get-in processed-data [:metadata :title]))]
           (log/debug "Got author: " author)
           (log/debug "Got category: " cat)
           (log/debug "Got year: " year)

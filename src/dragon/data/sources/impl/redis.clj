@@ -478,11 +478,13 @@
 
 (defn set-all-data
   [this src-file {:keys [category checksum content content-source
-                         dates excerpts metadata stats tags uri-path]}]
+                         dates excerpts images metadata stats tags
+                         uri-path]}]
   (let [data-keys [:category :checksum :content :content-source
-                   :dates :excerpts :metadata :stats :tags :uri-path]
+                   :dates :excerpts :images :metadata :stats :tags
+                   :uri-path]
         set-vars [category checksum content content-source
-                  dates excerpts metadata stats tags uri-path]
+                  dates excerpts images metadata stats tags uri-path]
         set-data (->> set-vars
                       (interleave data-keys)
                       (partition 2))
@@ -576,10 +578,7 @@
    :set-post-content-source set-post-content-source
    :set-post-dates set-post-dates
    :set-post-excerpts set-post-excerpts
-   :set-post-image-header set-post-image-header
-   :set-post-image-headliner set-post-image-headliner
-   :set-post-image-small set-post-image-small
-   :set-post-image-thumb set-post-image-thumb
+   :set-post-images set-post-images
    :set-post-metadata set-post-metadata
    :set-post-stats set-post-stats
    :set-post-tags set-post-tags
