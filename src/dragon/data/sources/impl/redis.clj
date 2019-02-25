@@ -247,7 +247,8 @@
 (defn get-all-data
   [this src-file]
   (let [data-keys [:category :checksum :content :content-source
-                   :dates :excerpts :metadata :stats :tags :uri-path]
+                   :dates :excerpts :images :metadata :stats :tags
+                   :uri-path]
         results (pipeline this (mapv #(get-query % src-file) data-keys))]
     (->> results
          (interleave data-keys)

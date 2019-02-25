@@ -11,7 +11,9 @@
     [dragon.event.system.core :as event]
     [dragon.event.tag :as tag]
     [dragon.util :as util]
-    [taoensso.timbre :as log]))
+    [taoensso.timbre :as log])
+  (:import
+    (java.util Random)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Data Transforms   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -78,13 +80,60 @@
               (map #'string/trim)
               (remove #(or (nil? %) (empty? %))))))
 
+(defn random-text-idx
+  "Generate a random number given input text as a seed and a max range."
+  [text max-count]
+  (inc (.nextInt (new Random (.hashCode text)) max-count)))
+
+(defn get-image-path
+  [this suffix]
+  (format "%s/img/%s"
+          (config/base-path (:system this))
+          suffix))
+
+(defn get-default-image
+  [this cfg-tmpl-fn title]
+  (let [img-count (config/default-images-count (:system this))
+        img-idx (random-text-idx title img-count)]
+    (format (get-image-path this (cfg-tmpl-fn (:system this)))
+            img-idx)))
+
+(defn get-image
+  [this explicit-img cfg-tmpl-fn title]
+  (if-not (util/nada? explicit-img)
+     (get-image-path this explicit-img)
+     (get-default-image this cfg-tmpl-fn title)))
+
 (defn get-images
   [this data]
-  (let [title (:title data)]
-    {:header (:header-image data)
-     :headliner (:headliner-image data)
-     :small (:small-image data)
-     :thumb (:thumbnail-image data)}))
+  (let [title (:title data)
+        explicit-header-image (:header-image data)
+        explicit-headliner-image (:headliner-image data)
+        explicit-small-image (:small-image data)
+        explicit-thumb-image (:thumbnail-image data)
+        header-image (get-image this
+                                explicit-header-image
+                                config/default-images-post-tmpl
+                                title)
+        headliner-image (get-image this
+                                   explicit-headliner-image
+                                   config/default-images-headliner-tmpl
+                                   title)
+        small-image (get-image this
+                               explicit-small-image
+                               config/default-images-small-tmpl
+                               title)
+        thumb-image (get-image this
+                               explicit-thumb-image
+                               config/default-images-thumb-tmpl
+                               title)]
+    ;; XXX Add logic for generating headliner, small, and thumb from an
+    ;;     explicit header image, if given. Will need to use an image lib
+    ;;     or cli tool.
+    {:header header-image
+     :headliner headliner-image
+     :small small-image
+     :thumb thumb-image}))
 
 (defn process-file
   [this file data opts]
