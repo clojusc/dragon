@@ -94,7 +94,8 @@
     :lint {
       :plugins [
         [jonase/eastwood "0.3.5"]
-        [lein-kibit "0.1.6"]]}
+        [lein-kibit "0.1.6"]
+        [venantius/yagni "0.1.7"]]}
     :test {
       :dependencies [
         [clojusc/ltest "0.4.0-SNAPSHOT"]]
@@ -138,6 +139,7 @@
       ["check-jars"]
       ["check-vers"]]
     "kibit" ["with-profile" "+lint" "kibit"]
+    "yagni" ["with-profile" "+lint" "yagni"]
     "eastwood" ["with-profile" "+lint" "eastwood" "{:namespaces [:source-paths]}"]
     "lint" ["do"
       ["kibit"]
